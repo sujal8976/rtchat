@@ -1,0 +1,24 @@
+{
+  "name": "@repo/db",
+  "version": "1.0.0",
+  "private": "true",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@repo/eslint-config": "workspace:*",
+    "@repo/typescript-config": "workspace:*",
+    "@types/node": "^20.11.24",
+    "typescript": "5.5.4"
+  },
+  "dependencies": {
+    "@prisma/client": "5.22.0",
+    "prisma": "^5.22.0"
+  },
+  "exports":{
+    "./client": "./src/index.ts"
+  }
+}

@@ -1,0 +1,28 @@
+{
+  "name": "@repo/store",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "recoil": "^0.7.7",
+    "typescript": "5.5.4"
+  },
+  "devDependencies": {
+    "@repo/typescript-config": "workspace:*"
+  },
+  "exports": {
+    "./recoil": {
+      "import": "./src/recoil/index.ts",
+      "require": "./src/recoil/index.ts"
+    },
+    "./useBalance": {
+      "import": "./src/hooks/useBalance.ts",
+      "require": "./src/hooks/useBalance.ts"
+    }
+  }
+}

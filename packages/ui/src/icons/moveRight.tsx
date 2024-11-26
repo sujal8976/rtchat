@@ -1,0 +1,1 @@
+export { MoveRight } from 'lucide-react'
