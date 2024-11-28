@@ -1,5 +1,3 @@
-import { ModeToggle } from "@repo/ui/components/theme/selectMode"
-import { Appbar } from "../components/Appbar"
 import { auth } from '../lib/auth'
 
 export default async function Home (){
@@ -7,8 +5,6 @@ export default async function Home (){
 
   return (
     <div>
-      <Appbar />
-      <ModeToggle />
       <div>
         <h1 className="">Hello</h1>
       </div>

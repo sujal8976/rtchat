@@ -37,7 +37,7 @@ export function Register() {
         throw new Error(result.message || "Failed to register");
       }
 
-      router.push("/");
+      router.push("/api/auth/signin");
       router.refresh();
     } catch (err) {
       setError(err instanceof Error ? err.message : "Something went wrong");

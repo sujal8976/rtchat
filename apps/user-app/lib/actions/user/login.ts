@@ -21,5 +21,5 @@ export async function loginUser(formData: FormData) {
     console.log(err);
   }
 
-  redirect("/")
+  redirect("/chat")
 }
