@@ -1,9 +1,9 @@
 "use client";
 
 import { RecoilRoot } from "@repo/store/recoil";
-import { SessionProvider } from "next-auth/react";
 import { ThemeProvider } from "@repo/ui/components/theme-provider";
 import { Toaster } from "@repo/ui/components/ui/toaster";
+import { SessionProvider } from "next-auth/react";
 
 export const Providers = ({ children }: { children: React.ReactNode }) => {
   return (
@@ -14,8 +14,8 @@ export const Providers = ({ children }: { children: React.ReactNode }) => {
       disableTransitionOnChange
     >
       <RecoilRoot>
-        {/* <SessionProvider>{children}</SessionProvider> */}
-        {children}
+        <SessionProvider>{children}</SessionProvider>
+        {/* {children} */}
       </RecoilRoot>
       <Toaster />
     </ThemeProvider>

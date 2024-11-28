@@ -12,7 +12,8 @@
     "@repo/db": "workspace:*",
     "@repo/store": "workspace:*",
     "@repo/ui": "workspace:*",
-    "bcrypt": "^5.1.1",
+    "@types/bcryptjs": "^2.4.6",
+    "bcryptjs": "^2.4.3",
     "next": "14.2.6",
     "next-auth": "5.0.0-beta.25",
     "react": "18.3.1",
@@ -21,7 +22,6 @@
   "devDependencies": {
     "@repo/eslint-config": "workspace:*",
     "@repo/typescript-config": "workspace:*",
-    "@types/bcrypt": "^5.0.2",
     "@types/node": "^20",
     "@types/react": "^18",
     "@types/react-dom": "^18",
