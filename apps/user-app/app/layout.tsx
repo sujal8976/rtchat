@@ -28,10 +28,8 @@ export default function RootLayout({
     <html lang="en">
       <body className={`${geistSans.variable} ${geistMono.variable}`}>
         <Providers>
-          <main className="w-screen">
-            <Header />
-            {children}
-          </main>
+          <Header />
+          <main className="flex">{children}</main>
         </Providers>
       </body>
     </html>
