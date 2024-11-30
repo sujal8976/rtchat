@@ -29,7 +29,7 @@ export default function RootLayout({
       <body className={`${geistSans.variable} ${geistMono.variable}`}>
         <Providers>
           <Header />
-          <main className="flex">{children}</main>
+          <main className="">{children}</main>
         </Providers>
       </body>
     </html>

@@ -1,5 +1,5 @@
 export  function RoomSidebar(){
     return(
-        <div className="fixed right-0">room sidebar</div>
+        <div className="right-0">room sidebar</div>
     )
 }
