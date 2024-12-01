@@ -5,14 +5,21 @@ import { UserCircle } from "@repo/ui/icons/userCircle";
 import { cn } from "@repo/ui/lib/utils";
 
 const statusStyles = {
-  online: "green-500",
-  offline: "gray-400",
+  online: "bg-green-500",
+  offline: "bg-gray-400",
 };
 
 export function ChatMembers() {
   return (
-    <div className="border-l-2 dark:border-l-slate-500 p-4 w-72 mb-4">
-      <h2 className="font-semibold">Room Members</h2>
+    <div className="border-l-2 dark:border-l-slate-500 p-4 w-72 mb-4 hidden lg:block">
+    <h2 className="font-semibold my-5">Room Members</h2>
+      <ChatMembersContent />
+    </div>
+  );
+}
+
+export function ChatMembersContent(){
+  return(
       <ScrollArea className="h-[calc(100vh-8rem)]">
         <div className="space-y-4 mt-1">
           {MEMBERS.map((mem) => (
@@ -26,7 +33,7 @@ export function ChatMembers() {
                 <span
                   className={cn(
                     "absolute bottom-0 right-0 size-2.5 rounded-full border-2",
-                    `bg-${statusStyles[mem.status]}`
+                    statusStyles[mem.status]
                   )}
                 />
               </div>
@@ -37,10 +44,10 @@ export function ChatMembers() {
                   </span>
                 </div>
                 <span
-                  className={cn("text-xs",
-                    mem.status === "online"
-                      ? "text-green-500"
-                      : "text-gray-400")}
+                  className={cn(
+                    "text-xs",
+                    mem.status === "online" ? "text-green-500" : "text-gray-400"
+                  )}
                 >
                   {mem.status}
                 </span>
@@ -49,6 +56,5 @@ export function ChatMembers() {
           ))}
         </div>
       </ScrollArea>
-    </div>
-  );
+  )
 }
