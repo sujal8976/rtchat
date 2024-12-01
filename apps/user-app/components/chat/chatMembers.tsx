@@ -1,7 +1,7 @@
 import { ScrollArea } from "@repo/ui/components/ui/scroll-area";
 import { MEMBERS } from "../../testData/roomMembers";
 import { Avatar, AvatarFallback } from "@repo/ui/components/ui/avatar";
-import { UserCircle } from "@repo/ui/icons/userCircle";
+import { UserCircle } from "@repo/ui/icons";
 import { cn } from "@repo/ui/lib/utils";
 
 const statusStyles = {

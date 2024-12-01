@@ -2,7 +2,7 @@
 
 import { LabelInput } from "@repo/ui/components/custom/labeledInput";
 import { Button } from "@repo/ui/components/ui/button";
-import { MoveRight } from "@repo/ui/icons/moveRight";
+import { MoveRight } from "@repo/ui/icons";
 import { useRouter } from "next/navigation";
 import { FormEvent, useState } from "react";
 

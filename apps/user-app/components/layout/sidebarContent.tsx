@@ -3,9 +3,9 @@
 import { Button } from "@repo/ui/components/ui/button";
 import { Input } from "@repo/ui/components/ui/input";
 import { ScrollArea } from "@repo/ui/components/ui/scroll-area";
-import { Plus } from "@repo/ui/icons/plus";
+import { Plus } from "@repo/ui/icons";
 import { useState } from "react";
-import { roomData } from "../../testData/room";
+import { DEMO_ROOMS } from "../../testData/room";
 import { RoomCard } from "../card/roomCard";
 
 export function SidebarContent() {
@@ -34,7 +34,7 @@ export function SidebarContent() {
         <ScrollArea className="h-full w-full">
           <div className="space-y-2">
             {roomSearch &&
-              roomData.map((room) => (
+              DEMO_ROOMS.map((room) => (
                 <RoomCard
                   name={room.name}
                   description={room.description}

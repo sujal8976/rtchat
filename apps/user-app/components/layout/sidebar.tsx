@@ -8,8 +8,7 @@ import {
   SheetHeader,
   SheetTitle,
 } from "@repo/ui/components/ui/sheet";
-import { X } from "@repo/ui/icons/X";
-import { Menu } from "@repo/ui/icons/menu";
+import { X, Menu } from "@repo/ui/icons";
 import { SidebarContent } from "./sidebarContent";
 
 export function Sidebar() {

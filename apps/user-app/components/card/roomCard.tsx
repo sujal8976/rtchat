@@ -1,6 +1,6 @@
 import { Avatar, AvatarFallback } from "@repo/ui/components/ui/avatar";
 import { Button } from "@repo/ui/components/ui/button";
-import { UserCircle } from "@repo/ui/icons/userCircle";
+import { UserCircle } from "@repo/ui/icons";
 import Link from "next/link";
 
 interface RoomCard {

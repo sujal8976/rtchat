@@ -2,36 +2,68 @@ export interface Room {
   id: string;
   name: string;
   description: string;
+  members: number
 }
 
-export const roomData: Room[] = [
-  { id: "1", name: "room1", description: "New Room for general conversation" },
-  { id: "2", name: "room2", description: "New Room for general conversation" },
-  { id: "3", name: "room2", description: "New Room for general conversation" },
-  { id: "4", name: "room2", description: "sdfsfasfasfdsafsfasdfsafasdfdsfdsfdsaffasfadsfadsfsadfdsafadsfsadf" },
-  { id: "5", name: "room2", description: "New Room for general conversation" },
-  { id: "6", name: "room2", description: "New Room for general conversation" },
-  { id: "7", name: "room2", description: "New Room for general conversation" },
-  { id: "8", name: "room2", description: "New Room for general conversation" },
-  { id: "9", name: "room2", description: "New Room for general conversation" },
-  { id: "10", name: "room2", description: "New Room for general conversation" },
-  { id: "211", name: "room2", description: "New Room for general conversation" },
-  { id: "21", name: "room2", description: "New Room for general conversation" },
-  { id: "2221", name: "room2", description: "New Room for general conversation" },
-  { id: "212", name: "room2", description: "New Room for general conversation" },
-  { id: "21212", name: "room2", description: "New Room for general conversation" },
-  { id: "21211", name: "room2", description: "New Room for general conversation" },
-  { id: "2435", name: "room2", description: "New Room for general conversation" },
-  { id: "235", name: "room2", description: "New Room for general conversation" },
-  { id: "2345", name: "room2", description: "New Room for general conversation" },
-  { id: "2435adfdsaf", name: "room2", description: "New Room for general conversation" },
-  { id: "245", name: "room2", description: "New Room for general conversation" },
-  { id: "245asdfasdf", name: "room2", description: "New Room for general conversation" },
-  { id: "265", name: "room2", description: "New Room for general conversation" },
-  { id: "267afadsf", name: "room2", description: "New Room for general conversation" },
-  { id: "287", name: "room2", description: "New Room for general conversation" },
-  { id: "267", name: "room2", description: "New Room for general conversation" },
-  { id: "256", name: "room2", description: "New Room for general conversation" },
-  { id: "2567", name: "room2", description: "New Room for general conversation" },
-  
-];
+export const DEMO_ROOMS: Room[] = [
+  {
+    "id": "1",
+    "name": "General Discussion",
+    "description": "A place for general chat and discussions",
+    "members": 124
+  },
+  {
+    "id": "2",
+    "name": "Tech Support",
+    "description": "Get help with technical issues and troubleshooting",
+    "members": 276
+  },
+  {
+    "id": "3", 
+    "name": "Product Updates",
+    "description": "Latest news and announcements about our products",
+    "members": 512
+  },
+  {
+    "id": "4",
+    "name": "Random Memes",
+    "description": "Share the funniest and most entertaining memes",
+    "members": 345
+  },
+  {
+    "id": "5",
+    "name": "Developer Corner",
+    "description": "Coding tips, programming languages, and tech discussions",
+    "members": 203
+  },
+  {
+    "id": "6",
+    "name": "Marketing Insights",
+    "description": "Strategies, trends, and marketing best practices",
+    "members": 187
+  },
+  {
+    "id": "7",
+    "name": "Coffee Break",
+    "description": "Casual conversations and team bonding",
+    "members": 156
+  },
+  {
+    "id": "8",
+    "name": "Design Inspiration",
+    "description": "Share creative ideas and design concepts",
+    "members": 98
+  },
+  {
+    "id": "9",
+    "name": "Career Growth",
+    "description": "Professional development and career advice",
+    "members": 211
+  },
+  {
+    "id": "10",
+    "name": "Global Events",
+    "description": "Discussions about international news and current events",
+    "members": 267
+  }
+]

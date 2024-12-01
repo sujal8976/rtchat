@@ -9,7 +9,7 @@
     "./lib/*": "./src/lib/*.ts",
     "./hooks/*": "./src/hooks/*.tsx",
     "./components/*": "./src/components/*.tsx",
-    "./icons/*": "./src/icons/*.tsx"
+    "./icons": "./src/icons/index.tsx"
   },
   "scripts": {
     "lint": "eslint . --max-warnings 0",

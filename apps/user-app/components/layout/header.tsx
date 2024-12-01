@@ -3,7 +3,7 @@
 import { Button } from "@repo/ui/components/ui/button";
 import { signIn, signOut, useSession } from "next-auth/react";
 import { Avatar, AvatarFallback } from "@repo/ui/components/ui/avatar";
-import { UserCircle } from "@repo/ui/icons/userCircle";
+import { UserCircle } from "@repo/ui/icons";
 import { ModeToggle } from "@repo/ui/components/theme/selectMode";
 import Link from "next/link";
 import { DropdownMenu, DropdownMenuTrigger, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuLabel } from "@repo/ui/components/ui/dropdown-menu";

@@ -1,11 +1,10 @@
 import { Button } from "@repo/ui/components/ui/button";
-import { Settings } from "@repo/ui/icons/setting";
+import { Settings, Users } from "@repo/ui/icons";
 import {
   Sheet,
   SheetContent,
   SheetTrigger,
 } from "@repo/ui/components/ui/sheet";
-import { Users } from "@repo/ui/icons/users";
 import { ChatMembersContent } from "./chatMembers";
 
 export function ChatHeader() {
