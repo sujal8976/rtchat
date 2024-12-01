@@ -1,5 +1,3 @@
-import { ChatRoom } from "../../../components/chat/chatRoom"
-
 export default function (){
-    return <div className="flex-1"><ChatRoom/></div>
+    return <div>SElect Room to ChatMembers</div>
 }

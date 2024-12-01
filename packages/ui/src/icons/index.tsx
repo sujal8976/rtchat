@@ -8,4 +8,5 @@ export {
   UserCircle,
   Users,
   X,
+  Send
 } from "lucide-react";

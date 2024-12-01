@@ -31,8 +31,8 @@ export function SidebarContent() {
 
       <div className="h-[calc(100vh-200px)] overflow-hidden w-full">
         {" "}
-        <ScrollArea className="h-full w-full">
-          <div className="space-y-2">
+        {/* <ScrollArea className="max-h-[80vh] w-full"> */}
+          <div className="space-y-2 w-full max-h-[70vh] overflow-y-scroll">
             {roomSearch &&
               DEMO_ROOMS.map((room) => (
                 <RoomCard
@@ -48,7 +48,7 @@ export function SidebarContent() {
               </div>
             )}
           </div>
-        </ScrollArea>
+        {/* </ScrollArea> */}
       </div>
     </div>
   );

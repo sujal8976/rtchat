@@ -88,7 +88,7 @@ export const DEMO_USERS: User[] = [
   },
 ];
 
-const DEMO_MESSAGES: Message[] = [
+export const DEMO_MESSAGES: Message[] = [
   {
     id: "1",
     userId: "7",
@@ -98,7 +98,7 @@ const DEMO_MESSAGES: Message[] = [
   },
   {
     id: "2",
-    userId: "cm3zo5ud300006jeogvtsk9z1",
+    userId: "1",
     message:
       "We need to discuss the Q1 marketing strategy tomorrow. Can everyone join the meeting? 📅",
     timestamp: "2024-02-15T14:30:22Z",
@@ -129,7 +129,7 @@ const DEMO_MESSAGES: Message[] = [
   },
   {
     id: "6",
-    userId: "cm3zo5ud300006jeogvtsk9z1",
+    userId: "1",
     message:
       "Can someone help me troubleshoot the database connection issue? 🤔",
     timestamp: "2024-02-28T13:55:29Z",
@@ -161,7 +161,7 @@ const DEMO_MESSAGES: Message[] = [
   },
   {
     id: "10",
-    userId: "cm3zo5ud300006jeogvtsk9z1",
+    userId: "1",
     message:
       "We're looking for beta testers for our upcoming mobile app. Interested? 📱",
     timestamp: "2024-03-07T12:25:17Z",

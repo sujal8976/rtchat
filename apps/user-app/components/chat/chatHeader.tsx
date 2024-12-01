@@ -16,7 +16,7 @@ export function ChatHeader() {
           A place for general chat and discussions
         </p>
       </div>
-      <div className="flex justify-center">
+      <div className="flex justify-center gap-2">
         {/* Desktop  */}
         <Button variant={"ghost"} size={"icon"} className=" hidden lg:flex">
           <Settings className="size-4" />

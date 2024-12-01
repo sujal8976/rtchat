@@ -20,8 +20,8 @@ export function ChatMembers() {
 
 export function ChatMembersContent(){
   return(
-      <ScrollArea className="h-[calc(100vh-8rem)]">
-        <div className="space-y-4 mt-1">
+      // <ScrollArea className="h-[calc(100vh-8rem)]">
+        <div className="space-y-4 mt-1 overflow-y-scroll max-h-[80vh]">
           {MEMBERS.map((mem) => (
             <div key={mem.id} className="flex items-center gap-3">
               <div className="relative">
@@ -55,6 +55,6 @@ export function ChatMembersContent(){
             </div>
           ))}
         </div>
-      </ScrollArea>
+      // </ScrollArea>
   )
 }

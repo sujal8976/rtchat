@@ -26,10 +26,12 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`${geistSans.variable} ${geistMono.variable}`}>
+      <body className={`${geistSans.variable} ${geistMono.variable} outline-2 outline-red-500`}>
         <Providers>
-          <Header />
-          <main className="">{children}</main>
+          <main>
+            <Header />
+            {children}
+          </main>
         </Providers>
       </body>
     </html>
