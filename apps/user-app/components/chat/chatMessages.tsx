@@ -9,7 +9,7 @@ const ChatMessages = forwardRef<HTMLDivElement, { roomId: string }>(
   ({ roomId }, ref) => {
     return (
       // <ScrollArea className="h-full max-h-[75vh] p-4 overflow-auto">
-        <div className="w-full max-h-[75vh] p-4 overflow-y-scroll">
+        <div className="w-full max-h-[75vh] p-4 overflow-y-scroll scroll-area">
           <div className="space-y-6">
             {DEMO_MESSAGES.map((msg) => {
               const user = DEMO_USERS.find((u) => u.id === msg.userId);

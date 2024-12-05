@@ -32,7 +32,7 @@ export function SidebarContent() {
       <div className="h-[calc(100vh-200px)] overflow-hidden w-full">
         {" "}
         {/* <ScrollArea className="max-h-[80vh] w-full"> */}
-          <div className="space-y-2 w-full max-h-[70vh] overflow-y-scroll">
+          <div className="space-y-2 w-full max-h-[70vh] overflow-y-scroll scroll-area">
             {roomSearch &&
               DEMO_ROOMS.map((room) => (
                 <RoomCard
