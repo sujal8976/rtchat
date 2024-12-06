@@ -27,13 +27,14 @@ model User {
 }
 
 model Room {
-  id        String     @id @default(cuid())
-  name      String
-  createdBy String
-  createdAt DateTime   @default(now())
-  updatedAt DateTime   @updatedAt
-  users     RoomUser[]
-  messages  Message[]
+  id          String     @id @default(cuid())
+  name        String
+  description String?
+  createdBy   String
+  createdAt   DateTime   @default(now())
+  updatedAt   DateTime   @updatedAt
+  users       RoomUser[]
+  messages    Message[]
 }
 
 model RoomUser {

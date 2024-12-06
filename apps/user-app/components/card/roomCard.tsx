@@ -6,7 +6,7 @@ import Link from "next/link";
 interface RoomCard {
   name: string;
   id: string;
-  description: string;
+  description: string | null;
 }
 
 export function RoomCard({ name, id, description }: RoomCard) {

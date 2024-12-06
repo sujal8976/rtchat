@@ -13,6 +13,7 @@
     "@repo/store": "workspace:*",
     "@repo/ui": "workspace:*",
     "@types/bcryptjs": "^2.4.6",
+    "axios": "^1.7.9",
     "bcryptjs": "^2.4.3",
     "date-fns": "^4.1.0",
     "framer-motion": "^11.12.0",
