@@ -4,6 +4,44 @@ import prisma from "@repo/db/client";
 import { Room, UserJoinedRoom } from "../../../types/room";
 import { auth } from "../../auth";
 
+export async function createRoom(name: string, description: string) {
+  const session = await auth();
+  if (!session?.user && !session?.user?.id) {
+    throw new Error("User not logged in");
+  }
+
+  try {
+    const room = await prisma.room.findFirst({
+      where: {
+        name,
+      },
+    });
+    if (room) {
+      throw new Error("Already room exists with this name");
+    }
+
+    const newRoom = await prisma.room.create({
+      data: {
+        name,
+        description,
+        createdBy: session.user.id as string,
+        users: {
+          create: {
+            userId: session.user.id as string,
+          },
+        },
+      },
+    });
+
+    return {
+      success: true,
+      roomId: newRoom.id
+    };
+  } catch (error) {
+    throw new Error('Failed to create Room')
+  }
+}
+
 export async function getRooms(query: string): Promise<Room[] | undefined> {
   try {
     if (query.length > 1) {

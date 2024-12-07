@@ -1,14 +1,13 @@
 "use client";
 
-import { Button } from "@repo/ui/components/ui/button";
 import { Input } from "@repo/ui/components/ui/input";
 import { ScrollArea } from "@repo/ui/components/ui/scroll-area";
-import { Plus } from "@repo/ui/icons";
 import { ChangeEvent, useCallback, useEffect, useState } from "react";
 import { RoomCard } from "../card/roomCard";
-import { fetchJoinedRooms, getRooms } from "../../lib/actions/room/getRooms";
+import { fetchJoinedRooms, getRooms } from "../../lib/actions/room/rooms";
 import { Room, UserJoinedRoom } from "../../types/room";
 import { useDebounce } from "../../hooks/useDebounce";
+import { CreateRoom } from "../room/createRoom";
 
 export function SidebarContent() {
   const [roomSearch, setRoomSearch] = useState("");
@@ -20,19 +19,19 @@ export function SidebarContent() {
   const debouncedSearch = useDebounce(roomSearch, 300);
 
   const getJoinedRooms = useCallback(async () => {
-    try{
+    try {
       const rooms = await fetchJoinedRooms();
-      setJoinedRooms(rooms as UserJoinedRoom[])
-    }catch(error){
-      setError('Failed to fetch joined rooms')
+      setJoinedRooms(rooms as UserJoinedRoom[]);
+    } catch (error) {
+      setError("Failed to fetch joined rooms");
     }
-  },[]);
-  
+  }, []);
+
   const onChangeHandler = async (e: ChangeEvent<HTMLInputElement>) => {
     e.preventDefault();
     setRoomSearch(e.target.value);
   };
-  
+
   const fetchRooms = useCallback(async () => {
     if (debouncedSearch.length > 1) {
       setLoading(true);
@@ -49,8 +48,8 @@ export function SidebarContent() {
     } else {
       setRooms([]);
     }
-  },[debouncedSearch]);
-  
+  }, [debouncedSearch]);
+
   useEffect(() => {
     getJoinedRooms();
   }, [getJoinedRooms]);
@@ -61,10 +60,7 @@ export function SidebarContent() {
 
   return (
     <div className="flex flex-col gap-4 w-[90%]">
-      <Button className="">
-        <Plus />
-        <span>Create Room</span>
-      </Button>
+      <CreateRoom />
 
       <Input
         placeholder="Search rooms..."
