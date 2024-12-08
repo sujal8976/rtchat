@@ -76,30 +76,33 @@ export function SidebarContent() {
         {" "}
         {/* <ScrollArea className="max-h-[80vh] w-full"> */}
         <div className="space-y-2 w-full max-h-[70vh] overflow-y-scroll scroll-area">
-          {roomSearch &&
-            rooms.map((room) => (
-              <RoomCard
-                name={room.name}
-                description={room.description}
-                id={room.id}
-                key={room.id}
-              />
-            ))}
-          {!roomSearch && (
-            <div className="dark:bg-slate-800 text-sm text-right rounded-lg mt-8 pr-4 py-2">
-              Joined Rooms
-            </div>
-          )}
-          {!roomSearch &&
-            joinedRooms &&
-            joinedRooms.map((room) => (
-              <RoomCard
-                name={room.room.name}
-                description={room.room.description}
-                id={room.room.id}
-                key={room.room.id}
-              />
-            ))}
+          <div>
+            {roomSearch ? (
+              rooms.map((room) => (
+                <RoomCard
+                  name={room.name}
+                  description={room.description}
+                  id={room.id}
+                  key={room.id}
+                />
+              ))
+            ) : (
+              <>
+                <div className="dark:bg-slate-800 text-sm text-right rounded-lg mt-8 pr-4 py-2">
+                  Joined Rooms
+                </div>
+                {joinedRooms &&
+                  joinedRooms.map((room) => (
+                    <RoomCard
+                      name={room.room.name}
+                      description={room.room.description}
+                      id={room.room.id}
+                      key={room.room.id}
+                    />
+                  ))}
+              </>
+            )}
+          </div>
         </div>
         {/* </ScrollArea> */}
       </div>
