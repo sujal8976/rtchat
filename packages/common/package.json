@@ -1,0 +1,24 @@
+{
+  "name": "@repo/common",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@repo/eslint-config": "workspace:*",
+    "@repo/typescript-config": "workspace:*",
+    "@types/node": "^20.11.24",
+    "typescript": "5.5.4"
+  },
+  "exports": {
+    "./types": "./src/types.ts",
+    "./schema": "./src/schema.ts"
+  },
+  "dependencies": {
+    "zod": "^3.23.8"
+  }
+}
