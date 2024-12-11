@@ -26,7 +26,7 @@ export const sendMessageSchema = z.object({
 export const privateMessageSchema = z.object({
   type: z.literal(WebSocketMessageType.PRIVATE_MESSAGE),
   payload: z.object({
-    roomId: z.string(),
+    recipientId: z.string(),
     content: z.string().min(1),
   }),
 });
