@@ -9,8 +9,9 @@ interface ChatState {
   connectionStatus: "connected" | "disconnected" | "error";
   error: string | null;
 
-  //actions
+  // Actions
   setCurrentRoom: (roomId: string) => void;
+  setMessages: (roomId: string, messages: ChatMessage[]) => void;
   addMessage: (message: ChatMessage) => void;
   updateMessage: (messageId: string, updates: Partial<ChatMessage>) => void;
   updateUserStatus: (status: UserStatus) => void;
@@ -29,10 +30,22 @@ export const useChatStore = create<ChatState>((set, get) => ({
   error: null,
 
   setCurrentRoom: (roomId) => {
+    if (!roomId) return; // Avoid setting an invalid room
     set({ currentRoom: roomId });
   },
 
+  setMessages: (roomId, messages) => {
+    if (!roomId || !Array.isArray(messages)) return; // Validate inputs
+    set((state) => ({
+      messages: {
+        ...state.messages,
+        [roomId]: messages,
+      },
+    }));
+  },
+
   addMessage: (message) => {
+    if (!message.roomId) return; // Ensure the message has a valid roomId
     set((state) => ({
       messages: {
         ...state.messages,
@@ -42,22 +55,32 @@ export const useChatStore = create<ChatState>((set, get) => ({
   },
 
   updateMessage: (messageId, updates) => {
+    if (!messageId || !updates) return; // Validate inputs
     set((state) => {
-      const newMessages = { ...state.messages };
-
-      Object.keys(newMessages).forEach((roomId) => {
-        if (newMessages[roomId]) {
-          newMessages[roomId] = newMessages[roomId].map((msg) =>
+      const updatedMessages = Object.keys(state.messages).reduce(
+        (acc, roomId) => {
+          const roomMessages = state.messages[roomId];
+          if (!roomMessages) {
+            acc[roomId] = []; // Ensure undefined rooms are not processed
+            return acc;
+          }
+  
+          const updatedRoomMessages = roomMessages.map((msg) =>
             msg.id === messageId ? { ...msg, ...updates } : msg
           );
-        }
-      });
-
-      return { messages: newMessages };
+          acc[roomId] = updatedRoomMessages;
+          return acc;
+        },
+        {} as Record<string, ChatMessage[]>
+      );
+  
+      return { messages: updatedMessages };
     });
   },
+  
 
   updateUserStatus: (status) => {
+    if (!status || !status.userId) return; // Validate user status
     set((state) => ({
       userStatuses: {
         ...state.userStatuses,
@@ -67,11 +90,12 @@ export const useChatStore = create<ChatState>((set, get) => ({
   },
 
   updateTypingStatus: (status) => {
+    if (!status || !status.userId || !status.roomId) return; // Validate inputs
     set((state) => {
-      const roomTypingStatuses = state.typingStatuses[status.roomId] || [];
+      const currentRoomStatuses = state.typingStatuses[status.roomId] || [];
       const updatedStatuses = status.isTyping
-        ? [...roomTypingStatuses, status]
-        : roomTypingStatuses.filter((s) => s.userId !== status.userId);
+        ? [...currentRoomStatuses.filter((s) => s.userId !== status.userId), status]
+        : currentRoomStatuses.filter((s) => s.userId !== status.userId);
 
       return {
         typingStatuses: {
@@ -91,6 +115,7 @@ export const useChatStore = create<ChatState>((set, get) => ({
   },
 
   clearMessages: (roomId) => {
+    if (!roomId) return; // Validate roomId
     set((state) => ({
       messages: {
         ...state.messages,

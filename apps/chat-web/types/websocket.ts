@@ -1,10 +1,9 @@
 export interface ChatMessage {
   id: string;
+  content: string;
   roomId: string;
   userId: string;
-  message: string;
-  timestamp: string;
-  status?: "sent" | "delivered" | "read";
+  createdAt: Date;
 }
 
 export interface UserStatus {
