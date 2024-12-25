@@ -23,19 +23,19 @@ export function useChatRoom(roomId: string) {
   useEffect(() => {
     setCurrentRoom(roomId);
 
-    // Join room
-    wsService.send({
-      type: WebSocketMessageType.JOIN_ROOM,
-      payload: { roomId },
-    });
+    // // Join room
+    // wsService.send({
+    //   type: WebSocketMessageType.JOIN_ROOM,
+    //   payload: { roomId },
+    // });
 
-    return () => {
-      // Leave room
-      wsService.send({
-        type: WebSocketMessageType.LEAVE_ROOM,
-        payload: { roomId },
-      });
-    };
+    // return () => {
+    //   // Leave room
+    //   wsService.send({
+    //     type: WebSocketMessageType.LEAVE_ROOM,
+    //     payload: { roomId },
+    //   });
+    // };
   }, [roomId, setCurrentRoom]);
 
   useEffect(() => {

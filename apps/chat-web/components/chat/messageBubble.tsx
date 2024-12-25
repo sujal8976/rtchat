@@ -1,17 +1,14 @@
 import { cn } from "@repo/ui/lib/utils";
-import { Message, User } from "../../testData/chat";
+import { ChatMessage } from "../../types/websocket";
 import { Check, CheckCheck, UserCircle } from "@repo/ui/icons";
-import {
-  Avatar,
-  AvatarFallback,
-  AvatarImage,
-} from "@repo/ui/components/ui/avatar";
+import { Avatar, AvatarFallback } from "@repo/ui/components/ui/avatar";
 import { format } from "date-fns";
+import { ChatUser } from "../../types/chat";
 
 interface MessageBubbleProps {
-  message: Message;
-  user: User;
+  message: ChatMessage;
   isCurrentUser: boolean;
+  messageUser?: ChatUser;
 }
 
 const statusIcons = {
@@ -21,26 +18,22 @@ const statusIcons = {
 };
 
 export function MessageBubble({
+  messageUser,
   message,
-  user,
   isCurrentUser,
 }: MessageBubbleProps) {
   return (
     <div
       className={cn(
         "flex gap-3 max-w-[75%]",
-        isCurrentUser ? "ml-auto flex-row-reverse":""
+        isCurrentUser ? "ml-auto flex-row-reverse" : ""
       )}
     >
       {!isCurrentUser && (
         <Avatar className="h-8 w-8">
-          {user.avatar ? (
-            <AvatarImage src={user.avatar} alt={user.name} />
-          ) : (
-            <AvatarFallback>
-              <UserCircle className="h-5 w-5" />
-            </AvatarFallback>
-          )}
+          <AvatarFallback>
+            <UserCircle className="h-5 w-5" />
+          </AvatarFallback>
         </Avatar>
       )}
       <div
@@ -50,21 +43,23 @@ export function MessageBubble({
         )}
       >
         {!isCurrentUser && (
-          <span className="text-sm font-medium">{user.name}</span>
+          <span className="text-sm font-medium">{messageUser?.username}</span>
         )}
         <div
           className={cn(
             "rounded-2xl px-4 py-2 max-w-[420px] break-words",
-            isCurrentUser ? "bg-black text-white dark:bg-white dark:text-black" : "bg-gray-100 dark:bg-slate-700"
+            isCurrentUser
+              ? "bg-black text-white dark:bg-white dark:text-black"
+              : "bg-gray-100 dark:bg-slate-700"
           )}
         >
-          {message.message}
+          {message.content}
         </div>
         <div className="flex items-center gap-1 text-xs">
-          {format(new Date(message.timestamp), "h:mm a")}
-          {isCurrentUser && message.status && (
-            <span className="ml-1">{statusIcons[message.status]}</span>
-          )}
+          {format(new Date(message.createdAt), "h:mm a")}
+          {/* {isCurrentUser && user.isOnline && (
+            <span className="ml-1">{}</span>
+          )} */}
         </div>
       </div>
     </div>

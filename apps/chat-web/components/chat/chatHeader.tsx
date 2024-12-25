@@ -6,15 +6,22 @@ import {
   SheetTrigger,
 } from "@repo/ui/components/ui/sheet";
 import { ChatMembersContent } from "./chatMembers";
+import { ChatUser } from "../../types/chat";
 
-export function ChatHeader() {
+interface ChatHeaderProps {
+  name: string;
+  description: string | null;
+  users: ChatUser[]
+}
+
+export function ChatHeader({name, description, users}:ChatHeaderProps) {
   return (
     <div className="border-b-2 dark:border-b-slate-500 px-6 py-4 flex items-center justify-between backdrop-blur">
       <div>
-        <h2 className="text-xl font-semibold">Room 1</h2>
-        <p className="text-sm text-gray-500">
-          A place for general chat and discussions
-        </p>
+        <h2 className="text-xl font-semibold">{name}</h2>
+        {description && <p className="text-sm text-gray-500">
+         {description}
+        </p>}
       </div>
       <div className="flex justify-center gap-2">
         {/* Desktop  */}
@@ -30,7 +37,7 @@ export function ChatHeader() {
           </SheetTrigger>
           <SheetContent side={"right"} className="p-4 mb-4">
             <h2 className="font-semibold my-5">Room Members</h2>
-            <ChatMembersContent />
+            <ChatMembersContent users={users} />
           </SheetContent>
         </Sheet>
       </div>
