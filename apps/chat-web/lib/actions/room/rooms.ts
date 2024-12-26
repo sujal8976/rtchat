@@ -7,28 +7,28 @@ import { ChatRoom } from "../../../types/chat";
 
 export async function createRoom(name: string, description: string) {
   const session = await auth();
-  if (!session?.user && !session?.user?.id) {
+
+  if (!session || !session.user?.id) {
     throw new Error("User not logged in");
   }
 
   try {
-    const room = await prisma.room.findFirst({
-      where: {
-        name,
-      },
+    const existingRoom = await prisma.room.findFirst({
+      where: { name }
     });
-    if (room) {
-      throw new Error("Already room exists with this name");
+
+    if (existingRoom) {
+      throw new Error("A room with this name already exists");
     }
 
     const newRoom = await prisma.room.create({
       data: {
         name,
         description,
-        createdBy: session.user.id as string,
+        createdBy: session.user.id,
         users: {
           create: {
-            userId: session.user.id as string,
+            userId: session.user.id,
           },
         },
       },
@@ -38,8 +38,9 @@ export async function createRoom(name: string, description: string) {
       success: true,
       roomId: newRoom.id,
     };
-  } catch (error) {
-    throw new Error("Failed to create Room");
+  } catch (error: any) {
+    console.error("Error creating room:", error);
+    throw new Error(error.message || "Failed to create the room");
   }
 }
 
