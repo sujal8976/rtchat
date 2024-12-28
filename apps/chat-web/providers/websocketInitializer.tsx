@@ -2,7 +2,7 @@
 
 import { useEffect } from "react";
 import { useSession } from "next-auth/react";
-import { wsService } from "../../lib/services/websocket";
+import { wsService } from "../lib/services/websocket"; 
 
 export default function WebSocketInitializer() {
   const { data: session } = useSession();

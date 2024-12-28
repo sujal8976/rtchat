@@ -3,9 +3,9 @@
 import { ThemeProvider } from "@repo/ui/components/theme-provider";
 import { Toaster } from "@repo/ui/components/ui/toaster";
 import { SessionProvider } from "next-auth/react";
-import WebSocketInitializer from "./components/initializer/websocketInitializer";
+import WebSocketInitializer from "./websocketInitializer";
 import { useEffect } from "react";
-import { wsService } from "./lib/services/websocket";
+import { wsService } from "../lib/services/websocket";
 
 export const Providers = ({ children }: { children: React.ReactNode }) => {
   useEffect(() => {

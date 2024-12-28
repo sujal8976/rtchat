@@ -2,13 +2,14 @@ import type { Metadata } from "next";
 import localFont from "next/font/local";
 import "./globals.css";
 import "@repo/ui/globals.css";
-import { Providers } from "../provider";
+import { Providers } from "../providers/provider";
 import { Header } from "../components/layout/header";
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
   variable: "--font-geist-sans",
 });
+
 const geistMono = localFont({
   src: "./fonts/GeistMonoVF.woff",
   variable: "--font-geist-mono",
