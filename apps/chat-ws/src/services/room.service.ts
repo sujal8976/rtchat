@@ -21,18 +21,30 @@ export class RoomService {
     }
   }
 
-  static async addUserToRoom(userId: string, roomId: string): Promise<boolean> {
+  static async addUserToRoom(
+    userId: string,
+    roomId: string
+  ): Promise<"alreadyJoined" | "joined" | "failed"> {
     try {
+      const existingEntry = await prisma.roomUser.findFirst({
+        where: { userId, roomId },
+      });
+
+      if (existingEntry) {
+        return "alreadyJoined";
+      }
+
       await prisma.roomUser.create({
         data: {
           userId,
           roomId,
         },
       });
-      return true;
+
+      return "joined";
     } catch (error) {
-      console.log("Error adding user to room:", error);
-      return false;
+      console.error("Error adding user to room:", error);
+      return "failed";
     }
   }
 
@@ -56,16 +68,27 @@ export class RoomService {
     }
   }
 
-  static async getRoomMembers(roomId: string): Promise<string[]> {
+  static async getRoomMembers(roomId: string): Promise<GetRoomMembersProps[]> {
     try {
       const roomUsers = await prisma.roomUser.findMany({
         where: { roomId },
-        select: { userId: true },
+        select: {
+          user: {
+            select: {
+              id: true,
+              isOnline: true,
+            },
+          },
+        },
       });
-      return roomUsers.map((user) => user.userId);
+      return roomUsers;
     } catch (error) {
-      console.error("Error getting room numbers:", error);
+      console.error("Error getting room members:", error);
       return [];
     }
   }
+}
+
+interface GetRoomMembersProps {
+  user: { id: string; isOnline: boolean };
 }

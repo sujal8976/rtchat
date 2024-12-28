@@ -15,6 +15,13 @@ export const leaveRoomSchema = z.object({
   }),
 });
 
+export const closeRoomSchema = z.object({
+  type: z.literal(WebSocketMessageType.CLOSE_ROOM),
+  payload: z.object({
+    roomId: z.string(),
+  }),
+});
+
 export const sendMessageSchema = z.object({
   type: z.literal(WebSocketMessageType.SEND_MESSAGE),
   payload: z.object({

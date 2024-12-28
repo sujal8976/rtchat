@@ -32,15 +32,23 @@ export class WebSocketService {
   }
 
   public async handleConnection(ws: AuthenticatedWebSocket, userId: string) {
-    ws.userId = userId;
-    ws.isAlive = true;
-    ws.rooms = new Set();
-    ws.isTyping = new Map();
-    this.clients.set(userId, ws);
-
     try {
-      await this.updateUserStatus(userId, true);
-      this.setupWebSocketListeners(ws);
+      if (await prisma.user.findUnique({ where: { id: userId } })) {
+        ws.userId = userId;
+        ws.isAlive = true;
+        ws.currentRoom = null;
+        ws.isTyping = new Map();
+        this.clients.set(userId, ws);
+
+        await this.updateUserStatus(userId, true);
+        this.setupWebSocketListeners(ws);
+      } else {
+        ErrorHandler.sendError(
+          ws,
+          "CONNECTION_FAILED",
+          "Failed to establish connection"
+        );
+      }
     } catch (error) {
       console.log("Error in handleConnection:", error);
       ErrorHandler.sendError(
@@ -58,7 +66,7 @@ export class WebSocketService {
 
     ws.on("message", async (data: string) => {
       try {
-        const message: WebSocketMessage = JSON.parse(data.toString());
+        const message: WebSocketMessage = JSON.parse(data);
         await this.handleMessage(ws, message);
       } catch (error) {
         console.log("Error processing Message:", error);
@@ -98,6 +106,9 @@ export class WebSocketService {
         case WebSocketMessageType.SEND_MESSAGE:
           await this.handleSendMessage(ws, message.payload);
           break;
+        case WebSocketMessageType.CLOSE_ROOM:
+          await this.handleCloseRoom(ws, message.payload);
+          break;
         case WebSocketMessageType.PRIVATE_MESSAGE:
           await this.handlePrivateMessage(ws, message.payload);
           break;
@@ -123,8 +134,10 @@ export class WebSocketService {
         payload,
       }).payload;
 
-      if (await RoomService.addUserToRoom(ws.userId, roomId)) {
-        ws.rooms.add(roomId);
+      const result = await RoomService.addUserToRoom(ws.userId, roomId);
+
+      if (result === "joined") {
+        ws.currentRoom = roomId;
         this.broadcastToRoom(roomId, {
           type: WebSocketMessageType.USER_STATUS,
           payload: {
@@ -133,8 +146,18 @@ export class WebSocketService {
             roomId,
           },
         });
+      } else if (result === "alreadyJoined") {
+        ws.currentRoom = roomId;
+        this.broadcastToRoom(roomId, {
+          type: WebSocketMessageType.USER_STATUS,
+          payload: {
+            userId: ws.userId,
+            status: "rejoined",
+            roomId,
+          },
+        });
       } else {
-        ErrorHandler.sendError(ws, "Room_Join_Error", "Failed to join room");
+        ErrorHandler.sendError(ws, "ROOM_JOIN_ERROR", "Failed to join room");
       }
     } catch (error) {
       console.log("Error in handleJoinRoom", error);
@@ -150,7 +173,7 @@ export class WebSocketService {
       }).payload;
 
       if (await RoomService.removeUserFromRoom(ws.userId, roomId)) {
-        ws.rooms.delete(roomId);
+        ws.currentRoom = null;
         this.broadcastToRoom(roomId, {
           type: WebSocketMessageType.USER_STATUS,
           payload: {
@@ -174,6 +197,14 @@ export class WebSocketService {
         type: WebSocketMessageType.SEND_MESSAGE,
         payload,
       }).payload;
+
+      if (ws.currentRoom !== roomId) {
+        return ErrorHandler.sendError(
+          ws,
+          "NOT_CURRENT_ROOMID",
+          "Provide a current roomId"
+        );
+      }
 
       if (!(await RoomService.validateRoomAccess(ws.userId, roomId))) {
         return ErrorHandler.sendError(
@@ -203,9 +234,31 @@ export class WebSocketService {
       console.log("Error in handleSendMessage:", error);
       ErrorHandler.sendError(
         ws,
-        "Message_Send_Message",
+        "ERROR_SEND_MESSAGE",
         "Failed to send message"
       );
+    }
+  }
+
+  private async handleCloseRoom(ws: AuthenticatedWebSocket, payload: any) {
+    try {
+      const { roomId } = schemas.closeRoomSchema.parse({
+        type: WebSocketMessageType.CLOSE_ROOM,
+        payload,
+      }).payload;
+
+      if (ws.currentRoom === roomId) {
+        ws.currentRoom = null;
+      } else {
+        ErrorHandler.sendError(
+          ws,
+          "ERROR_CLOSING_ROOM",
+          "Failed to close room"
+        );
+      }
+    } catch (error) {
+      console.log("Error in handleCloseRoom:", error);
+      ErrorHandler.sendError(ws, "ERROR_CLOSING_ROOM", "Failed to close room");
     }
   }
 
@@ -312,22 +365,22 @@ export class WebSocketService {
   private async handleDisconnect(ws: AuthenticatedWebSocket) {
     try {
       this.clients.delete(ws.userId);
+      await this.updateUserStatus(ws.userId, false);
 
-      //clear typing timeout
       ws.isTyping.forEach((timeout) => clearTimeout(timeout));
       ws.isTyping.clear();
 
-      // Notify all rooms about user's departure
-      ws.rooms.forEach((roomId) => {
-        this.broadcastToRoom(roomId, {
+      if (ws.currentRoom) {
+        this.broadcastToRoom(ws.currentRoom, {
           type: WebSocketMessageType.USER_STATUS,
           payload: {
             userId: ws.userId,
             status: "offline",
-            roomId,
+            roomId: ws.currentRoom,
           },
         });
-      });
+        ws.currentRoom = null;
+      }
     } catch (error) {
       console.log("Error in handleDisconnect:", error);
     }
@@ -352,11 +405,16 @@ export class WebSocketService {
     try {
       const roomMembers = await RoomService.getRoomMembers(roomId);
 
+      const onlineRoomMemberIds = roomMembers
+        .filter((member) => member.user.isOnline)
+        .map((member) => member.user.id);
+
       this.clients.forEach((client, userId) => {
         if (
           client.readyState === WebSocket.OPEN &&
-          roomMembers.includes(userId) &&
-          !excludeUserIds.includes(userId)
+          onlineRoomMemberIds.includes(userId) &&
+          !excludeUserIds.includes(userId) &&
+          client.currentRoom === roomId
         ) {
           client.send(JSON.stringify(message));
         }
