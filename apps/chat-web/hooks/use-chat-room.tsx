@@ -9,33 +9,31 @@ import { useToast } from "@repo/ui/hooks/use-toast";
 export function useChatRoom(roomId: string) {
   const { toast } = useToast();
   const {
-    messages,
-    userStatuses,
-    typingStatuses,
+    // userStatuses,
+    // typingStatuses,
     connectionStatus,
     error,
     setCurrentRoom,
   } = useChatStore();
 
-  const roomMessages = messages[roomId] || [];
-  const roomTypingStatuses = typingStatuses[roomId] || [];
+  // const roomTypingStatuses = typingStatuses[roomId] || [];
 
   useEffect(() => {
     setCurrentRoom(roomId);
 
-    // // Join room
-    // wsService.send({
-    //   type: WebSocketMessageType.JOIN_ROOM,
-    //   payload: { roomId },
-    // });
+    // Join room
+    wsService.send({
+      type: WebSocketMessageType.JOIN_ROOM,
+      payload: { roomId },
+    });
 
-    // return () => {
-    //   // Leave room
-    //   wsService.send({
-    //     type: WebSocketMessageType.LEAVE_ROOM,
-    //     payload: { roomId },
-    //   });
-    // };
+    return () => {
+      // Close room
+      wsService.send({
+        type: WebSocketMessageType.CLOSE_ROOM,
+        payload: { roomId },
+      });
+    };
   }, [roomId, setCurrentRoom]);
 
   useEffect(() => {
@@ -61,26 +59,25 @@ export function useChatRoom(roomId: string) {
     [roomId]
   );
 
-  const sendTypingStatus = useCallback(
-    (isTyping: boolean) => {
-      wsService.send({
-        type: isTyping
-          ? WebSocketMessageType.TYPING_START
-          : WebSocketMessageType.TYPING_STOP,
-        payload: {
-          roomId,
-        },
-      });
-    },
-    [roomId]
-  );
+  // const sendTypingStatus = useCallback(
+  //   (isTyping: boolean) => {
+  //     wsService.send({
+  //       type: isTyping
+  //         ? WebSocketMessageType.TYPING_START
+  //         : WebSocketMessageType.TYPING_STOP,
+  //       payload: {
+  //         roomId,
+  //       },
+  //     });
+  //   },
+  //   [roomId]
+  // );
 
   return {
-    messages: roomMessages,
-    typingUsers: roomTypingStatuses,
-    userStatuses,
+    // typingUsers: roomTypingStatuses,
+    // userStatuses,
     connectionStatus,
     sendMessage,
-    sendTypingStatus,
+    // sendTypingStatus,
   };
 }

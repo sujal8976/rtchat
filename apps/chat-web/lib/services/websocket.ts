@@ -112,17 +112,17 @@ class WebSocketService {
         store.addMessage(message.payload);
         break;
 
-      case WebSocketMessageType.USER_STATUS:
-        store.updateUserStatus(message.payload);
-        break;
+      // case WebSocketMessageType.USER_STATUS:
+      //   store.updateUserStatus(message.payload);
+      //   break;
 
-      case WebSocketMessageType.TYPING_START:
-        store.updateTypingStatus({
-          userId: message.payload.userId,
-          roomId: message.payload.roomId,
-          isTyping: true,
-        });
-        break;
+      // case WebSocketMessageType.TYPING_START:
+      //   store.updateTypingStatus({
+      //     userId: message.payload.userId,
+      //     roomId: message.payload.roomId,
+      //     isTyping: true,
+      //   });
+      //   break;
 
       case WebSocketMessageType.ERROR:
         console.error("WebSocket error message:", message.payload);
