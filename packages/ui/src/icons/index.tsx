@@ -8,5 +8,6 @@ export {
   UserCircle,
   Users,
   X,
-  Send
+  Send,
+  AlignLeft
 } from "lucide-react";

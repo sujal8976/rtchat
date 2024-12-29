@@ -3,7 +3,7 @@ import localFont from "next/font/local";
 import "./globals.css";
 import "@repo/ui/globals.css";
 import { Providers } from "../providers/provider";
-import { Header } from "../components/layout/header";
+import { Navbar } from "../components/layout/navbar1";
 
 const geistSans = localFont({
   src: "./fonts/GeistVF.woff",
@@ -27,10 +27,10 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`${geistSans.variable} ${geistMono.variable} outline-2 outline-red-500`}>
+      <body className={`${geistSans.variable} ${geistMono.variable}`}>
         <Providers>
           <main>
-            <Header />
+            <Navbar />
             {children}
           </main>
         </Providers>

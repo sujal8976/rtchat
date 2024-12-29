@@ -1,26 +1,24 @@
 "use client";
 
-import { MessageBubble } from "./messageBubble";
 import { forwardRef } from "react";
-import { useSession } from "next-auth/react";
 import { ChatUser } from "../../types/chat";
+import { useSession } from "next-auth/react";
 import { useChatStore } from "../../lib/store/chat";
+import { MessageBubble } from "./messageBubble";
 
-interface ChatMessagesProp {
+interface ChatMessagesProps {
   users: ChatUser[];
-  roomId: string;
 }
 
-const ChatMessages = forwardRef<HTMLDivElement, ChatMessagesProp>(
-  ({ users, roomId }, ref) => {
-    
+const ChatMessages = forwardRef<HTMLDivElement, ChatMessagesProps>(
+  ({ users }, ref) => {
     const { data } = useSession();
     if (!data?.user && !data?.user?.id) return <div>User not logged In</div>;
 
     const { messages } = useChatStore();
 
     return (
-      <div className="w-full max-h-[75vh] p-4 overflow-y-scroll scroll-area">
+      <div className="w-full h-[70vh] p-4 overflow-y-scroll">
         <div className="space-y-6">
           {messages.map((msg) => {
             const messageUser = users.find((user) => user.id === msg.userId);

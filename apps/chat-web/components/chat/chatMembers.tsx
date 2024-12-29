@@ -1,13 +1,7 @@
-import { ScrollArea } from "@repo/ui/components/ui/scroll-area";
-import { Avatar, AvatarFallback } from "@repo/ui/components/ui/avatar";
-import { UserCircle } from "@repo/ui/icons";
 import { cn } from "@repo/ui/lib/utils";
 import { ChatUser } from "../../types/chat";
-
-const statusStyles = {
-  online: "bg-green-500",
-  offline: "bg-gray-400",
-};
+import { Avatar, AvatarFallback } from "@repo/ui/components/ui/avatar";
+import { UserCircle } from "@repo/ui/icons";
 
 interface ChatMembersProps {
   users: ChatUser[];
@@ -15,21 +9,16 @@ interface ChatMembersProps {
 
 export function ChatMembers({ users }: ChatMembersProps) {
   return (
-    <div className="border-l-2 dark:border-l-slate-500 p-4 w-72 mb-4 hidden lg:block">
+    <div className="border-l-2 dark:border-l-slate-500 p-4 pt-2 w-72 mb-4 hidden lg:block">
       <h2 className="font-semibold my-5">Room Members</h2>
       <ChatMembersContent users={users} />
     </div>
   );
 }
 
-interface ChatMembersContentProps {
-  users: ChatUser[];
-}
-
-export function ChatMembersContent({ users }: ChatMembersContentProps) {
+export function ChatMembersContent({ users }: ChatMembersProps) {
   return (
-    // <ScrollArea className="h-[calc(100vh-8rem)]">
-    <div className="space-y-4 mt-1 overflow-y-scroll scroll-area max-h-[80vh]">
+    <div className="space-y-4 mt-1 overflow-y-scroll h-[75vh]">
       {users.map((user) => (
         <div key={user.id} className="flex items-center gap-3">
           <div className="relative">
@@ -63,6 +52,5 @@ export function ChatMembersContent({ users }: ChatMembersContentProps) {
         </div>
       ))}
     </div>
-    // </ScrollArea>
   );
 }

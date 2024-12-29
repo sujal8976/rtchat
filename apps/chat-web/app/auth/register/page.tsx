@@ -1,7 +1,5 @@
-import { Register } from "../../../components/register";
+import { Register } from "../../../components/auth/register";
 
 export default function () {
-  return (
-    <Register />
-  );
+  return <Register />;
 }

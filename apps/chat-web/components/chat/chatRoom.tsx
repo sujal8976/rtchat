@@ -1,13 +1,12 @@
 "use client";
 
 import { useEffect, useRef } from "react";
+import { ChatRoom as ChatRoomProps } from "../../types/chat";
 import { ChatHeader } from "./chatHeader";
+import { ChatInput } from "./chatInput";
 import { ChatMembers } from "./chatMembers";
 import ChatMessages from "./chatMessages";
-import ChatInput from "./chatInput";
-import { ChatRoom as ChatRoomProps } from "../../types/chat";
 import { useChatRoom } from "../../hooks/use-chat-room";
-import { useChatMessages } from "../../hooks/use-chat-message";
 import { useChatStore } from "../../lib/store/chat";
 
 export function ChatRoom(room: ChatRoomProps) {
@@ -28,16 +27,15 @@ export function ChatRoom(room: ChatRoomProps) {
   useEffect(() => {
     scrollToBottom();
   }, [messages]);
-
   return (
-    <div className="flex flex-1 ">
+    <div className="flex flex-1">
       <div className="flex-1 flex flex-col">
         <ChatHeader
           name={room.name}
           description={room.description}
           users={room.users}
         />
-        <ChatMessages roomId={room.id} users={room.users} ref={messageEndRef} />
+        <ChatMessages users={room.users} ref={messageEndRef} />
         <ChatInput roomId={room.id} />
       </div>
       <ChatMembers users={room.users} />

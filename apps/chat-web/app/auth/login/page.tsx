@@ -1,5 +1,5 @@
-import { Login } from "../../../components/login";
+import { Login } from "../../../components/auth/login";
 
-export default function (){
-    return <Login/>
+export default function () {
+  return <Login />;
 }

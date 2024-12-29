@@ -5,11 +5,9 @@ import { Textarea } from "@repo/ui/components/ui/textarea";
 import { Send } from "@repo/ui/icons";
 import { useEffect, useRef, useState } from "react";
 import { useChatRoom } from "../../hooks/use-chat-room";
-import { useSession } from "next-auth/react";
 
-export default function ChatInput({ roomId }: { roomId: string }) {
+export function ChatInput({ roomId }: { roomId: string }) {
   const [message, setMessage] = useState("");
-  const { data: session } = useSession();
   const { sendMessage } = useChatRoom(roomId);
 
   const textareaRef = useRef<HTMLTextAreaElement>(null);

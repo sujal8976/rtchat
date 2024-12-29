@@ -1,14 +1,15 @@
-import { SidebarContent } from "./sidebarContent";
+import { Logo } from "../client utilities/logo";
+import { SidebarContent } from "../client utilities/sidebarContent";
 
 export function Sidebar() {
   return (
-    <>
-      {/* Desktop Sidebar */}
-      <div className="hidden lg:block lg:w-72 xl:w-80 2xl:w-96 dark:border-slate-600 border-r-2 max-h-[90vh] left-0 overflow-hidden">
-        <div className="flex justify-center w-full mt-10">
-          <SidebarContent />
+    <div className="w-[350px] lg:flex justify-center hidden">
+      <div className="flex flex-col w-full">
+        <div className="flex justify-center border-b-2 dark:border-b">
+            <Logo className="py-4" />
         </div>
+        <SidebarContent />
       </div>
-    </>
+    </div>
   );
 }

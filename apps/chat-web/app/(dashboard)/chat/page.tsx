@@ -1,3 +1,3 @@
-export default function (){
-    return <div>Select Room to ChatMembers</div>
+export default function () {
+  return <div>Select Room to Chat</div>;
 }
