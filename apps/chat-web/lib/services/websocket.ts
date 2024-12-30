@@ -27,9 +27,6 @@ class WebSocketService {
 
   public setAccessToken(token: string | null) {
     this.accessToken = token;
-
-    // If we have a new token and we're already initialized,
-    // we should reconnect with the new token
     if (this.initialized && token) {
       this.reconnect();
     }
@@ -39,7 +36,6 @@ class WebSocketService {
 
   public initialize() {
     if (this.initialized) {
-      console.warn("WebSocket service already initialized");
       return this;
     }
 
@@ -56,6 +52,7 @@ class WebSocketService {
       console.log("No accessToken provided");
     }
     try {
+      useChatStore.getState().setConnectionStatus("connecting");
       this.ws = new WebSocket(`${WS_URL}?token=${this.accessToken}`);
       this.setupEventListners();
       this.setupPing();
@@ -112,21 +109,13 @@ class WebSocketService {
         store.addMessage(message.payload);
         break;
 
-      // case WebSocketMessageType.USER_STATUS:
-      //   store.updateUserStatus(message.payload);
-      //   break;
-
-      // case WebSocketMessageType.TYPING_START:
-      //   store.updateTypingStatus({
-      //     userId: message.payload.userId,
-      //     roomId: message.payload.roomId,
-      //     isTyping: true,
-      //   });
-      //   break;
-
       case WebSocketMessageType.ERROR:
         console.error("WebSocket error message:", message.payload);
-        store.setError(message.payload);
+        store.setError(message.payload.message);
+        break;
+
+      case WebSocketMessageType.USER_STATUS:
+        store.setRoomConnectionStatus(message.payload.status);
         break;
 
       default:

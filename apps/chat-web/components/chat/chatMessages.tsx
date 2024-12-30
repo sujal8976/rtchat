@@ -5,17 +5,17 @@ import { ChatUser } from "../../types/chat";
 import { useSession } from "next-auth/react";
 import { useChatStore } from "../../lib/store/chat";
 import { MessageBubble } from "./messageBubble";
+import { ChatMessage } from "../../types/websocket";
 
 interface ChatMessagesProps {
   users: ChatUser[];
+  messages: ChatMessage[]
 }
 
 const ChatMessages = forwardRef<HTMLDivElement, ChatMessagesProps>(
-  ({ users }, ref) => {
+  ({ users, messages }, ref) => {
     const { data } = useSession();
     if (!data?.user && !data?.user?.id) return <div>User not logged In</div>;
-
-    const { messages } = useChatStore();
 
     return (
       <div className="w-full h-[70vh] p-4 overflow-y-scroll">
@@ -39,5 +39,4 @@ const ChatMessages = forwardRef<HTMLDivElement, ChatMessagesProps>(
 );
 
 ChatMessages.displayName = "ChatMessages";
-
 export default ChatMessages;

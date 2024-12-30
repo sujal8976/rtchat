@@ -27,6 +27,7 @@ export function ChatRoom(room: ChatRoomProps) {
   useEffect(() => {
     scrollToBottom();
   }, [messages]);
+
   return (
     <div className="flex flex-1">
       <div className="flex-1 flex flex-col">
@@ -35,7 +36,11 @@ export function ChatRoom(room: ChatRoomProps) {
           description={room.description}
           users={room.users}
         />
-        <ChatMessages users={room.users} ref={messageEndRef} />
+        <ChatMessages
+          messages={messages}
+          users={room.users}
+          ref={messageEndRef}
+        />
         <ChatInput roomId={room.id} />
       </div>
       <ChatMembers users={room.users} />

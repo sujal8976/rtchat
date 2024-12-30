@@ -8,25 +8,16 @@ import { useToast } from "@repo/ui/hooks/use-toast";
 
 export function useChatRoom(roomId: string) {
   const { toast } = useToast();
-  const {
-    // userStatuses,
-    // typingStatuses,
-    connectionStatus,
-    error,
-    setCurrentRoom,
-  } = useChatStore();
-
-  // const roomTypingStatuses = typingStatuses[roomId] || [];
+  const { connectionStatus, error, setCurrentRoom, roomConnectionStatus } =
+    useChatStore();
 
   useEffect(() => {
     setCurrentRoom(roomId);
-
     // Join room
     wsService.send({
       type: WebSocketMessageType.JOIN_ROOM,
       payload: { roomId },
     });
-
     return () => {
       // Close room
       wsService.send({
@@ -40,11 +31,16 @@ export function useChatRoom(roomId: string) {
     if (error) {
       toast({
         title: "Error",
-        description: "error",
+        description: error,
         variant: "destructive",
       });
     }
-  }, [error, toast]);
+    if (roomConnectionStatus === "rejoined") {
+      toast({
+        title: "You entered in the chat",
+      });
+    }
+  }, [error, connectionStatus, toast]);
 
   const sendMessage = useCallback(
     (message: string) => {
@@ -59,25 +55,8 @@ export function useChatRoom(roomId: string) {
     [roomId]
   );
 
-  // const sendTypingStatus = useCallback(
-  //   (isTyping: boolean) => {
-  //     wsService.send({
-  //       type: isTyping
-  //         ? WebSocketMessageType.TYPING_START
-  //         : WebSocketMessageType.TYPING_STOP,
-  //       payload: {
-  //         roomId,
-  //       },
-  //     });
-  //   },
-  //   [roomId]
-  // );
-
   return {
-    // typingUsers: roomTypingStatuses,
-    // userStatuses,
     connectionStatus,
     sendMessage,
-    // sendTypingStatus,
   };
 }
