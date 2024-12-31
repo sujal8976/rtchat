@@ -16,7 +16,8 @@
   },
   "exports": {
     "./types": "./src/types.ts",
-    "./schema": "./src/schema.ts"
+    "./schema": "./src/schema.ts",
+    "./utils": "./src/utils.ts"
   },
   "dependencies": {
     "zod": "^3.23.8"

@@ -47,3 +47,17 @@ export const typingSchema = z.object({
     roomId: z.string(),
   }),
 });
+
+export const registerSchema = z.object({
+  username: z
+    .string()
+    .min(4, { message: "Username must be at least 4 characters long." })
+    .max(12, { message: "Username must be at most 12 characters long." }),
+  password: z
+    .string()
+    .min(6, { message: "Password must be at least 6 characters long." })
+    .regex(/^(?=.*[a-zA-Z])(?=.*\d)/, {
+      message: "Password must contain at least one letter and one number.",
+    }),
+  email: z.string().email({ message: "Invalid email address." }),
+});
