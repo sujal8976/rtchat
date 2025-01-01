@@ -1,5 +1,5 @@
 import { create } from "zustand";
-import { ChatMessage, UserStatus, TypingStatus } from "../../types/websocket";
+import { ChatMessage } from "../../types/websocket";
 import { devtools } from "zustand/middleware";
 
 interface ChatState {
@@ -7,10 +7,10 @@ interface ChatState {
   currentRoom: string | null;
   connectionStatus: "connected" | "connecting" | "disconnected" | "error";
   error: string | null;
-  roomConnectionStatus: "rejoined" | "joined";
+  roomConnectionStatus: "rejoined" | "joined" | "no room";
 
   // Actions
-  setCurrentRoom: (roomId: string) => void;
+  setCurrentRoom: (roomId: string | null) => void;
   setMessages: (messages: ChatMessage[]) => void;
   addMessage: (message: ChatMessage) => void;
   setConnectionStatus: (
@@ -18,7 +18,7 @@ interface ChatState {
   ) => void;
   setError: (error: string | null) => void;
   clearMessages: (roomId: string) => void;
-  setRoomConnectionStatus: (status: "rejoined" | "joined") => void;
+  setRoomConnectionStatus: (status: "rejoined" | "joined" | "no room" ) => void;
 }
 
 export const useChatStore = create<ChatState>()(

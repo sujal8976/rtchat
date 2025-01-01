@@ -8,6 +8,7 @@ import { useDebounce } from "../../hooks/useDebounce";
 import { fetchJoinedRooms, getRooms } from "../../lib/actions/room/rooms";
 import { RoomCard } from "../cards/roomCard";
 import { useToast } from "@repo/ui/hooks/use-toast";
+import Loading from "../loading/loading";
 
 interface SidebarContentProps {
   onUpdate?: (value: boolean) => void;
@@ -91,48 +92,54 @@ export function SidebarContent({ onUpdate }: SidebarContentProps) {
           }}
         />
 
-        <div className="flex-1 px-2 overflow-y-scroll">
-          <div className="space-y-2 p-2">
-            {roomSearch ? (
-              rooms.map((room) => (
-                <RoomCard
-                  onClickSidebarClose={onUpdate}
-                  name={room.name}
-                  description={room.description}
-                  id={room.id}
-                  key={room.id}
-                />
-              ))
-            ) : (
-              <>
-                <div className="dark:bg-slate-800 text-sm text-right rounded-lg mt-8 mb-3 pr-4 py-[6px]">
-                  Joined Rooms
-                </div>
-                {joinedRooms && joinedRooms.length > 0 ? (
-                  joinedRooms.map((room) => (
-                    <RoomCard
-                      onClickSidebarClose={onUpdate}
-                      name={room.room.name}
-                      description={room.room.description}
-                      id={room.room.id}
-                      key={room.room.id}
-                    />
-                  ))
-                ) : (
-                  <>
-                    <div className="w-full h-[40vh] flex flex-col justify-center items-center">
-                      <div className="text-5xl text-red-400">!</div>
-                      <div>
-                        Start joining rooms that interest you and connect with
-                        like-minded people!
-                      </div>
-                    </div>
-                  </>
-                )}
-              </>
-            )}
+        {loading ? (
+          <div className="w-full h-[40vh] flex justify-center items-center">
+            <Loading text="Loading Rooms..." />
           </div>
-        </div>
+        ) : (
+          <div className="flex-1 px-2 overflow-y-scroll">
+            <div className="space-y-2 p-2">
+              {roomSearch ? (
+                rooms.map((room) => (
+                  <RoomCard
+                    onClickSidebarClose={onUpdate}
+                    name={room.name}
+                    description={room.description}
+                    id={room.id}
+                    key={room.id}
+                  />
+                ))
+              ) : (
+                <>
+                  <div className="dark:bg-slate-800 bg-gray-400 text-sm text-right rounded-lg mt-8 mb-3 pr-4 py-[6px]">
+                    Joined Rooms
+                  </div>
+                  {joinedRooms && joinedRooms.length > 0 ? (
+                    joinedRooms.map((room) => (
+                      <RoomCard
+                        onClickSidebarClose={onUpdate}
+                        name={room.room.name}
+                        description={room.room.description}
+                        id={room.room.id}
+                        key={room.room.id}
+                      />
+                    ))
+                  ) : (
+                    <>
+                      <div className="w-full h-[40vh] flex flex-col justify-center items-center">
+                        <div className="text-5xl text-red-400">!</div>
+                        <div>
+                          Start joining rooms that interest you and connect with
+                          like-minded people!
+                        </div>
+                      </div>
+                    </>
+                  )}
+                </>
+              )}
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );

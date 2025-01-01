@@ -1,23 +1,25 @@
 import { Button } from "@repo/ui/components/ui/button";
 import { ChatUser } from "../../types/chat";
 import { Settings, Users } from "@repo/ui/icons";
-import { Sheet, SheetContent, SheetTrigger } from "@repo/ui/components/ui/sheet";
+import {
+  Sheet,
+  SheetContent,
+  SheetTrigger,
+} from "@repo/ui/components/ui/sheet";
 import { ChatMembersContent } from "./chatMembers";
 
 interface ChatHeaderProps {
-    name: string;
-    description: string | null;
-    users: ChatUser[]
-  }
-  
-  export function ChatHeader({name, description, users}:ChatHeaderProps){
-    return (
-        <div className="border-b-2 dark:border-b-slate-500 px-6 py-4 flex items-center justify-between backdrop-blur">
-             <div>
+  name: string;
+  description: string | null;
+  users: ChatUser[];
+}
+
+export function ChatHeader({ name, description, users }: ChatHeaderProps) {
+  return (
+    <div className="border-b-2 dark:border-b px-6 py-4 flex items-center justify-between backdrop-blur">
+      <div>
         <h2 className="text-xl font-semibold">{name}</h2>
-        {description && <p className="text-sm text-gray-500">
-         {description}
-        </p>}
+        {description && <p className="text-sm text-gray-500">{description}</p>}
       </div>
       <div className="flex justify-center gap-2">
         {/* Desktop  */}
@@ -37,6 +39,6 @@ interface ChatHeaderProps {
           </SheetContent>
         </Sheet>
       </div>
-        </div>
-    )
+    </div>
+  );
 }

@@ -1,9 +1,9 @@
 import prisma from "@repo/db/client";
 import { compare } from "bcryptjs";
-import NextAuth, { CredentialsSignin, Session, User } from "next-auth";
+import NextAuth, { CredentialsSignin, User } from "next-auth";
 import { JWT } from "next-auth/jwt";
 import Credentials from "next-auth/providers/credentials";
-import { JWTPayload, SignJWT, importJWK } from "jose";
+import { JWTPayload, SignJWT } from "jose";
 
 const generateUUID = () => {
   return "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(/[xy]/g, function (c) {

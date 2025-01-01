@@ -41,7 +41,7 @@ export function ChatInput({ roomId }: { roomId: string }) {
   return (
     <form
       onSubmit={handleSubmit}
-      className="border-t-2 dark:border-slate-500 p-4 bg-background bottom-0"
+      className="border-t-2 dark:border-t p-4 bg-background bottom-0"
     >
       <div className="flex gap-4 items-end max-w-[900px] mx-auto">
         <Textarea

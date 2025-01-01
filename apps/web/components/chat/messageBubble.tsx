@@ -1,6 +1,6 @@
 import { cn } from "@repo/ui/lib/utils";
 import { ChatMessage } from "../../types/websocket";
-import { Check, CheckCheck, UserCircle } from "@repo/ui/icons";
+import { UserCircle } from "@repo/ui/icons";
 import { Avatar, AvatarFallback } from "@repo/ui/components/ui/avatar";
 import { format } from "date-fns";
 import { ChatUser } from "../../types/chat";
@@ -10,12 +10,6 @@ interface MessageBubbleProps {
   isCurrentUser: boolean;
   messageUser?: ChatUser;
 }
-
-const statusIcons = {
-  sent: <Check className="h-3 w-3" />,
-  delivered: <CheckCheck className="h-3 w-3" />,
-  read: <CheckCheck className="h-3 w-3 text-blue-500" />,
-};
 
 export function MessageBubble({
   messageUser,
@@ -57,9 +51,6 @@ export function MessageBubble({
         </div>
         <div className="flex items-center gap-1 text-xs">
           {format(new Date(message.createdAt), "h:mm a")}
-          {/* {isCurrentUser && user.isOnline && (
-            <span className="ml-1">{}</span>
-          )} */}
         </div>
       </div>
     </div>

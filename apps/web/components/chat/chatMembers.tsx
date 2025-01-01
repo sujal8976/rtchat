@@ -9,7 +9,7 @@ interface ChatMembersProps {
 
 export function ChatMembers({ users }: ChatMembersProps) {
   return (
-    <div className="border-l-2 dark:border-l-slate-500 p-4 pt-2 w-72 mb-4 hidden lg:block">
+    <div className="border-l-2 dark:border-l p-4 pt-2 w-72 mb-4 hidden lg:block">
       <h2 className="font-semibold my-5">Room Members</h2>
       <ChatMembersContent users={users} />
     </div>

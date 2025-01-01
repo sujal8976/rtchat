@@ -12,7 +12,7 @@ export default function Login({
 
   return (
     <div className="flex w-full justify-center">
-      <div className="flex flex-col justify-center items-center mt-44 border-2 dark:border-slate-500 shadow-lg dark:shadow-slate-500 rounded-xl p-4 w-full max-w-[90%] sm:max-w-[80%] md:max-w-[70%] lg:max-w-[60%] xl:max-w-[50%]">
+      <div className="flex flex-col justify-center items-center mt-44 border-2 dark:border-2 shadow-lg dark:shadow-slate-500 rounded-xl p-4 w-full max-w-[90%] sm:max-w-[80%] md:max-w-[70%] lg:max-w-[60%] xl:max-w-[50%]">
         {searchParams.error && (
           <ClientToastComponent
             title="Login Failed"

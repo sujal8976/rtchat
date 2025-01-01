@@ -7,7 +7,6 @@ import { ChatInput } from "./chatInput";
 import { ChatMembers } from "./chatMembers";
 import ChatMessages from "./chatMessages";
 import { useChatRoom } from "../../hooks/use-chat-room";
-import { useChatStore } from "../../lib/store/chat";
 
 export function ChatRoom(room: ChatRoomProps) {
   const messageEndRef = useRef<HTMLDivElement>(null);
@@ -16,9 +15,11 @@ export function ChatRoom(room: ChatRoomProps) {
     messageEndRef.current?.scrollIntoView({ behavior: "smooth" });
   };
 
-  const { connectionStatus } = useChatRoom(room.id);
-  const setMessages = useChatStore().setMessages;
-  const messages = useChatStore().messages;
+  const {
+    messages,
+    setMessages,
+    connectionStatus
+  } = useChatRoom(room.id);
 
   useEffect(() => {
     setMessages(room.messages);
@@ -27,6 +28,12 @@ export function ChatRoom(room: ChatRoomProps) {
   useEffect(() => {
     scrollToBottom();
   }, [messages]);
+
+  if(connectionStatus === 'connecting'){
+    return <div>
+      connnecting To server....
+    </div>
+  }
 
   return (
     <div className="flex flex-1">
