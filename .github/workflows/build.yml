@@ -1,0 +1,38 @@
+name: Succeeds on Push and PR
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: "22.12.0"
+          cache: "pnpm"
+
+      - name: Install pnpm
+        run: npm install -g pnpm
+
+      - name: Install dependencies
+        run: pnpm install
+      
+      - name: Generate Primsa Client
+        run: pnpm run prisma:generate
+
+      # - name: Run Turbo lint
+      #   run: pnpm run lint
+
+      - name: Run Turbo build
+        run: pnpm run build
