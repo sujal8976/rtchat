@@ -7,7 +7,7 @@ interface ChatState {
   currentRoom: string | null;
   connectionStatus: "connected" | "connecting" | "disconnected" | "error";
   error: string | null;
-  roomConnectionStatus: "rejoined" | "joined" | "no room";
+  roomConnectionStatus: "rejoined" | "joined";
 
   // Actions
   setCurrentRoom: (roomId: string | null) => void;
@@ -18,7 +18,7 @@ interface ChatState {
   ) => void;
   setError: (error: string | null) => void;
   clearMessages: (roomId: string) => void;
-  setRoomConnectionStatus: (status: "rejoined" | "joined" | "no room" ) => void;
+  setRoomConnectionStatus: (status: "rejoined" | "joined" ) => void;
 }
 
 export const useChatStore = create<ChatState>()(
