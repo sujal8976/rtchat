@@ -19,7 +19,7 @@ const ChatMessages = forwardRef<HTMLDivElement, ChatMessagesProps>(
       <div className="w-full h-[calc(100svh-73px-81px-77px)] p-4 overflow-y-scroll">
         {data?.user?.id ? (
           <>
-            {/* <div className="space-y-6"> */}
+            <div className="space-y-6">
               {messages.map((msg) => {
                 const messageUser = users.find(
                   (user) => user.id === msg.userId
@@ -33,7 +33,7 @@ const ChatMessages = forwardRef<HTMLDivElement, ChatMessagesProps>(
                   />
                 );
               })}
-            {/* </div> */}
+            </div>
             <div ref={ref} />
           </>
         ) : (

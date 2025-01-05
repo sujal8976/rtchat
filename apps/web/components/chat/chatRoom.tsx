@@ -36,8 +36,8 @@ export function ChatRoom(room: ChatRoomProps) {
   }
 
   return (
-    <div className="flex">
-      <div className="w-full flex flex-col bottom-0">
+    <div className="flex-1 flex">
+      <div className="flex-1 flex flex-col">
         <ChatHeader
           name={room.name}
           description={room.description}
