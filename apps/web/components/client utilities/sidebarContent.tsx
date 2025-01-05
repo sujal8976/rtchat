@@ -78,7 +78,7 @@ export function SidebarContent({ onUpdate }: SidebarContentProps) {
   }, [debouncedSearch]);
 
   return (
-    <div className="pt-5 flex justify-center lg:border-r-2 lg:dark:border-r h-[90vh]">
+    <div className="pt-5 flex justify-center lg:border-r-2 lg:dark:border-r h-[calc(100svh-73px)]">
       <div className="flex flex-col gap-4 w-full max-w-[90%]">
         <CreateRoom />
 

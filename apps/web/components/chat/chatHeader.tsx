@@ -16,7 +16,7 @@ interface ChatHeaderProps {
 
 export function ChatHeader({ name, description, users }: ChatHeaderProps) {
   return (
-    <div className="border-b-2 dark:border-b px-6 py-4 flex items-center justify-between backdrop-blur">
+    <div className="border-b-2 h-[81px] dark:border-b px-6 py-4 flex items-center justify-between backdrop-blur">
       <div>
         <h2 className="text-xl font-semibold">{name}</h2>
         {description && <p className="text-sm text-gray-500">{description}</p>}

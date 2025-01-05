@@ -9,7 +9,7 @@ interface ChatMembersProps {
 
 export function ChatMembers({ users }: ChatMembersProps) {
   return (
-    <div className="border-l-2 dark:border-l p-4 pt-2 w-72 mb-4 hidden lg:block">
+    <div className="border-l-2 dark:border-l p-4 pt-2 w-72 h-[calc(100svh-73px)] lg:overflow-y-scroll hidden lg:block mb-0">
       <h2 className="font-semibold my-5">Room Members</h2>
       <ChatMembersContent users={users} />
     </div>
@@ -18,7 +18,7 @@ export function ChatMembers({ users }: ChatMembersProps) {
 
 export function ChatMembersContent({ users }: ChatMembersProps) {
   return (
-    <div className="space-y-4 mt-1 overflow-y-scroll h-[75vh]">
+    <div className="space-y-4 mt-1 overflow-y-scroll">
       {users.map((user) => (
         <div key={user.id} className="flex items-center gap-3">
           <div className="relative">
