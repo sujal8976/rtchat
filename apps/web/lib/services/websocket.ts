@@ -115,7 +115,10 @@ class WebSocketService {
         break;
 
       case WebSocketMessageType.USER_STATUS:
-        store.setRoomConnectionStatus(message.payload.status);
+        store.setRoomConnectionStatus({
+          status: message.payload.status,
+          username: message.payload.username,
+        });
         break;
 
       default:

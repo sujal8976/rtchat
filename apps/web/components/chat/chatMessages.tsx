@@ -37,8 +37,9 @@ const ChatMessages = forwardRef<HTMLDivElement, ChatMessagesProps>(
             <div ref={ref} />
           </>
         ) : (
-          <div className="text-center">
+          <div className="text-center text-xl font-medium">
             <p>User is not Logged In</p>
+            <p>Please try to refresh the page and try again to Join Room...</p>
           </div>
         )}
       </div>

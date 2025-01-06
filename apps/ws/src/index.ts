@@ -21,8 +21,8 @@ server.on("upgrade", async (request, socket, head) => {
     return;
   }
 
-  const userId = await AuthService.validateToken(token);
-  if (!userId) {
+  const userData = await AuthService.validateToken(token);
+  if (!userData?.userId && !userData?.username) {
     socket.write("HTTP/1.1 401 Unauthorized\r\n\r\n");
     socket.destroy();
     return;
@@ -30,7 +30,7 @@ server.on("upgrade", async (request, socket, head) => {
 
   wsService.getWSServer().handleUpgrade(request, socket, head, (ws) => {
     const authenticatedWs = ws as AuthenticatedWebSocket;
-    wsService.handleConnection(authenticatedWs, userId);
+    wsService.handleConnection(authenticatedWs, userData);
   });
 });
 

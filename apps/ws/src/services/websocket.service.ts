@@ -31,16 +31,20 @@ export class WebSocketService {
     }, 30000);
   }
 
-  public async handleConnection(ws: AuthenticatedWebSocket, userId: string) {
+  public async handleConnection(
+    ws: AuthenticatedWebSocket,
+    userData: { userId: string; username: string }
+  ) {
     try {
-      if (await prisma.user.findUnique({ where: { id: userId } })) {
-        ws.userId = userId;
+      if (await prisma.user.findUnique({ where: { id: userData.userId } })) {
+        ws.userId = userData.userId;
+        ws.username = userData.username;
         ws.isAlive = true;
         ws.currentRoom = null;
         ws.isTyping = new Map();
-        this.clients.set(userId, ws);
+        this.clients.set(userData.userId, ws);
 
-        await this.updateUserStatus(userId, true);
+        await this.updateUserStatus(userData.userId, true);
         this.setupWebSocketListeners(ws);
       } else {
         ErrorHandler.sendError(
@@ -143,6 +147,7 @@ export class WebSocketService {
           payload: {
             userId: ws.userId,
             status: "joined",
+            username: ws.username,
             roomId,
           },
         });
@@ -153,6 +158,7 @@ export class WebSocketService {
           payload: {
             userId: ws.userId,
             status: "rejoined",
+            username: ws.username,
             roomId,
           },
         });
@@ -179,6 +185,7 @@ export class WebSocketService {
           payload: {
             userId: ws.userId,
             status: "left",
+            username: ws.username,
             roomId,
           },
         });
@@ -376,6 +383,7 @@ export class WebSocketService {
           payload: {
             userId: ws.userId,
             status: "offline",
+            username: ws.username,
             roomId: ws.currentRoom,
           },
         });

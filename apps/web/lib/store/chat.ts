@@ -7,7 +7,10 @@ interface ChatState {
   currentRoom: string | null;
   connectionStatus: "connected" | "connecting" | "disconnected" | "error";
   error: string | null;
-  roomConnectionStatus: "rejoined" | "joined";
+  roomConnectionStatus: {
+    status: "rejoined" | "joined" | "left" | "offline";
+    username: string;
+  };
 
   // Actions
   setCurrentRoom: (roomId: string | null) => void;
@@ -18,7 +21,10 @@ interface ChatState {
   ) => void;
   setError: (error: string | null) => void;
   clearMessages: (roomId: string) => void;
-  setRoomConnectionStatus: (status: "rejoined" | "joined" ) => void;
+  setRoomConnectionStatus: (statusData: {
+    status: "rejoined" | "joined" | "left" | "offline";
+    username: string;
+  }) => void;
 }
 
 export const useChatStore = create<ChatState>()(
@@ -49,8 +55,11 @@ export const useChatStore = create<ChatState>()(
       set({ connectionStatus: status });
     },
 
-    setRoomConnectionStatus: (status) => {
-      set({ roomConnectionStatus: status });
+    setRoomConnectionStatus: (statusData) => {
+      set({ roomConnectionStatus: {
+        status: statusData.status,
+        username: statusData.username
+      } });
     },
 
     setError: (error) => {
