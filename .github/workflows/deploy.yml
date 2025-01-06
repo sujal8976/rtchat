@@ -1,50 +1,50 @@
-name: Build and Deploy to Docker Hub
+# name: Build and Deploy to Docker Hub
 
-on:
-  push:
-    branches:
-      - main
+# on:
+#   push:
+#     branches:
+#       - main
 
-jobs:
-  build-and-push:
-    runs-on: ubuntu-latest
-    steps:
-    - name: Check Out Repo
-      uses: actions/checkout@v4
+# jobs:
+#   build-and-push:
+#     runs-on: ubuntu-latest
+#     steps:
+#     - name: Check Out Repo
+#       uses: actions/checkout@v4
 
-    - name: Set up Docker Buildx
-      uses: docker/setup-buildx-action@v3
+#     - name: Set up Docker Buildx
+#       uses: docker/setup-buildx-action@v3
 
-    - name: Log in to Docker Hub
-      uses: docker/login-action@v3
-      with:
-        username: ${{ secrets.DOCKER_USERNAME }}
-        password: ${{ secrets.DOCKER_PASSWORD }}
+#     - name: Log in to Docker Hub
+#       uses: docker/login-action@v3
+#       with:
+#         username: ${{ secrets.DOCKER_USERNAME }}
+#         password: ${{ secrets.DOCKER_PASSWORD }}
 
-    - name: Build and Push Web App Docker image
-      uses: docker/build-push-action@v6
-      with:
-        context: .
-        file: ./docker/Dockerfile.web
-        push: true
-        tags: sujal8976/rtchat-web:1.0
+#     - name: Build and Push Web App Docker image
+#       uses: docker/build-push-action@v6
+#       with:
+#         context: .
+#         file: ./docker/Dockerfile.web
+#         push: true
+#         tags: sujal8976/rtchat-web:1.0
     
-    - name: Build and Push WS App Docker image
-      uses: docker/build-push-action@v6
-      with:
-        context: .
-        file: ./docker/Dockerfile.ws
-        push: true
-        tags: sujal8976/rtchat-ws:1.0
+#     - name: Build and Push WS App Docker image
+#       uses: docker/build-push-action@v6
+#       with:
+#         context: .
+#         file: ./docker/Dockerfile.ws
+#         push: true
+#         tags: sujal8976/rtchat-ws:1.0
 
-    - name: Verify Web Pushed Image
-      run: docker pull sujal8976/rtchat-web:1.0
+#     - name: Verify Web Pushed Image
+#       run: docker pull sujal8976/rtchat-web:1.0
 
-    - name: Verify Ws Pushed Image
-      run: docker pull sujal8976/rtchat-ws:1.0
+#     - name: Verify Ws Pushed Image
+#       run: docker pull sujal8976/rtchat-ws:1.0
 
-    - name: Clean Up Local Docker Images
-      run: docker rmi sujal8976/rtchat-web:latest sujal8976/rtchat-ws:latest || true
+#     - name: Clean Up Local Docker Images
+#       run: docker rmi sujal8976/rtchat-web:latest sujal8976/rtchat-ws:latest || true
     
-    - name: Clean Up Local Docker Images
-      run: docker rmi sujal8976/rtchat-web:1.0 || true
+#     - name: Clean Up Local Docker Images
+#       run: docker rmi sujal8976/rtchat-web:1.0 || true
