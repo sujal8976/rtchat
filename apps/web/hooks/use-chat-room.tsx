@@ -5,6 +5,7 @@ import { useChatStore } from "../lib/store/chat";
 import { wsService } from "../lib/services/websocket";
 import { WebSocketMessageType } from "@repo/common/types";
 import { useToast } from "@repo/ui/hooks/use-toast";
+import { useSession } from "next-auth/react";
 
 class RoomManager {
   private static instance: RoomManager;
@@ -29,7 +30,7 @@ class RoomManager {
     }
   }
 
-  leaveRoom(roomId: string) {
+  closeRoom(roomId: string) {
     if (this.activeRooms.has(roomId)) {
       wsService.send({
         type: WebSocketMessageType.CLOSE_ROOM,
@@ -55,6 +56,7 @@ export function useChatRoom(roomId: string) {
     messages,
     setMessages,
   } = useChatStore();
+  const { data } = useSession();
 
   // Handle room connection
   const connectToRoom = useCallback(() => {
@@ -83,7 +85,7 @@ export function useChatRoom(roomId: string) {
     if (!roomId) return;
 
     try {
-      roomManager.current.leaveRoom(roomId);
+      roomManager.current.closeRoom(roomId);
       setCurrentRoom(null);
 
       toast({
@@ -112,7 +114,7 @@ export function useChatRoom(roomId: string) {
     };
   }, [roomId, connectToRoom, disconnectFromRoom]);
 
-  // Handle WebSocket errors
+  // Handle WebSocket errors and status message
   useEffect(() => {
     if (error) {
       toast({
@@ -122,13 +124,36 @@ export function useChatRoom(roomId: string) {
       });
     }
 
-    if (
-      roomConnectionStatus === "joined" ||
-      roomConnectionStatus === "rejoined"
-    ) {
+    if (!roomConnectionStatus) return;
+
+    if (roomConnectionStatus.status === "rejoined") {
       toast({
-        title: "Room Joined",
-        description: "You entered in the chat!",
+        title:
+          data?.user?.username === roomConnectionStatus.username
+            ? "You entered in the chat!"
+            : `${roomConnectionStatus.username} entered in the chat!`,
+      });
+    }
+
+    if (roomConnectionStatus.status === "joined") {
+      toast({
+        title:
+          data?.user?.username === roomConnectionStatus.username
+            ? "You joined the room!"
+            : `${roomConnectionStatus.username} joined the room!`,
+        description: "Member++ :)",
+      });
+    }
+
+    if (roomConnectionStatus.status === "offline") {
+      toast({
+        title: `${roomConnectionStatus.username} Gone offline :(`,
+      });
+    }
+
+    if (roomConnectionStatus.status === "left") {
+      toast({
+        title: `${roomConnectionStatus.username} left the room :(`,
       });
     }
   }, [error, toast, roomConnectionStatus]);
@@ -146,6 +171,15 @@ export function useChatRoom(roomId: string) {
     [roomId]
   );
 
+  const exitRoom = useCallback(() => {
+    wsService.send({
+      type: WebSocketMessageType.LEAVE_ROOM,
+      payload: {
+        roomId,
+      },
+    });
+  }, []);
+
   return {
     connectionStatus,
     roomConnectionStatus,
@@ -153,6 +187,7 @@ export function useChatRoom(roomId: string) {
     error,
     setMessages,
     sendMessage,
+    exitRoom,
     // Expose methods for manual control if needed
     connectToRoom,
     disconnectFromRoom,

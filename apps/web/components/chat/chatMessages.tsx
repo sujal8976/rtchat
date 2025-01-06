@@ -19,7 +19,7 @@ const ChatMessages = forwardRef<HTMLDivElement, ChatMessagesProps>(
       <div className="w-full h-[calc(100svh-73px-81px-77px)] p-4 overflow-y-scroll">
         {data?.user?.id ? (
           <>
-            {/* <div className="space-y-6"> */}
+            <div className="space-y-6">
               {messages.map((msg) => {
                 const messageUser = users.find(
                   (user) => user.id === msg.userId
@@ -33,12 +33,13 @@ const ChatMessages = forwardRef<HTMLDivElement, ChatMessagesProps>(
                   />
                 );
               })}
-            {/* </div> */}
+            </div>
             <div ref={ref} />
           </>
         ) : (
-          <div className="text-center">
+          <div className="text-center text-xl font-medium">
             <p>User is not Logged In</p>
+            <p>Please try to refresh the page and try again to Join Room...</p>
           </div>
         )}
       </div>
