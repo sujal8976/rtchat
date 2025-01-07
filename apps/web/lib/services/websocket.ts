@@ -66,7 +66,6 @@ class WebSocketService {
     if (!this.ws) return;
 
     this.ws.onopen = () => {
-      console.log("Websocket connected");
       this.reconnectAttempts = 0;
       useChatStore.getState().setConnectionStatus("connected");
 
@@ -115,7 +114,7 @@ class WebSocketService {
         break;
 
       case WebSocketMessageType.USER_STATUS:
-        store.setRoomConnectionStatus({
+        store.setRoomUpdates({
           status: message.payload.status,
           username: message.payload.username,
         });

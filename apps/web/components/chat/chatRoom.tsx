@@ -15,12 +15,9 @@ export function ChatRoom(room: ChatRoomProps) {
     messageEndRef.current?.scrollIntoView({ behavior: "smooth" });
   };
 
-  const {
-    messages,
-    setMessages,
-    connectionStatus,
-    exitRoom
-  } = useChatRoom(room.id);
+  const { messages, setMessages, connectionStatus, exitRoom } = useChatRoom(
+    room.id
+  );
 
   useEffect(() => {
     setMessages(room.messages);
@@ -30,30 +27,30 @@ export function ChatRoom(room: ChatRoomProps) {
     scrollToBottom();
   }, [messages]);
 
-  if(connectionStatus === 'connecting'){
-    return <div>
-      connnecting To server....
-    </div>
+  if (connectionStatus === "connecting") {
+    return <div>connnecting To server....</div>;
   }
 
-  return (
-    <div className="flex-1 flex">
-      <div className="flex-1 flex flex-col">
-        <ChatHeader
-          name={room.name}
-          description={room.description}
-          users={room.users}
-          adminId={room.createdBy}
-          exitRoom={exitRoom}
-        />
-        <ChatMessages
-          messages={messages}
-          users={room.users}
-          ref={messageEndRef}
-        />
-        <ChatInput roomId={room.id} />
+  if (connectionStatus === "connected") {
+    return (
+      <div className="flex-1 flex">
+        <div className="flex-1 flex flex-col">
+          <ChatHeader
+            name={room.name}
+            description={room.description}
+            users={room.users}
+            adminId={room.createdBy}
+            exitRoom={exitRoom}
+          />
+          <ChatMessages
+            messages={messages}
+            users={room.users}
+            ref={messageEndRef}
+          />
+          <ChatInput roomId={room.id} />
+        </div>
+        <ChatMembers users={room.users} adminId={room.createdBy} />
       </div>
-      <ChatMembers users={room.users} adminId={room.createdBy} />
-    </div>
-  );
+    );
+  }
 }

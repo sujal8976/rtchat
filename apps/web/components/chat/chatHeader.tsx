@@ -15,6 +15,7 @@ import {
 } from "@repo/ui/components/ui/dropdown-menu";
 import { useRouter } from "next/navigation";
 import { useChatStore } from "../../lib/store/chat";
+import { Avatar, AvatarFallback } from "@repo/ui/components/ui/avatar";
 
 interface ChatHeaderProps {
   name: string;
@@ -37,9 +38,18 @@ export function ChatHeader({
 
   return (
     <div className="border-b-2 h-[81px] dark:border-b px-6 py-4 flex items-center justify-between backdrop-blur">
-      <div>
-        <h2 className="text-xl font-semibold">{name}</h2>
-        {description && <p className="text-sm text-gray-500">{description}</p>}
+      <div className="flex items-center gap-4">
+        <Avatar className="size-12 flex-shrink-0">
+          <AvatarFallback className="bg-gray-200">
+            <Users className="text-gray-500" size={28}/>
+          </AvatarFallback>
+        </Avatar>
+        <div>
+          <h2 className="text-xl font-semibold">{name}</h2>
+          {description && (
+            <p className="text-sm text-gray-500">{description}</p>
+          )}
+        </div>
       </div>
       <div className="flex justify-center gap-2">
         <DropdownMenu>

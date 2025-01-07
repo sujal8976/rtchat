@@ -52,7 +52,7 @@ export function useChatRoom(roomId: string) {
     connectionStatus,
     error,
     setCurrentRoom,
-    roomConnectionStatus,
+    roomUpdates,
     messages,
     setMessages,
   } = useChatStore();
@@ -124,39 +124,39 @@ export function useChatRoom(roomId: string) {
       });
     }
 
-    if (!roomConnectionStatus) return;
+    if (!roomUpdates) return;
 
-    if (roomConnectionStatus.status === "rejoined") {
+    if (roomUpdates.status === "rejoined") {
       toast({
         title:
-          data?.user?.username === roomConnectionStatus.username
+          data?.user?.username === roomUpdates.username
             ? "You entered in the chat!"
-            : `${roomConnectionStatus.username} entered in the chat!`,
+            : `${roomUpdates.username} entered in the chat!`,
       });
     }
 
-    if (roomConnectionStatus.status === "joined") {
+    if (roomUpdates.status === "joined") {
       toast({
         title:
-          data?.user?.username === roomConnectionStatus.username
+          data?.user?.username === roomUpdates.username
             ? "You joined the room!"
-            : `${roomConnectionStatus.username} joined the room!`,
+            : `${roomUpdates.username} joined the room!`,
         description: "Member++ :)",
       });
     }
 
-    if (roomConnectionStatus.status === "offline") {
+    if (roomUpdates.status === "offline") {
       toast({
-        title: `${roomConnectionStatus.username} Gone offline :(`,
+        title: `${roomUpdates.username} Gone offline :(`,
       });
     }
 
-    if (roomConnectionStatus.status === "left") {
+    if (roomUpdates.status === "left") {
       toast({
-        title: `${roomConnectionStatus.username} left the room :(`,
+        title: `${roomUpdates.username} left the room :(`,
       });
     }
-  }, [error, toast, roomConnectionStatus]);
+  }, [error, toast, roomUpdates]);
 
   const sendMessage = useCallback(
     (message: string) => {
@@ -182,7 +182,7 @@ export function useChatRoom(roomId: string) {
 
   return {
     connectionStatus,
-    roomConnectionStatus,
+    roomUpdates,
     messages,
     error,
     setMessages,

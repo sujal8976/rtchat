@@ -2,7 +2,7 @@
 
 import { Avatar, AvatarFallback } from "@repo/ui/components/ui/avatar";
 import { Button } from "@repo/ui/components/ui/button";
-import { UserCircle } from "@repo/ui/icons";
+import { Users } from "@repo/ui/icons";
 import Link from "next/link";
 
 interface RoomCardProps {
@@ -30,7 +30,7 @@ export function RoomCard({
         <div className="flex items-center space-x-3 w-full">
           <Avatar className="h-10 w-10 flex-shrink-0">
             <AvatarFallback className="bg-gray-200">
-              <UserCircle className="h-6 w-6 text-gray-500" />
+              <Users className="h-6 w-6 text-gray-500" />
             </AvatarFallback>
           </Avatar>
           <div className="flex flex-col items-start overflow-hidden w-full">
