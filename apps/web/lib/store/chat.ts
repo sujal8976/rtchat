@@ -8,7 +8,7 @@ interface ChatState {
   connectionStatus: "connected" | "connecting" | "disconnected" | "error";
   error: string | null;
   roomConnectionStatus: {
-    status: "rejoined" | "joined" | "left" | "offline";
+    status: "rejoined" | "joined" | "left" | "offline" | null;
     username: string;
   };
 
@@ -22,7 +22,7 @@ interface ChatState {
   setError: (error: string | null) => void;
   clearMessages: (roomId: string) => void;
   setRoomConnectionStatus: (statusData: {
-    status: "rejoined" | "joined" | "left" | "offline";
+    status: "rejoined" | "joined" | "left" | "offline" | null;
     username: string;
   }) => void;
 }

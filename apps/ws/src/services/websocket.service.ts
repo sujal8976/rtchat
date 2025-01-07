@@ -256,13 +256,7 @@ export class WebSocketService {
 
       if (ws.currentRoom === roomId) {
         ws.currentRoom = null;
-      } else {
-        ErrorHandler.sendError(
-          ws,
-          "ERROR_CLOSING_ROOM",
-          "Failed to close room"
-        );
-      }
+      } 
     } catch (error) {
       console.log("Error in handleCloseRoom:", error);
       ErrorHandler.sendError(ws, "ERROR_CLOSING_ROOM", "Failed to close room");

@@ -9,5 +9,6 @@ export {
   Users,
   X,
   Send,
-  AlignLeft
+  AlignLeft,
+  LogOut
 } from "lucide-react";

@@ -18,7 +18,8 @@ export function ChatRoom(room: ChatRoomProps) {
   const {
     messages,
     setMessages,
-    connectionStatus
+    connectionStatus,
+    exitRoom
   } = useChatRoom(room.id);
 
   useEffect(() => {
@@ -42,6 +43,8 @@ export function ChatRoom(room: ChatRoomProps) {
           name={room.name}
           description={room.description}
           users={room.users}
+          adminId={room.createdBy}
+          exitRoom={exitRoom}
         />
         <ChatMessages
           messages={messages}
@@ -50,7 +53,7 @@ export function ChatRoom(room: ChatRoomProps) {
         />
         <ChatInput roomId={room.id} />
       </div>
-      <ChatMembers users={room.users} />
+      <ChatMembers users={room.users} adminId={room.createdBy} />
     </div>
   );
 }
