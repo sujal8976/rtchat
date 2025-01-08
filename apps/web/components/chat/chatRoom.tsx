@@ -7,6 +7,7 @@ import { ChatInput } from "./chatInput";
 import { ChatMembers } from "./chatMembers";
 import ChatMessages from "./chatMessages";
 import { useChatRoom } from "../../hooks/use-chat-room";
+import Loading from "../loading/loading";
 
 export function ChatRoom(room: ChatRoomProps) {
   const messageEndRef = useRef<HTMLDivElement>(null);
@@ -15,9 +16,13 @@ export function ChatRoom(room: ChatRoomProps) {
     messageEndRef.current?.scrollIntoView({ behavior: "smooth" });
   };
 
-  const { messages, setMessages, connectionStatus, exitRoom } = useChatRoom(
-    room.id
-  );
+  const {
+    messages,
+    setMessages,
+    connectionStatus,
+    exitRoom,
+    roomConnectionStatus,
+  } = useChatRoom(room.id);
 
   useEffect(() => {
     setMessages(room.messages);
@@ -25,13 +30,26 @@ export function ChatRoom(room: ChatRoomProps) {
 
   useEffect(() => {
     scrollToBottom();
-  }, [messages]);
+  }, [messages, roomConnectionStatus]);
 
   if (connectionStatus === "connecting") {
-    return <div>connnecting To server....</div>;
+    return <Loading text="Connecting to server..." />;
   }
 
-  if (connectionStatus === "connected") {
+  if (connectionStatus === "disconnected") {
+    return (
+      <Loading text="Try to refresh the page OR Check your network connection..." />
+    );
+  }
+
+  if (roomConnectionStatus === "connecting") {
+    return <Loading text={`Connecting to ${room.name} room...`} />;
+  }
+
+  if (
+    connectionStatus === "connected" &&
+    roomConnectionStatus === "connected"
+  ) {
     return (
       <div className="flex-1 flex">
         <div className="flex-1 flex flex-col">
@@ -52,5 +70,7 @@ export function ChatRoom(room: ChatRoomProps) {
         <ChatMembers users={room.users} adminId={room.createdBy} />
       </div>
     );
+  } else {
+    return <Loading text="Try to refresh the page and try again..." />;
   }
 }

@@ -68,9 +68,9 @@ export function CreateRoom() {
         </Button>
       </DialogTrigger>
       <DialogContent className="max-w-[90%] sm:max-w-[500px]">
-        <DialogHeader className="flex justify-center items-center mb-8">
-          <DialogTitle>Create New Room</DialogTitle>
-        </DialogHeader>
+        {/* <DialogHeader className="flex justify-center items-center mb-8"> */}
+          <DialogTitle className="w-full text-center">Create New Room</DialogTitle>
+        {/* </DialogHeader> */}
         <form
           onSubmit={handleSubmit}
           className="w-full space-y-4 flex flex-col items-center"

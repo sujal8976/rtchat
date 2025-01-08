@@ -55,21 +55,19 @@ export function useChatRoom(roomId: string) {
     roomUpdates,
     messages,
     setMessages,
+    setRoomConnectionStatus,
+    roomConnectionStatus
   } = useChatStore();
   const { data } = useSession();
 
   // Handle room connection
   const connectToRoom = useCallback(() => {
     if (!roomId) {
-      toast({
-        title: "Error",
-        description: "Room ID is required",
-        variant: "destructive",
-      });
       return;
     }
 
     try {
+      setRoomConnectionStatus("connecting");
       roomManager.current.joinRoom(roomId);
     } catch (err) {
       toast({
@@ -78,7 +76,7 @@ export function useChatRoom(roomId: string) {
         variant: "destructive",
       });
     }
-  }, [roomId, toast, setCurrentRoom]);
+  }, [roomId, toast, setCurrentRoom, setRoomConnectionStatus]);
 
   // Handle room disconnection
   const disconnectFromRoom = useCallback(() => {
@@ -86,8 +84,8 @@ export function useChatRoom(roomId: string) {
 
     try {
       roomManager.current.closeRoom(roomId);
+      setRoomConnectionStatus("disconnected");
       setCurrentRoom(null);
-
       toast({
         title: "Disconnected",
         description: `Left room ${roomId}`,
@@ -100,7 +98,7 @@ export function useChatRoom(roomId: string) {
         variant: "destructive",
       });
     }
-  }, [roomId, toast, setCurrentRoom]);
+  }, [roomId, toast, setCurrentRoom, setRoomConnectionStatus]);
 
   // Automatic cleanup on unmount
   useEffect(() => {
@@ -127,6 +125,9 @@ export function useChatRoom(roomId: string) {
     if (!roomUpdates) return;
 
     if (roomUpdates.status === "rejoined") {
+      if (roomUpdates.username === data?.user?.username) {
+        setRoomConnectionStatus("connected");
+      }
       toast({
         title:
           data?.user?.username === roomUpdates.username
@@ -136,6 +137,9 @@ export function useChatRoom(roomId: string) {
     }
 
     if (roomUpdates.status === "joined") {
+      if (roomUpdates.username === data?.user?.username) {
+        setRoomConnectionStatus("connected");
+      }
       toast({
         title:
           data?.user?.username === roomUpdates.username
@@ -185,6 +189,7 @@ export function useChatRoom(roomId: string) {
     roomUpdates,
     messages,
     error,
+    roomConnectionStatus,
     setMessages,
     sendMessage,
     exitRoom,
