@@ -7,6 +7,7 @@ node_modules
 *.swp
 dist
 coverage
+.git
 
 **/.env
 **/node_modules
@@ -14,3 +15,4 @@ coverage
 **/dist
 **/build
 **/.next
+**/.git
