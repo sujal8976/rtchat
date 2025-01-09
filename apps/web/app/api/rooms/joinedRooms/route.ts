@@ -4,7 +4,7 @@ import { NextResponse } from "next/server";
 
 export const GET = auth(async function GET(req) {
   if (!req.auth) {
-    return NextResponse.json({ message: "Not authenticated" }, { status: 401 });
+    return NextResponse.json({ error: "Not authenticated" }, { status: 401 });
   }
 
   try {
@@ -21,14 +21,10 @@ export const GET = auth(async function GET(req) {
       },
     });
 
-    if (!rooms) {
-      return NextResponse.json({ error: "No rooms founds" }, { status: 404 });
-    }
-
     return NextResponse.json({ rooms }, { status: 200 });
   } catch (error) {
     return NextResponse.json(
-      { error: "Something went werong" },
+      { error: "Something went wrong" },
       { status: 500 }
     );
   }

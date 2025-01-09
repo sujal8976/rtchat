@@ -1,6 +1,7 @@
 import { auth } from "../auth";
 
 export const WS_URL = process.env.NEXT_PUBLIC_WS_URL || "ws://localhost:5000";
+export const BASE_URL = process.env.NEXT_PUBLIC_API_BASE_URL || 'http://localhost:3000';
 export const RECONNECT_INTERVAL = 3000;
 export const MAX_RECONNECT_ATTEMPTS = 5;
 export const PING_INTERVAL = 30000;

@@ -3,12 +3,12 @@
 import { Input } from "@repo/ui/components/ui/input";
 import { CreateRoom } from "./createRoom";
 import { ChangeEvent, useCallback, useEffect, useState } from "react";
-import { Room, UserJoinedRoom } from "../../types/room";
+import { Room, JoinedRoomsResponse, SearchRoomsResponse, RoomWrapper } from "../../types/room";
 import { useDebounce } from "../../hooks/useDebounce";
-import { fetchJoinedRooms, getRooms } from "../../lib/actions/room/rooms";
 import { RoomCard } from "../cards/roomCard";
 import { useToast } from "@repo/ui/hooks/use-toast";
 import Loading from "../loading/loading";
+import { BASE_URL } from "../../lib/config/websocket";
 
 interface SidebarContentProps {
   onUpdate?: (value: boolean) => void;
@@ -18,7 +18,7 @@ export function SidebarContent({ onUpdate }: SidebarContentProps) {
   const [roomSearch, setRoomSearch] = useState("");
   const [loading, setLoading] = useState(false);
   const [rooms, setRooms] = useState<Room[]>([]);
-  const [joinedRooms, setJoinedRooms] = useState<UserJoinedRoom[]>([]);
+  const [joinedRooms, setJoinedRooms] = useState<RoomWrapper[]>([]);
   const { toast } = useToast();
 
   const debouncedSearch = useDebounce(roomSearch, 300);
@@ -26,8 +26,17 @@ export function SidebarContent({ onUpdate }: SidebarContentProps) {
   const getJoinedRooms = useCallback(async () => {
     try {
       setLoading(true);
-      const rooms = await fetchJoinedRooms();
-      setJoinedRooms(rooms as UserJoinedRoom[]);
+      const res = await fetch(`${BASE_URL}/api/rooms/joinedRooms`, {
+        method: "GET"
+      });
+
+      const data: JoinedRoomsResponse = await res.json();
+
+      if (!res.ok) {
+        throw new Error(data.error || "Failed to fetch rooms");
+      }
+
+      setJoinedRooms(data.rooms);
     } catch (error) {
       if (error instanceof Error) {
         toast({
@@ -50,8 +59,15 @@ export function SidebarContent({ onUpdate }: SidebarContentProps) {
     if (debouncedSearch.length > 1) {
       setLoading(true);
       try {
-        const rooms = (await getRooms(debouncedSearch)) as Room[];
-        setRooms(rooms);
+        const res = await fetch(
+          `${BASE_URL}/api/rooms/searchRooms?query=${debouncedSearch}`
+        );
+        const data: SearchRoomsResponse = await res.json();
+
+        if (!res.ok) {
+          throw new Error(data.error || "Failed to fetch rooms");
+        }
+        setRooms(data.rooms);
       } catch (error) {
         if (error instanceof Error) {
           toast({

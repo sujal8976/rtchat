@@ -8,6 +8,20 @@ export interface UserJoinedRoom {
   room: Room;
 }
 
+export interface RoomWrapper {
+  room: Room
+}
+
+export interface JoinedRoomsResponse {
+  rooms: RoomWrapper[];
+  error?: string
+}
+
+export interface SearchRoomsResponse {
+  rooms: Room[];
+  error?: string
+}
+
 export class AppError extends Error {
   constructor(
     message: string,
