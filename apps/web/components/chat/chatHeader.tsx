@@ -16,6 +16,7 @@ import {
 import { useRouter } from "next/navigation";
 import { useChatStore } from "../../lib/store/chat";
 import { Avatar, AvatarFallback } from "@repo/ui/components/ui/avatar";
+import { useMessagesStore } from "../../lib/store/messages";
 
 interface ChatHeaderProps {
   name: string;
@@ -34,7 +35,7 @@ export function ChatHeader({
 }: ChatHeaderProps) {
   const router = useRouter();
   const setCurrentRoom = useChatStore().setCurrentRoom;
-  const setMessages = useChatStore().setMessages;
+  const resetStore = useMessagesStore().resetStore
 
   return (
     <div className="border-b-2 h-[81px] dark:border-b px-6 py-4 flex items-center justify-between backdrop-blur">
@@ -63,7 +64,7 @@ export function ChatHeader({
               onClick={() => {
                 setCurrentRoom(null);
                 exitRoom();
-                setMessages([]);
+                resetStore();
                 router.push("/chat");
               }}
               className="text-base flex items-center justify-between"

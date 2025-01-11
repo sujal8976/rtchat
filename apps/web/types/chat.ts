@@ -1,5 +1,3 @@
-import { ChatMessage } from "./websocket";
-
 export interface ChatUser {
   id: string;
   username: string;
@@ -12,5 +10,4 @@ export interface ChatRoom {
   description: string | null;
   createdBy: string;
   users: ChatUser[];
-  messages: ChatMessage[];
 }

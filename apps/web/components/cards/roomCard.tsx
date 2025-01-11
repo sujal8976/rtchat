@@ -19,7 +19,7 @@ export function RoomCard({
   onClickSidebarClose,
 }: RoomCardProps) {
   return (
-    <Link href={`/chat/${id}`} className="w-full">
+    <Link prefetch={false} href={`/chat/${id}`} className="w-full">
       <Button
         onClick={() => {
           if (onClickSidebarClose) onClickSidebarClose(false);

@@ -1,36 +1,17 @@
 "use client";
 
-import { useEffect, useRef } from "react";
 import { ChatRoom as ChatRoomProps } from "../../types/chat";
 import { ChatHeader } from "./chatHeader";
 import { ChatInput } from "./chatInput";
 import { ChatMembers } from "./chatMembers";
-import ChatMessages from "./chatMessages";
+import { ChatMessages } from "./chatMessages";
 import { useChatRoom } from "../../hooks/use-chat-room";
 import Loading from "../loading/loading";
 
 export function ChatRoom(room: ChatRoomProps) {
-  const messageEndRef = useRef<HTMLDivElement>(null);
-
-  const scrollToBottom = () => {
-    messageEndRef.current?.scrollIntoView({ behavior: "smooth" });
-  };
-
-  const {
-    messages,
-    setMessages,
-    connectionStatus,
-    exitRoom,
-    roomConnectionStatus,
-  } = useChatRoom(room.id);
-
-  useEffect(() => {
-    setMessages(room.messages);
-  }, [room]);
-
-  useEffect(() => {
-    scrollToBottom();
-  }, [messages, roomConnectionStatus]);
+  const { connectionStatus, exitRoom, roomConnectionStatus, sendMessage } = useChatRoom(
+    room.id
+  );
 
   if (connectionStatus === "connecting") {
     return <Loading text="Connecting to server..." />;
@@ -60,12 +41,8 @@ export function ChatRoom(room: ChatRoomProps) {
             adminId={room.createdBy}
             exitRoom={exitRoom}
           />
-          <ChatMessages
-            messages={messages}
-            users={room.users}
-            ref={messageEndRef}
-          />
-          <ChatInput roomId={room.id} />
+          <ChatMessages roomId={room.id} />
+          <ChatInput roomId={room.id} sendMessage={sendMessage} />
         </div>
         <ChatMembers users={room.users} adminId={room.createdBy} />
       </div>

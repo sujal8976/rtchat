@@ -26,6 +26,9 @@ export const GET = auth(async function GET(req) {
         where: {
           roomId: roomId,
         },
+        orderBy:{
+          createdAt: 'desc'
+        },
         take: limit,
         skip,
         select: {
@@ -36,7 +39,6 @@ export const GET = auth(async function GET(req) {
           createdAt: true,
           user: {
             select: {
-              id: true,
               username: true,
             },
           },
@@ -48,7 +50,7 @@ export const GET = auth(async function GET(req) {
     ]);
 
     return NextResponse.json({
-      messages,
+      messages: messages.reverse(),
       totalCount: totalMessages,
       currentPage: page,
       totalPage: Math.ceil(totalMessages / limit),

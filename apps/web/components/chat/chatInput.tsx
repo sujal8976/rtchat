@@ -4,11 +4,15 @@ import { Button } from "@repo/ui/components/ui/button";
 import { Textarea } from "@repo/ui/components/ui/textarea";
 import { Send } from "@repo/ui/icons";
 import { useEffect, useRef, useState } from "react";
-import { useChatRoom } from "../../hooks/use-chat-room";
 
-export function ChatInput({ roomId }: { roomId: string }) {
+export function ChatInput({
+  roomId,
+  sendMessage,
+}: {
+  roomId: string;
+  sendMessage: (message: string) => void;
+}) {
   const [message, setMessage] = useState("");
-  const { sendMessage } = useChatRoom(roomId);
 
   const textareaRef = useRef<HTMLTextAreaElement>(null);
 

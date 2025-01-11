@@ -6,6 +6,7 @@ import {
   PING_INTERVAL,
 } from "../config/websocket";
 import { useChatStore } from "../store/chat";
+import { useMessagesStore } from "../store/messages";
 
 class WebSocketService {
   private static instance: WebSocketService;
@@ -102,10 +103,11 @@ class WebSocketService {
 
   private handleMessage(message: WebSocketMessage) {
     const store = useChatStore.getState();
+    const messageStore = useMessagesStore.getState();
 
     switch (message.type) {
       case WebSocketMessageType.SEND_MESSAGE:
-        store.addMessage(message.payload);
+        messageStore.addMessage(message.payload);
         break;
 
       case WebSocketMessageType.ERROR:

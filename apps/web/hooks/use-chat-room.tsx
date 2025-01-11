@@ -53,8 +53,6 @@ export function useChatRoom(roomId: string) {
     error,
     setCurrentRoom,
     roomUpdates,
-    messages,
-    setMessages,
     setRoomConnectionStatus,
     roomConnectionStatus
   } = useChatStore();
@@ -187,10 +185,8 @@ export function useChatRoom(roomId: string) {
   return {
     connectionStatus,
     roomUpdates,
-    messages,
     error,
     roomConnectionStatus,
-    setMessages,
     sendMessage,
     exitRoom,
     // Expose methods for manual control if needed

@@ -129,8 +129,7 @@ export async function getRoom(roomId: string): Promise<ChatRoom | undefined> {
               },
             },
           },
-        },
-        messages: true,
+        }
       },
     });
     if (!room) return undefined;
@@ -141,7 +140,6 @@ export async function getRoom(roomId: string): Promise<ChatRoom | undefined> {
       description: room.description,
       createdBy: room.createdBy,
       users: room.users.map((u) => u.user), // Flatten the nested structure
-      messages: room.messages,
     };
     return transformedRoom;
   } catch (error) {

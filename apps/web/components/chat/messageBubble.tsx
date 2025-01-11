@@ -1,19 +1,19 @@
 import { cn } from "@repo/ui/lib/utils";
-import { ChatMessage } from "../../types/websocket";
 import { UserCircle } from "@repo/ui/icons";
 import { Avatar, AvatarFallback } from "@repo/ui/components/ui/avatar";
 import { format } from "date-fns";
-import { ChatUser } from "../../types/chat";
 
 interface MessageBubbleProps {
-  message: ChatMessage;
+  content: string;
+  createdAt: Date;
+  username: string;
   isCurrentUser: boolean;
-  messageUser?: ChatUser;
 }
 
 export function MessageBubble({
-  messageUser,
-  message,
+  content,
+  username,
+  createdAt,
   isCurrentUser,
 }: MessageBubbleProps) {
   return (
@@ -37,7 +37,7 @@ export function MessageBubble({
         )}
       >
         {!isCurrentUser && (
-          <span className="text-sm font-medium">{messageUser?.username}</span>
+          <span className="text-sm font-medium">{username}</span>
         )}
         <div
           className={cn(
@@ -47,10 +47,10 @@ export function MessageBubble({
               : "bg-gray-100 dark:bg-slate-700"
           )}
         >
-          {message.content}
+          {content}
         </div>
         <div className="flex items-center gap-1 text-xs">
-          {format(new Date(message.createdAt), "h:mm a")}
+          {format(new Date(createdAt), "h:mm a")}
         </div>
       </div>
     </div>
