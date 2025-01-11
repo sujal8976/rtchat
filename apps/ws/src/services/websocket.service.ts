@@ -229,12 +229,14 @@ export class WebSocketService {
       this.broadcastToRoom(roomId, {
         type: WebSocketMessageType.SEND_MESSAGE,
         payload: {
-          messageId: message.id,
+          id: message.id,
           content: message.content,
           userId: message.userId,
-          username: message.user.username,
           roomId: message.roomId,
           createdAt: message.createdAt,
+          user: {
+            username: message.user.username,
+          }
         },
       });
     } catch (error) {
