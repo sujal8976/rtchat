@@ -1,7 +1,6 @@
 "use server";
 
 import prisma from "@repo/db/client";
-import { Room } from "../../../types/room";
 import { auth } from "../../auth";
 import { ChatRoom } from "../../../types/chat";
 
@@ -70,35 +69,6 @@ export async function createRoom(
         message: "Failed to create the room. Please try again later.",
       },
     };
-  }
-}
-
-export async function getRooms(query: string): Promise<Room[] | undefined> {
-  try {
-    if (query.length > 1) {
-      const session = await auth();
-      if (!session?.user && !session?.user?.id)
-        throw new Error("User not logged in");
-
-      const rooms = await prisma.room.findMany({
-        where: {
-          name: {
-            contains: query,
-            mode: "insensitive",
-          },
-        },
-        select: {
-          id: true,
-          name: true,
-          description: true,
-        },
-      });
-
-      return rooms;
-    } else return [];
-  } catch (error) {
-    console.log(error);
-    throw new Error("Something went wrong");
   }
 }
 

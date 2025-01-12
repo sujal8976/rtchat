@@ -6,6 +6,7 @@ import { useMessagesStore } from "../../lib/store/messages";
 import { useCallback, useEffect, useRef } from "react";
 import useInfiniteScroll from "../../hooks/useInfiniteScroll";
 import Loading from "../loading/loading";
+import {ChevronDown } from '@repo/ui/icons'
 
 interface ChatMessagesProps {
   roomId: string;
@@ -15,75 +16,73 @@ export function ChatMessages({ roomId }: ChatMessagesProps) {
   const { data } = useSession();
   const pageRef = useRef(1);
   const messageEndRef = useRef<HTMLDivElement | null>(null);
-  const isFirstLoadRef = useRef(true);
   const containerRef = useRef<HTMLDivElement>(null);
   const scrollHeightRef = useRef(0);
+  const isFirstLoadRef = useRef(true);
+  const initialLoadCompletedRef = useRef(false);
+
   const { messages, fetchMessages, resetStore, isLoading, hasMore } =
     useMessagesStore();
 
   const scrollToBottom = useCallback(() => {
     if (messageEndRef.current) {
       messageEndRef.current?.scrollIntoView({
-        behavior: "smooth"
+        behavior: "smooth",
       });
     }
   }, []);
 
   const isNearBottom = useCallback(() => {
     const container = containerRef.current;
-    const endElement = messageEndRef.current;
-    
-    if (!container || !endElement) return false;
+    if (!container) return false;
 
-    const containerRect = container.getBoundingClientRect();
-    const endElementRect = endElement.getBoundingClientRect();
-    
-    // Distance between bottom of container and messageEndRef
-    const distance = endElementRect.bottom - containerRect.bottom;
-    return Math.abs(distance) < 300;
+    const distanceFromBottom = 
+      container.scrollHeight - 
+      (container.scrollTop + container.clientHeight);
+      
+    const threshold = 1000;
+    return distanceFromBottom <= threshold;
   }, []);
 
-  const saveScrollPosition = useCallback(() => {
+  // Initial load effect
+  useEffect(() => {
+    const initialLoad = async () => {
+      if (initialLoadCompletedRef.current) return;
+      
+      resetStore();
+      pageRef.current = 1;
+      await fetchMessages(roomId, 1, 30);
+      scrollToBottom();
+      initialLoadCompletedRef.current = true;
+      isFirstLoadRef.current = false;
+    };
+
+    initialLoad();
+  }, [roomId, resetStore, fetchMessages]);
+
+  useEffect(() => {
+    if (messages.length === 0 || !initialLoadCompletedRef.current) return;
+
+    if (isNearBottom()) {
+      scrollToBottom();
+    }
+  }, [messages]);
+
+  const handleInfiniteScroll = useCallback(async () => {
+    if (isLoading || !hasMore || !initialLoadCompletedRef.current) return;
+    
     if (containerRef.current) {
       scrollHeightRef.current = containerRef.current.scrollHeight;
     }
-  }, []);
-
-  const restoreScrollPosition = useCallback(() => {
+    
+    pageRef.current += 1;
+    await fetchMessages(roomId, pageRef.current, 30);
+    
     if (containerRef.current) {
       const newScrollHeight = containerRef.current.scrollHeight;
       const scrollDiff = newScrollHeight - scrollHeightRef.current;
       containerRef.current.scrollTop += scrollDiff;
     }
-  }, []);
-
-  useEffect(() => {
-    const initialLoadJob = async() => {
-      resetStore();
-      pageRef.current = 1;
-      await fetchMessages(roomId, 1, 40);
-    }
-    initialLoadJob();
-  }, [roomId]);
-
-  useEffect(() => {
-    if (messages.length === 0) return;
-
-    if (isFirstLoadRef.current) {
-      scrollToBottom();
-      isFirstLoadRef.current = false;
-    } else if (isNearBottom()) {
-      scrollToBottom()
-    } else if (!isLoading && pageRef.current > 1) {
-      restoreScrollPosition();
-    }
-  }, [messages]);
-
-  const handleInfiniteScroll = useCallback(() => {
-    if (isLoading || !hasMore) return;
-    saveScrollPosition();
-    pageRef.current += 1;
-    fetchMessages(roomId, pageRef.current, 40);
   }, [isLoading, hasMore, fetchMessages, roomId]);
 
   const firstMessageRef = useInfiniteScroll<HTMLDivElement>(
@@ -102,26 +101,26 @@ export function ChatMessages({ roomId }: ChatMessagesProps) {
     );
   }
 
-  if (isFirstLoadRef && isLoading) {
+  if (isFirstLoadRef.current && isLoading) {
     return <Loading text="Loading Chats..." />;
   }
-  
+
   return (
     <>
       <div
         ref={containerRef}
-        className="w-full h-[calc(100svh-73px-81px-77px)] p-4 overflow-y-scroll"
+        className="relative w-full h-[calc(100svh-73px-81px-77px)] p-4 overflow-y-scroll"
       >
         {isLoading && (
           <div className="h-4">
             <Loading text="Loading messages..." />
           </div>
         )}
-        <div ref={firstMessageRef} />
         <div className="space-y-6">
           {messages.map((msg, i) => (
             <MessageBubble
               key={i}
+              ref={i === 0 ? firstMessageRef : null}
               content={msg.content}
               username={msg.user.username}
               createdAt={msg.createdAt}
@@ -129,8 +128,13 @@ export function ChatMessages({ roomId }: ChatMessagesProps) {
             />
           ))}
         </div>
+        <div ref={messageEndRef} />
+        {!isNearBottom() && (<div
+        onClick={()=> scrollToBottom()}
+        className="fixed bottom-24 right-8 dark:bg-white bg-slate-500 shadow-lg rounded-full p-2 hover:bg-gray-400 transition-colors cursor-pointer">
+          <ChevronDown className="dark:text-black" />
+        </div>)}
       </div>
-      <div ref={messageEndRef} />
     </>
   );
 }
