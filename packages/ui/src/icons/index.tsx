@@ -10,5 +10,6 @@ export {
   X,
   Send,
   AlignLeft,
-  LogOut
+  LogOut,
+  ChevronDown,
 } from "lucide-react";
