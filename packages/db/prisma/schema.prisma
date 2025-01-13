@@ -28,7 +28,7 @@ model User {
 
 model Room {
   id          String     @id @default(cuid())
-  name        String
+  name        String     @unique
   description String?
   createdBy   String
   createdAt   DateTime   @default(now())
@@ -46,6 +46,8 @@ model RoomUser {
   room      Room     @relation(fields: [roomId], references: [id], onDelete: Cascade)
 
   @@unique([userId, roomId])
+  @@index([userId])
+  @@index([roomId])
 }
 
 model Message {
@@ -56,4 +58,7 @@ model Message {
   createdAt DateTime @default(now())
   user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
   room      Room     @relation(fields: [roomId], references: [id], onDelete: Cascade)
+
+  @@index([roomId])
+  @@index([roomId, createdAt])
 }
