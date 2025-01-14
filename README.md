@@ -35,6 +35,8 @@ The development of RtChat v2 adheres to several fundamental and efficient system
 
 ## Installation Guide
 
+### Use node version v22.12.0(lts).
+
 ### Step 1: Set up the project directory
 ```bash
 mkdir rtchat
