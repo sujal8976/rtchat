@@ -41,7 +41,7 @@ The development of RtChat v2 adheres to several fundamental and efficient system
 ```bash
 mkdir rtchat
 cd rtchat
-git clone https://github.com/sujal8976/rtchat.git
+git clone https://github.com/sujal8976/rtchat.git .
 ```
 
 ### Step 2: Install dependencies
