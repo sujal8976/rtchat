@@ -9,6 +9,7 @@
     "format": "prettier --write \"**/*.{ts,tsx,md}\"",
     "prisma:migrate": "cd packages/db && npx prisma migrate dev && cd ../..",
     "prisma:generate": "cd packages/db && npx prisma generate && cd ../..",
+    "prisma:seed": "node packages/db/seed.js",
     "start:web": "pnpm --filter web run start",
     "start:ws": "pnpm --filter ws run start"
   },
