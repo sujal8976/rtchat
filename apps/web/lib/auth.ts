@@ -13,14 +13,13 @@ const generateUUID = () => {
   });
 };
 
-const getSecretKey = () => {
+const getSecretKey = async () => {
   const secret = process.env.JWT_SECRET;
   if (!secret || typeof secret !== "string") {
     throw new Error("JWT_SECRET is not configured");
   }
-
-  // Convert string secret to Uint8Array
-  return new TextEncoder().encode(secret);
+  
+  return secret;
 };
 
 const generateToken = async (payload: JWTPayload) => {
@@ -33,7 +32,7 @@ const generateToken = async (payload: JWTPayload) => {
   })
     .setProtectedHeader({ alg: "HS256" })
     .setExpirationTime("365d")
-    .sign(secretKey); // Use the Uint8Array secret directly
+    .sign(new TextEncoder().encode(secretKey)); // Use the Uint8Array secret directly
 
   return jwt;
 };
