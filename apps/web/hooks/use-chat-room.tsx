@@ -6,6 +6,7 @@ import { wsService } from "../lib/services/websocket";
 import { WebSocketMessageType } from "@repo/common/types";
 import { useToast } from "@repo/ui/hooks/use-toast";
 import { useSession } from "next-auth/react";
+import { useMessagesStore } from "../lib/store/messages";
 
 class RoomManager {
   private static instance: RoomManager;
@@ -54,8 +55,9 @@ export function useChatRoom(roomId: string) {
     setCurrentRoom,
     roomUpdates,
     setRoomConnectionStatus,
-    roomConnectionStatus
+    roomConnectionStatus,
   } = useChatStore();
+  const addMessage = useMessagesStore().addMessage;
   const { data } = useSession();
 
   // Handle room connection
@@ -161,13 +163,26 @@ export function useChatRoom(roomId: string) {
   }, [error, toast, roomUpdates]);
 
   const sendMessage = useCallback(
-    (message: string, tempId: string) => {
+    (message: string) => {
+      const tempId = `temp-${Date.now().toString()}`;
+
       wsService.send({
         type: WebSocketMessageType.SEND_MESSAGE,
         payload: {
           roomId,
           content: message,
-          tempId
+          tempId,
+        },
+      });
+
+      addMessage({
+        id: tempId,
+        content: message,
+        userId: data?.user?.id as string,
+        roomId: roomId,
+        createdAt: new Date(),
+        user: {
+          username: data?.user?.username as string,
         },
       });
     },

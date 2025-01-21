@@ -42,7 +42,7 @@ export function ChatRoom(room: ChatRoomProps) {
             exitRoom={exitRoom}
           />
           <ChatMessages roomId={room.id} />
-          <ChatInput roomId={room.id} sendMessage={sendMessage} />
+          <ChatInput sendMessage={sendMessage} />
         </div>
         <ChatMembers users={room.users} adminId={room.createdBy} />
       </div>

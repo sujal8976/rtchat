@@ -4,19 +4,13 @@ import { Button } from "@repo/ui/components/ui/button";
 import { Textarea } from "@repo/ui/components/ui/textarea";
 import { Send } from "@repo/ui/icons";
 import { useEffect, useRef, useState } from "react";
-import { useMessagesStore } from "../../lib/store/messages";
-import { useSession } from "next-auth/react";
 
 export function ChatInput({
   sendMessage,
-  roomId,
 }: {
-  sendMessage: (message: string, tempId: string) => void;
-  roomId: string;
+  sendMessage: (message: string) => void;
 }) {
   const [message, setMessage] = useState("");
-  const addMessage = useMessagesStore().addMessage;
-  const { data } = useSession();
 
   const textareaRef = useRef<HTMLTextAreaElement>(null);
 
@@ -24,19 +18,7 @@ export function ChatInput({
     e.preventDefault();
     if (!message.trim()) return;
 
-    const tempId = `temp-${Date.now().toString()}`;
-
-    sendMessage(message, tempId);
-    addMessage({
-      id: tempId,
-      content: message,
-      userId: data?.user?.id as string,
-      roomId: roomId,
-      createdAt: new Date(),
-      user: {
-        username: data?.user?.username as string,
-      },
-    });
+    sendMessage(message);
 
     setMessage("");
     if (textareaRef.current) {
