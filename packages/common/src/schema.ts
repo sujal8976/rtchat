@@ -27,6 +27,7 @@ export const sendMessageSchema = z.object({
   payload: z.object({
     roomId: z.string(),
     content: z.string().min(1),
+    tempId: z.string().optional()
   }),
 });
 

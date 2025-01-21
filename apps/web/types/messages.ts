@@ -7,6 +7,7 @@ export interface ChatMessage {
   user: {
     username: string;
   };
+  tempId?: string
 }
 
 export interface MessageResponse {

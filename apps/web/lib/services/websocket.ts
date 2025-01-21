@@ -16,6 +16,7 @@ class WebSocketService {
   private reconnectTimeout: NodeJS.Timeout | null = null;
   private initialized: boolean = false;
   private accessToken: string | null = null;
+  private currentUserId: string | null = null;
 
   private constructor() {}
 
@@ -26,9 +27,10 @@ class WebSocketService {
     return WebSocketService.instance;
   }
 
-  public setAccessToken(token: string | null) {
+  public setSession(token: string | null, userId: string | null) {
     this.accessToken = token;
-    if (this.initialized && token) {
+    this.currentUserId = userId;
+    if (this.initialized && token && userId) {
       this.reconnect();
     }
 
@@ -41,7 +43,7 @@ class WebSocketService {
     }
 
     this.initialized = true;
-    if (this.accessToken) {
+    if (this.accessToken && this.currentUserId) {
       this.connect();
     }
 
@@ -107,7 +109,11 @@ class WebSocketService {
 
     switch (message.type) {
       case WebSocketMessageType.SEND_MESSAGE:
-        messageStore.addMessage(message.payload);
+        if (message.payload.userId === this.currentUserId) {
+          messageStore.replaceMessage(message.payload.tempId, message.payload);
+        } else {
+          messageStore.addMessage(message.payload);
+        }
         break;
 
       case WebSocketMessageType.ERROR:

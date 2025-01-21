@@ -11,6 +11,7 @@ interface MessagesStore {
   appendMessages: (messages: ChatMessage[]) => void;
   resetStore: () => void;
   addMessage: (message: ChatMessage) => void;
+  replaceMessage: (tempId: string, message: ChatMessage) => void;
 }
 
 export const useMessagesStore = create<MessagesStore>()(
@@ -46,9 +47,15 @@ export const useMessagesStore = create<MessagesStore>()(
     },
 
     appendMessages: (newMessages: ChatMessage[]) =>
-      set((state) => ({
-        messages: [...newMessages, ...state.messages],
-      })),
+      set((state) => {
+        const uniqueMessages = newMessages.filter(
+          (newMsg) =>
+            !state.messages.some((existingMsg) => existingMsg.id === newMsg.id)
+        );
+        return {
+          messages: [...uniqueMessages, ...state.messages],
+        };
+      }),
 
     resetStore: () =>
       set({
@@ -58,9 +65,35 @@ export const useMessagesStore = create<MessagesStore>()(
       }),
 
     addMessage: (message: ChatMessage) => {
-      set((state) => ({
-        messages: [...state.messages, message],
-      }));
+      set((state) => {
+        const messageExists = state.messages.some(
+          (msg) => msg.id === message.id
+        );
+        if (messageExists) {
+          return state;
+        }
+        return {
+          messages: [...state.messages, message],
+        };
+      });
+    },
+
+    replaceMessage: (tempId: string, confirmedMessage: ChatMessage) => {
+      if (!tempId) return;
+      set((state) => {
+        const messages = [...state.messages];
+        if (messages.length === 0) {
+          return { messages };
+        }
+        for (let i = messages.length - 1; i >= 0; i--) {
+          const message = messages[i];
+          if (message && message.id === tempId) {
+            messages[i] = confirmedMessage;
+            break;
+          }
+        }
+        return { messages };
+      });
     },
   }))
 );

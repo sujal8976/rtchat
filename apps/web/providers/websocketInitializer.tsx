@@ -8,10 +8,10 @@ export default function WebSocketInitializer() {
   const { data: session } = useSession();
 
   useEffect(() => {
-    if (session?.user?.accessToken) {
-      wsService.setAccessToken(session.user.accessToken).initialize();
+    if (session?.user?.accessToken && session.user.id) {
+      wsService.setSession(session.user.accessToken, session.user.id).initialize();
     }
-  }, [session?.user?.accessToken]);
+  }, [session?.user?.accessToken, session?.user?.id]);
 
   return null;
 }

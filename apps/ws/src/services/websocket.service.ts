@@ -200,7 +200,7 @@ export class WebSocketService {
 
   private async handleSendMessage(ws: AuthenticatedWebSocket, payload: any) {
     try {
-      const { roomId, content } = schemas.sendMessageSchema.parse({
+      const { roomId, content, tempId } = schemas.sendMessageSchema.parse({
         type: WebSocketMessageType.SEND_MESSAGE,
         payload,
       }).payload;
@@ -236,7 +236,8 @@ export class WebSocketService {
           createdAt: message.createdAt,
           user: {
             username: message.user.username,
-          }
+          },
+          tempId: tempId || undefined,
         },
       });
     } catch (error) {
@@ -258,7 +259,7 @@ export class WebSocketService {
 
       if (ws.currentRoom === roomId) {
         ws.currentRoom = null;
-      } 
+      }
     } catch (error) {
       console.log("Error in handleCloseRoom:", error);
       ErrorHandler.sendError(ws, "ERROR_CLOSING_ROOM", "Failed to close room");

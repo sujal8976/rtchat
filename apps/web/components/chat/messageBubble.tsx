@@ -1,5 +1,5 @@
 import { cn } from "@repo/ui/lib/utils";
-import { UserCircle } from "@repo/ui/icons";
+import { UserCircle, Check, Clock } from "@repo/ui/icons";
 import { Avatar, AvatarFallback } from "@repo/ui/components/ui/avatar";
 import { format } from "date-fns";
 import { forwardRef } from "react";
@@ -9,12 +9,14 @@ interface MessageBubbleProps {
   createdAt: Date;
   username: string;
   isCurrentUser: boolean;
+  messageId: string;
 }
 
 export const MessageBubble = forwardRef<HTMLDivElement, MessageBubbleProps>(
-  ({ content, username, createdAt, isCurrentUser }, ref) => {
+  ({ content, username, createdAt, isCurrentUser, messageId }, ref) => {
     return (
-      <div ref={ref}
+      <div
+        ref={ref}
         className={cn(
           "flex gap-3 max-w-[75%]",
           isCurrentUser ? "ml-auto flex-row-reverse" : ""
@@ -46,8 +48,19 @@ export const MessageBubble = forwardRef<HTMLDivElement, MessageBubbleProps>(
           >
             {content}
           </div>
-          <div className="flex items-center gap-1 text-xs">
-            {format(new Date(createdAt), "h:mm a")}
+          <div className="flex items-center justify-center gap-2">
+            <div className=" gap-1 text-xs">
+              {format(new Date(createdAt), "h:mm a")}
+            </div>
+            {isCurrentUser && (
+              <div className="text-xs flex items-end">
+                {messageId.startsWith("temp-") ? (
+                  <Clock className="size-4" />
+                ) : (
+                  <Check className="size-4" />
+                )}
+              </div>
+            )}
           </div>
         </div>
       </div>

@@ -39,7 +39,7 @@ export function ChatMessages({ roomId }: ChatMessagesProps) {
     const distanceFromBottom =
       container.scrollHeight - (container.scrollTop + container.clientHeight);
 
-    const threshold = 1000;
+    const threshold = 300;
     return distanceFromBottom <= threshold;
   }, []);
 
@@ -119,7 +119,8 @@ export function ChatMessages({ roomId }: ChatMessagesProps) {
           <div className="space-y-6">
             {messages.map((msg, i) => (
               <MessageBubble
-                key={i}
+                key={msg.id}
+                messageId={msg.id}
                 ref={i === 0 ? firstMessageRef : null}
                 content={msg.content}
                 username={msg.user.username}

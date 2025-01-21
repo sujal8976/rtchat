@@ -161,12 +161,13 @@ export function useChatRoom(roomId: string) {
   }, [error, toast, roomUpdates]);
 
   const sendMessage = useCallback(
-    (message: string) => {
+    (message: string, tempId: string) => {
       wsService.send({
         type: WebSocketMessageType.SEND_MESSAGE,
         payload: {
           roomId,
           content: message,
+          tempId
         },
       });
     },
