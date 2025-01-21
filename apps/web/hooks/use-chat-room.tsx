@@ -124,41 +124,46 @@ export function useChatRoom(roomId: string) {
 
     if (!roomUpdates) return;
 
-    if (roomUpdates.status === "rejoined") {
-      if (roomUpdates.username === data?.user?.username) {
-        setRoomConnectionStatus("connected");
-      }
-      toast({
-        title:
-          data?.user?.username === roomUpdates.username
-            ? "You entered in the chat!"
-            : `${roomUpdates.username} entered in the chat!`,
-      });
-    }
+    switch (roomUpdates.status) {
+      case "rejoined":
+        if (roomUpdates.username === data?.user?.username) {
+          setRoomConnectionStatus("connected");
+        }
+        toast({
+          title:
+            data?.user?.username === roomUpdates.username
+              ? "You entered in the chat!"
+              : `${roomUpdates.username} entered in the chat!`,
+        });
+        break;
 
-    if (roomUpdates.status === "joined") {
-      if (roomUpdates.username === data?.user?.username) {
-        setRoomConnectionStatus("connected");
-      }
-      toast({
-        title:
-          data?.user?.username === roomUpdates.username
-            ? "You joined the room!"
-            : `${roomUpdates.username} joined the room!`,
-        description: "Member++ :)",
-      });
-    }
+      case "joined":
+        if (roomUpdates.username === data?.user?.username) {
+          setRoomConnectionStatus("connected");
+        }
+        toast({
+          title:
+            data?.user?.username === roomUpdates.username
+              ? "You joined the room!"
+              : `${roomUpdates.username} joined the room!`,
+          description: "Member++ :)",
+        });
+        break;
 
-    if (roomUpdates.status === "offline") {
-      toast({
-        title: `${roomUpdates.username} Gone offline :(`,
-      });
-    }
+      case "offline":
+        toast({
+          title: `${roomUpdates.username} Gone offline :(`,
+        });
+        break;
 
-    if (roomUpdates.status === "left") {
-      toast({
-        title: `${roomUpdates.username} left the room :(`,
-      });
+      case "left":
+        toast({
+          title: `${roomUpdates.username} left the room :(`,
+        });
+        break;
+
+      default:
+        break;
     }
   }, [error, toast, roomUpdates]);
 
