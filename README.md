@@ -17,6 +17,7 @@ RtChat v2 is a purely room-based real-time chat system. It allows users to creat
 - **Database**: PostgreSQL for robust and reliable data storage.
 - **ORM**: Prisma for database schema management and query building.
 - **State Management**: Zustand for simple and flexible client-side state handling.
+- **zod**: Zod for runtime types safety.
 
 ---
 
@@ -101,25 +102,6 @@ Start both the frontend and WebSocket servers:
 ```bash
 pnpm run dev
 ```
-
----
-
-## Known Issues
-
-### Issue: Refresh required after login
-After logging in, users may need to refresh the page to see updated session data. This occurs due to a known issue in `next-auth` v5 (beta), where server-side updates happen immediately but client-side updates lag.
-
-#### Why does this happen?
-When a user logs in, the session is updated server-side, but the client-side session state isn't immediately refreshed. This issue is tracked in the following GitHub discussion:
-[NextAuth.js Issue #11034](https://github.com/nextauthjs/next-auth/issues/11034)
-
-#### Current Workaround
-We are actively exploring solutions, including switching away from `next-auth` or implementing custom authentication logic.
-
----
-
-## Feedback & Contributions
-Thank you for exploring RtChat v2! We value your feedback, bug reports, and suggestions for improvement. Feel free to share your experience and let us know what works well and what could be improved.
 
 ---
 
