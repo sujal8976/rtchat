@@ -1,8 +1,7 @@
-"use server";
+"use client";
 
 import { redirect } from "next/navigation";
-import { signIn } from "../../auth";
-import { revalidatePath } from "next/cache";
+import { signIn } from "next-auth/react";
 
 export async function loginUser(formData: FormData) {
   const email = formData.get("email") as string;
@@ -13,20 +12,20 @@ export async function loginUser(formData: FormData) {
   }
 
   try {
-    await signIn("credentials", {
+    const response = await signIn("credentials", {
       redirect: false,
       email,
       password,
     });
-  } catch (err) {
-    if (err instanceof Error) {
-      if (err.name === "CredentialsSignin") {
-        redirect("/auth/login?error=Provided Email or Password is wrong.");
-      } else {
-        redirect("/auth/login?error=Something Went Wrong, Please try again");
-      }
+
+    if (response?.ok) {
+      // Refresh the session on the server
+      await fetch("/api/auth/session", { cache: "no-cache" });
+      redirect("/chat");
+    } else {
+      redirect("/auth/login?error=Invalid credentials");
     }
+  } catch (err) {
+    redirect("/auth/login?error=Something went wrong. Please try again.");
   }
-  revalidatePath("/");
-  redirect("/chat");
 }
