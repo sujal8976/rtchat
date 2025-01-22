@@ -1,20 +1,36 @@
-export default function () {
+"use client";
+
+import { useEffect, useRef } from "react";
+import { Logo } from "../../../components/client utilities/logo";
+
+export default function HeroSection() {
+  const heroRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (heroRef.current) {
+      heroRef.current.classList.add("animate-slide-up");
+    }
+  }, []);
+
   return (
-    <div className="h-[70vh] w-full flex justify-center items-center text-center">
-      <div className="max-w-[90%] p-6 rounded-lg shadow-lg border border-indigo-300">
-        <h3 className="text-2xl font-bold text-indigo-600 mb-4">🚨 Important Note 🚨</h3>
-        <p className="text-lg mb-2">
-          If you just logged in and haven't refreshed the page yet, the app may not work properly. 
-          Please make sure to refresh the page now to enjoy a seamless experience.
+    <div
+      ref={heroRef}
+      className="h-screen w-full flex flex-col justify-center items-center text-center opacity-0 transform translate-y-10 transition-all duration-1000 ease-out"
+    >
+      <div className="max-w-3xl p-8 rounded-lg shadow-lg backdrop-blur-md">
+        <h1 className="text-4xl sm:text-5xl flex gap-3 items-center justify-center font-extrabold mb-6">
+          Welcome to <span><Logo className="text-5xl" /></span>
+        </h1>
+        <p className="text-lg sm:text-xl mb-6">
+          Connect, chat, and collaborate in real-time with people all over the
+          world. Create rooms, invite friends and start building meaningful
+          conversations instantly!
         </p>
-        <p className="text-lg mb-2">
-          Also, don’t forget to start connecting with people through chat and build meaningful conversations!
-        </p>
-        <p className="text-lg font-semibold text-indigo-600">
-          We’re thrilled to have you here—let’s make some amazing memories together! 🎉
-        </p>
+      </div>
+
+      <div className="absolute bottom-8 text-sm">
+        <p>Developed by Sujal and crafted with ❤️.</p>
       </div>
     </div>
   );
 }
-
