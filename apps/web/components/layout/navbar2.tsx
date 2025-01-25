@@ -6,7 +6,7 @@ import { MobileSidebar } from "../client utilities/mobileSidebar";
 
 export function Navbar() {
   return (
-    <div className={cn("flex border-b-2 h-[73px] dark:border-b w-full justify-center")}>
+    <div className={cn("flex border-b border-slate-500 lg:border-amber-50 lg:border-b-2 h-[73px] lg:dark:border-b w-full justify-center")}>
       <div className="flex items-center justify-between w-[90%] py-4 lg:justify-end">
         <MobileSidebar className="lg:hidden" />
         <Logo className="lg:hidden" />

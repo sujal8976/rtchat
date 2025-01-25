@@ -19,7 +19,7 @@ export function ChatMembers({ users, adminId }: ChatMembersProps) {
 
 export function ChatMembersContent({ users, adminId }: ChatMembersProps) {
   return (
-    <div className="space-y-4 mt-1 overflow-y-scroll">
+    <div className="space-y-4 mt-1 h-[calc(100%-70px)] lg:h-auto overflow-y-scroll">
       {users.map((user) => (
         <div key={user.id} className="flex items-center gap-3">
           <div className="relative">

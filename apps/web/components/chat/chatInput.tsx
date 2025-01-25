@@ -43,16 +43,16 @@ export function ChatInput({
   return (
     <form
       onSubmit={handleSubmit}
-      className="border-t-2 h-[77px] dark:border-t p-4 bg-background bottom-0"
+      className="lg:border-t-2 lg:h-[52px] p-2 px-4 lg:dark:border-t lg:p-4 bg-background bottom-0"
     >
-      <div className="flex gap-4 items-end max-w-[900px] mx-auto">
+      <div className="flex gap-2 items-end max-w-[900px] mx-auto">
         <Textarea
           ref={textareaRef}
           placeholder="Type a message..."
           value={message}
           onChange={(e) => setMessage(e.target.value)}
           onKeyDown={handleKeyDown}
-          className="min-h-[44px] max-h-[200px] resize-none"
+          className="min-h-[44px] max-h-[200px] resize-none px-3"
           rows={1}
         />
         <Button type="submit" size="icon" className="h-11 w-11 shrink-0">

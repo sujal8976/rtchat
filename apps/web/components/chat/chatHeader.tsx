@@ -38,7 +38,7 @@ export function ChatHeader({
   const resetStore = useMessagesStore().resetStore
 
   return (
-    <div className="border-b-2 h-[81px] dark:border-b px-6 py-4 flex items-center justify-between backdrop-blur">
+    <div className="border-b border-slate-500 lg:border-amber-50 lg:h-[81px] lg:dark:border-b px-6 py-2 lg:py-4 flex items-center justify-between backdrop-blur">
       <div className="flex items-center gap-4">
         <Avatar className="size-12 flex-shrink-0">
           <AvatarFallback className="bg-gray-200">

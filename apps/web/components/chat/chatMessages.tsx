@@ -109,14 +109,14 @@ export function ChatMessages({ roomId }: ChatMessagesProps) {
       <div className="relative">
         <div
           ref={containerRef}
-          className="w-full h-[calc(100svh-73px-81px-77px)] p-4 overflow-y-scroll"
+          className="w-full h-[calc(100svh-73px-65px-61px)] lg:h-[calc(100svh-73px-81px-77px)] p-4 overflow-y-scroll"
         >
           {isLoading && (
             <div className="h-4">
               <Loading text="Loading messages..." />
             </div>
           )}
-          <div className="space-y-6">
+          <div className="space-y-3">
             {messages.map((msg, i) => (
               <MessageBubble
                 key={msg.id}
