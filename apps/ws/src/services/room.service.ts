@@ -14,7 +14,7 @@ export class RoomService {
           },
         },
       });
-      return true;
+      return !!roomUser
     } catch (error) {
       console.log("Error validating room access:", error);
       return false;
@@ -28,10 +28,23 @@ export class RoomService {
     try {
       const existingEntry = await prisma.roomUser.findFirst({
         where: { userId, roomId },
+        select: {
+          id: true,
+          room: {
+            select: {
+              isPrivate: true,
+            },
+          },
+        },
       });
 
-      if (existingEntry) {
+      if (existingEntry?.id) {
         return "alreadyJoined";
+      }
+
+      if (existingEntry?.room.isPrivate) {
+        const isUserJoined = await this.validateRoomAccess(userId, roomId);
+        return isUserJoined ? "alreadyJoined" : "failed";
       }
 
       await prisma.roomUser.create({

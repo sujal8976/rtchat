@@ -10,4 +10,5 @@ export interface ChatRoom {
   description: string | null;
   createdBy: string;
   users: ChatUser[];
+  isPrivate: boolean
 }

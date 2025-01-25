@@ -7,11 +7,31 @@ interface Params {
 }
 
 export default async function ({ params }: { params: Params }) {
-  const room = await getRoom(params.roomId);
+  try {
+    const room = await getRoom(params.roomId);
 
-  if (!room) {
+    if (!room) {
+      return <RoomNotFound />;
+    }
+
+    return <ChatRoom {...room} />;
+  } catch (error) {
+    if (error instanceof Error) {
+      return (
+        <div className="flex flex-col items-center justify-center h-screen">
+          <h1 className="text-2xl font-semibold text-red-500">
+            {error.message === "ACCESS_DENIED"
+              ? "Access Denied"
+              : error.message}
+          </h1>
+          <p className="text-lg text-gray-600">
+            {error.message === "ACCESS_DENIED" &&
+              "You are not a member of this room. Please join this room first."}{" "}
+          </p>
+        </div>
+      );
+    }
+
     return <RoomNotFound />;
   }
-
-  return <ChatRoom {...room} />;
 }

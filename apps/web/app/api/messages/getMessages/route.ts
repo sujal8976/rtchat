@@ -3,15 +3,13 @@ import { auth } from "../../../../lib/auth";
 import prisma from "@repo/db/client";
 
 export const GET = auth(async function GET(req) {
-  if (!req.auth) {
+  if (!req.auth || !req.auth.user?.id) {
     return NextResponse.json({ error: "Not authenticated" }, { status: 401 });
   }
 
   const searchParams = req.nextUrl.searchParams;
-  const page = parseInt(searchParams.get("page") || "1");
-  const limit = parseInt(searchParams.get("limit") || "40");
+
   const roomId = searchParams.get("roomId");
-  const skip = (page - 1) * limit;
 
   if (!roomId) {
     return NextResponse.json(
@@ -20,14 +18,34 @@ export const GET = auth(async function GET(req) {
     );
   }
 
+  const roomUser = await prisma.roomUser.findUnique({
+    where: {
+      userId_roomId: {
+        userId: req.auth.user.id,
+        roomId,
+      },
+    },
+  });
+
+  if (!roomUser) {
+    return NextResponse.json(
+      { error: "You not have the access for this room." },
+      { status: 401 }
+    );
+  }
+
+  const page = parseInt(searchParams.get("page") || "1");
+  const limit = parseInt(searchParams.get("limit") || "40");
+  const skip = (page - 1) * limit;
+
   try {
     const [messages, totalMessages] = await prisma.$transaction([
       prisma.message.findMany({
         where: {
           roomId: roomId,
         },
-        orderBy:{
-          createdAt: 'desc'
+        orderBy: {
+          createdAt: "desc",
         },
         take: limit,
         skip,

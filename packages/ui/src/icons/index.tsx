@@ -12,5 +12,6 @@ export {
   AlignLeft,
   LogOut,
   ChevronDown,
-  Clock
+  Clock,
+  LockKeyhole
 } from "lucide-react";

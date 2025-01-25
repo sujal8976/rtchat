@@ -137,37 +137,30 @@ export class WebSocketService {
         type: WebSocketMessageType.JOIN_ROOM,
         payload,
       }).payload;
-
+  
       const result = await RoomService.addUserToRoom(ws.userId, roomId);
-
-      if (result === "joined") {
-        ws.currentRoom = roomId;
-        this.broadcastToRoom(roomId, {
-          type: WebSocketMessageType.USER_STATUS,
-          payload: {
-            userId: ws.userId,
-            status: "joined",
-            username: ws.username,
-            roomId,
-          },
-        });
-      } else if (result === "alreadyJoined") {
-        ws.currentRoom = roomId;
-        this.broadcastToRoom(roomId, {
-          type: WebSocketMessageType.USER_STATUS,
-          payload: {
-            userId: ws.userId,
-            status: "rejoined",
-            username: ws.username,
-            roomId,
-          },
-        });
-      } else {
-        ErrorHandler.sendError(ws, "ROOM_JOIN_ERROR", "Failed to join room");
+  
+      switch (result) {
+        case "joined":
+        case "alreadyJoined":
+          ws.currentRoom = roomId;
+          this.broadcastToRoom(roomId, {
+            type: WebSocketMessageType.USER_STATUS,
+            payload: {
+              userId: ws.userId,
+              status: result === "joined" ? "joined" : "rejoined",
+              username: ws.username,
+              roomId,
+            },
+          });
+          break;
+        case "failed":
+          ErrorHandler.sendError(ws, "ROOM_JOIN_ERROR", "Failed to join room");
+          break;
       }
     } catch (error) {
-      console.log("Error in handleJoinRoom", error);
-      ErrorHandler.sendError(ws, "Room_Join_Error", "Failed to join room");
+      console.error("Error in handleJoinRoom", error);
+      ErrorHandler.sendError(ws, "ROOM_JOIN_ERROR", "Failed to join room");
     }
   }
 

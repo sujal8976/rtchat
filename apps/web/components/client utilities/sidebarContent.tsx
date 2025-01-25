@@ -3,12 +3,19 @@
 import { Input } from "@repo/ui/components/ui/input";
 import { CreateRoom } from "./createRoom";
 import { ChangeEvent, useCallback, useEffect, useState } from "react";
-import { Room, JoinedRoomsResponse, SearchRoomsResponse, RoomWrapper } from "../../types/room";
+import {
+  Room,
+  JoinedRoomsResponse,
+  SearchRoomsResponse,
+  UserJoinedRoom,
+} from "../../types/room";
 import { useDebounce } from "../../hooks/useDebounce";
 import { RoomCard } from "../cards/roomCard";
 import { useToast } from "@repo/ui/hooks/use-toast";
 import Loading from "../loading/loading";
 import { BASE_URL } from "../../lib/config/websocket";
+import Link from "next/link";
+import { SearchedRoomCard } from "../cards/searchedRoomCard";
 
 interface SidebarContentProps {
   onUpdate?: (value: boolean) => void;
@@ -18,7 +25,7 @@ export function SidebarContent({ onUpdate }: SidebarContentProps) {
   const [roomSearch, setRoomSearch] = useState("");
   const [loading, setLoading] = useState(false);
   const [rooms, setRooms] = useState<Room[]>([]);
-  const [joinedRooms, setJoinedRooms] = useState<RoomWrapper[]>([]);
+  const [joinedRooms, setJoinedRooms] = useState<UserJoinedRoom[]>([]);
   const { toast } = useToast();
 
   const debouncedSearch = useDebounce(roomSearch, 300);
@@ -27,7 +34,7 @@ export function SidebarContent({ onUpdate }: SidebarContentProps) {
     try {
       setLoading(true);
       const res = await fetch(`${BASE_URL}/api/rooms/joinedRooms`, {
-        method: "GET"
+        method: "GET",
       });
 
       const data: JoinedRoomsResponse = await res.json();
@@ -96,7 +103,7 @@ export function SidebarContent({ onUpdate }: SidebarContentProps) {
   return (
     <div className="pt-5 flex justify-center lg:border-r-2 lg:dark:border-r h-[calc(100svh-73px)]">
       <div className="flex flex-col gap-4 w-full max-w-[90%]">
-        <CreateRoom />
+        <CreateRoom onUpdate={onUpdate} />
 
         <Input
           placeholder="Search rooms..."
@@ -117,12 +124,16 @@ export function SidebarContent({ onUpdate }: SidebarContentProps) {
             <div className="space-y-2 p-2">
               {roomSearch ? (
                 rooms.map((room) => (
-                  <RoomCard
-                    onClickSidebarClose={onUpdate}
+                  <SearchedRoomCard
                     name={room.name}
                     description={room.description}
                     id={room.id}
                     key={room.id}
+                    isPrivate={room.isPrivate}
+                    isJoinedRoom={joinedRooms.some(
+                      (joinedRoom) => joinedRoom.room.id === room.id
+                    )}
+                    onUpdate={onUpdate}
                   />
                 ))
               ) : (
@@ -132,13 +143,19 @@ export function SidebarContent({ onUpdate }: SidebarContentProps) {
                   </div>
                   {joinedRooms && joinedRooms.length > 0 ? (
                     joinedRooms.map((room) => (
-                      <RoomCard
-                        onClickSidebarClose={onUpdate}
-                        name={room.room.name}
-                        description={room.room.description}
-                        id={room.room.id}
+                      <Link
+                        prefetch={false}
+                        href={`/chat/${room.room.id}`}
+                        className="w-full"
                         key={room.room.id}
-                      />
+                      >
+                        <RoomCard
+                          onClickSidebarClose={onUpdate}
+                          name={room.room.name}
+                          description={room.room.description}
+                          id={room.room.id}
+                        />
+                      </Link>
                     ))
                   ) : (
                     <>

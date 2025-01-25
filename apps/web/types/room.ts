@@ -1,7 +1,8 @@
 export interface Room {
   id: string;
   name: string;
-  description: string | null;
+  description: string;
+  isPrivate: boolean;
 }
 
 export interface UserJoinedRoom {
@@ -9,17 +10,17 @@ export interface UserJoinedRoom {
 }
 
 export interface RoomWrapper {
-  room: Room
+  room: Room;
 }
 
 export interface JoinedRoomsResponse {
   rooms: RoomWrapper[];
-  error?: string
+  error?: string;
 }
 
 export interface SearchRoomsResponse {
   rooms: Room[];
-  error?: string
+  error?: string;
 }
 
 export class AppError extends Error {
@@ -29,7 +30,7 @@ export class AppError extends Error {
     public statusCode: number = 400
   ) {
     super(message);
-    this.name = 'AppError';
+    this.name = "AppError";
   }
 }
 
@@ -37,13 +38,13 @@ export class AppError extends Error {
 export class RoomError extends AppError {
   constructor(message: string, code: string) {
     super(message, code, 400);
-    this.name = 'RoomError';
+    this.name = "RoomError";
   }
 }
 
 export class AuthError extends AppError {
-  constructor(message: string = 'Authentication required') {
-    super(message, 'UNAUTHORIZED', 401);
-    this.name = 'AuthError';
+  constructor(message: string = "Authentication required") {
+    super(message, "UNAUTHORIZED", 401);
+    this.name = "AuthError";
   }
 }

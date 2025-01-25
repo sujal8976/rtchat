@@ -3,7 +3,6 @@
 import { Avatar, AvatarFallback } from "@repo/ui/components/ui/avatar";
 import { Button } from "@repo/ui/components/ui/button";
 import { Users } from "@repo/ui/icons";
-import Link from "next/link";
 
 interface RoomCardProps {
   name: string;
@@ -19,7 +18,6 @@ export function RoomCard({
   onClickSidebarClose,
 }: RoomCardProps) {
   return (
-    <Link prefetch={false} href={`/chat/${id}`} className="w-full">
       <Button
         onClick={() => {
           if (onClickSidebarClose) onClickSidebarClose(false);
@@ -39,6 +37,5 @@ export function RoomCard({
           </div>
         </div>
       </Button>
-    </Link>
   );
 }
