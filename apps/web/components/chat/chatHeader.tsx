@@ -21,7 +21,6 @@ import { useMessagesStore } from "../../lib/store/messages";
 interface ChatHeaderProps {
   name: string;
   description: string | null;
-  users: ChatUser[];
   adminId: string;
   exitRoom: () => void;
 }
@@ -29,7 +28,6 @@ interface ChatHeaderProps {
 export function ChatHeader({
   name,
   description,
-  users,
   adminId,
   exitRoom,
 }: ChatHeaderProps) {
@@ -82,7 +80,7 @@ export function ChatHeader({
           </SheetTrigger>
           <SheetContent side={"right"} className="p-4 mb-4">
             <h2 className="font-semibold my-5">Room Members</h2>
-            <ChatMembersContent users={users} adminId={adminId} />
+            <ChatMembersContent adminId={adminId} />
           </SheetContent>
         </Sheet>
       </div>

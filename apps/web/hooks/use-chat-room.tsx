@@ -7,6 +7,8 @@ import { WebSocketMessageType } from "@repo/common/types";
 import { useToast } from "@repo/ui/hooks/use-toast";
 import { useSession } from "next-auth/react";
 import { useMessagesStore } from "../lib/store/messages";
+import { ChatUser } from "../types/chat";
+import { useRoomMembersStore } from "../lib/store/roomMembers";
 
 class RoomManager {
   private static instance: RoomManager;
@@ -46,7 +48,7 @@ class RoomManager {
   }
 }
 
-export function useChatRoom(roomId: string) {
+export function useChatRoom(roomId: string, roomMembers: ChatUser[]) {
   const { toast } = useToast();
   const roomManager = useRef(RoomManager.getInstance());
   const {
@@ -57,6 +59,13 @@ export function useChatRoom(roomId: string) {
     setRoomConnectionStatus,
     roomConnectionStatus,
   } = useChatStore();
+  const {
+    setRoomMembers,
+    addRoomMember,
+    setOnlineRoomMember,
+    setOfflineRoomMember,
+    removeRoomMember,
+  } = useRoomMembersStore();
   const addMessage = useMessagesStore().addMessage;
   const { data } = useSession();
 
@@ -69,6 +78,7 @@ export function useChatRoom(roomId: string) {
     try {
       setRoomConnectionStatus("connecting");
       roomManager.current.joinRoom(roomId);
+      setRoomMembers(roomMembers);
     } catch (err) {
       toast({
         title: "Connection Error",
@@ -86,6 +96,7 @@ export function useChatRoom(roomId: string) {
       roomManager.current.closeRoom(roomId);
       setRoomConnectionStatus("disconnected");
       setCurrentRoom(null);
+      setRoomMembers([]);
       toast({
         title: "Disconnected",
         description: `Left room ${roomId}`,
@@ -127,8 +138,10 @@ export function useChatRoom(roomId: string) {
     switch (roomUpdates.status) {
       case "rejoined":
         if (roomUpdates.username === data?.user?.username) {
+          setRoomMembers(roomMembers);
           setRoomConnectionStatus("connected");
         }
+        setOnlineRoomMember(roomUpdates.username);
         toast({
           title:
             data?.user?.username === roomUpdates.username
@@ -141,6 +154,7 @@ export function useChatRoom(roomId: string) {
         if (roomUpdates.username === data?.user?.username) {
           setRoomConnectionStatus("connected");
         }
+        addRoomMember(roomUpdates.username);
         toast({
           title:
             data?.user?.username === roomUpdates.username
@@ -151,12 +165,14 @@ export function useChatRoom(roomId: string) {
         break;
 
       case "offline":
+        setOfflineRoomMember(roomUpdates.username);
         toast({
           title: `${roomUpdates.username} Gone offline :(`,
         });
         break;
 
       case "left":
+        removeRoomMember(roomUpdates.username);
         toast({
           title: `${roomUpdates.username} left the room :(`,
         });

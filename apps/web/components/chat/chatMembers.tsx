@@ -2,22 +2,24 @@ import { cn } from "@repo/ui/lib/utils";
 import { ChatUser } from "../../types/chat";
 import { Avatar, AvatarFallback } from "@repo/ui/components/ui/avatar";
 import { UserCircle } from "@repo/ui/icons";
+import { useRoomMembersStore } from "../../lib/store/roomMembers";
 
 interface ChatMembersProps {
-  users: ChatUser[];
   adminId: string;
 }
 
-export function ChatMembers({ users, adminId }: ChatMembersProps) {
+export function ChatMembers({ adminId }: ChatMembersProps) {
   return (
     <div className="border-l-2 dark:border-l p-4 pt-2 w-72 h-[calc(100svh-73px)] lg:overflow-y-scroll hidden lg:block mb-0">
       <h2 className="font-semibold my-5">Room Members</h2>
-      <ChatMembersContent users={users} adminId={adminId} />
+      <ChatMembersContent adminId={adminId} />
     </div>
   );
 }
 
-export function ChatMembersContent({ users, adminId }: ChatMembersProps) {
+export function ChatMembersContent({ adminId }: ChatMembersProps) {
+  const users = useRoomMembersStore().roomMembers;
+
   return (
     <div className="space-y-4 mt-1 h-[calc(100%-70px)] lg:h-auto overflow-y-scroll">
       {users.map((user) => (

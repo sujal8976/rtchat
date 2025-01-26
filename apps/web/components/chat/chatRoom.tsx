@@ -9,13 +9,8 @@ import { useChatRoom } from "../../hooks/use-chat-room";
 import Loading from "../loading/loading";
 
 export function ChatRoom(room: ChatRoomProps) {
-  const { connectionStatus, exitRoom, roomConnectionStatus, sendMessage } = useChatRoom(
-    room.id
-  );
-
-  if (connectionStatus === "connecting") {
-    return <Loading text="Connecting to server..." />;
-  }
+  const { connectionStatus, exitRoom, roomConnectionStatus, sendMessage } =
+    useChatRoom(room.id, room.users);
 
   if (connectionStatus === "disconnected") {
     return (
@@ -37,14 +32,13 @@ export function ChatRoom(room: ChatRoomProps) {
           <ChatHeader
             name={room.name}
             description={room.description}
-            users={room.users}
             adminId={room.createdBy}
             exitRoom={exitRoom}
           />
           <ChatMessages roomId={room.id} />
           <ChatInput sendMessage={sendMessage} />
         </div>
-        <ChatMembers users={room.users} adminId={room.createdBy} />
+        <ChatMembers adminId={room.createdBy} />
       </div>
     );
   } else {
