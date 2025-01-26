@@ -21,6 +21,8 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@repo/ui/components/ui/dropdown-menu";
+import { useJoinedRoomsStore } from "../../lib/store/mobileRoomSidebar";
+import { Room } from "../../types/room";
 
 interface CreateRoomProps {
   onUpdate?: (value: boolean) => void;
@@ -32,6 +34,7 @@ export function CreateRoom({ onUpdate }: CreateRoomProps) {
   const [loading, setLoading] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
   const [isPrivate, setIsPrivate] = useState(false);
+  const addJoinedRoom = useJoinedRoomsStore().addJoinedRoom;
 
   const handleSubmit = async (e: FormEvent<HTMLFormElement>) => {
     setLoading(true);
@@ -64,6 +67,15 @@ export function CreateRoom({ onUpdate }: CreateRoomProps) {
         description: "Welcome to the Room",
       });
       setIsOpen(false);
+
+      const newRoom: Room = {
+        id: res.roomId,
+        name: data.roomName,
+        description: data.description,
+        isPrivate,
+      };
+      addJoinedRoom({ room: newRoom });
+
       if (onUpdate) onUpdate(false);
       router.push(`/chat/${res.roomId}`);
     } else if (res.error) {

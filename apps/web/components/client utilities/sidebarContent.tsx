@@ -3,12 +3,7 @@
 import { Input } from "@repo/ui/components/ui/input";
 import { CreateRoom } from "./createRoom";
 import { ChangeEvent, useCallback, useEffect, useState } from "react";
-import {
-  Room,
-  JoinedRoomsResponse,
-  SearchRoomsResponse,
-  UserJoinedRoom,
-} from "../../types/room";
+import { Room, SearchRoomsResponse } from "../../types/room";
 import { useDebounce } from "../../hooks/useDebounce";
 import { RoomCard } from "../cards/roomCard";
 import { useToast } from "@repo/ui/hooks/use-toast";
@@ -16,53 +11,27 @@ import Loading from "../loading/loading";
 import { BASE_URL } from "../../lib/config/websocket";
 import Link from "next/link";
 import { SearchedRoomCard } from "../cards/searchedRoomCard";
+import { useJoinedRoomsStore } from "../../lib/store/mobileRoomSidebar";
 
 interface SidebarContentProps {
   onUpdate?: (value: boolean) => void;
 }
 
 export function SidebarContent({ onUpdate }: SidebarContentProps) {
+  const { joinedRooms, loading, fetchJoinedRooms, setLoading } =
+    useJoinedRoomsStore();
   const [roomSearch, setRoomSearch] = useState("");
-  const [loading, setLoading] = useState(false);
   const [rooms, setRooms] = useState<Room[]>([]);
-  const [joinedRooms, setJoinedRooms] = useState<UserJoinedRoom[]>([]);
   const { toast } = useToast();
 
   const debouncedSearch = useDebounce(roomSearch, 300);
-
-  const getJoinedRooms = useCallback(async () => {
-    try {
-      setLoading(true);
-      const res = await fetch(`${BASE_URL}/api/rooms/joinedRooms`, {
-        method: "GET",
-      });
-
-      const data: JoinedRoomsResponse = await res.json();
-
-      if (!res.ok) {
-        throw new Error(data.error || "Failed to fetch rooms");
-      }
-
-      setJoinedRooms(data.rooms);
-    } catch (error) {
-      if (error instanceof Error) {
-        toast({
-          title: "Room fetching failed",
-          description: error.message || "Failed to fetch joined rooms",
-          variant: "destructive",
-        });
-      }
-    } finally {
-      setLoading(false);
-    }
-  }, []);
 
   const onChangeHeandler = async (e: ChangeEvent<HTMLInputElement>) => {
     e.preventDefault();
     setRoomSearch(e.target.value);
   };
 
-  const fetchRooms = useCallback(async () => {
+  const fetchSearchRooms = useCallback(async () => {
     if (debouncedSearch.length > 1) {
       setLoading(true);
       try {
@@ -93,11 +62,26 @@ export function SidebarContent({ onUpdate }: SidebarContentProps) {
   }, [debouncedSearch]);
 
   useEffect(() => {
+    const getJoinedRooms = async () => {
+      try {
+        await fetchJoinedRooms();
+      } catch (error) {
+        toast({
+          title: "Room fetching failed",
+          description:
+            error instanceof Error
+              ? error.message
+              : "Failed to fetch joined rooms",
+          variant: "destructive",
+        });
+      }
+    };
+    
     getJoinedRooms();
-  }, [getJoinedRooms]);
+  }, []);
 
   useEffect(() => {
-    fetchRooms();
+    fetchSearchRooms();
   }, [debouncedSearch]);
 
   return (

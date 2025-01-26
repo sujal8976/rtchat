@@ -19,6 +19,8 @@ import {
   addUserToRoom,
   validatePrivateRoomCode,
 } from "../../lib/actions/room/rooms";
+import { Room } from "../../types/room";
+import { useJoinedRoomsStore } from "../../lib/store/mobileRoomSidebar";
 
 interface SearchedRoomCardProps {
   name: string;
@@ -42,6 +44,9 @@ export function SearchedRoomCard({
   const [privateCode, setPrivateCode] = useState("");
   const [loading, setLoading] = useState(false);
   const { toast } = useToast();
+  const addJoinedRoom = useJoinedRoomsStore().addJoinedRoom;
+
+  const newRoom: Room = { name, id, description, isPrivate };
 
   const privateJoinRoomHandler = async () => {
     setLoading(true);
@@ -64,6 +69,7 @@ export function SearchedRoomCard({
       const isUserAdded = await addUserToRoom(id);
       if (isUserAdded === "added") {
         setIsOpen(false);
+        addJoinedRoom({room: newRoom});
         if (onUpdate) onUpdate(false);
         router.push(`/chat/${id}`);
       } else {
@@ -85,9 +91,8 @@ export function SearchedRoomCard({
 
   const publicJoinRoomHandler = () => {
     setIsOpen(false);
-    if (onUpdate) {
-      onUpdate(false);
-    }
+    addJoinedRoom({room: newRoom});
+    if (onUpdate) onUpdate(false);
     router.push(`/chat/${id}`);
   };
 

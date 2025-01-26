@@ -9,6 +9,7 @@ import { useSession } from "next-auth/react";
 import { useMessagesStore } from "../lib/store/messages";
 import { ChatUser } from "../types/chat";
 import { useRoomMembersStore } from "../lib/store/roomMembers";
+import { useJoinedRoomsStore } from "../lib/store/mobileRoomSidebar";
 
 class RoomManager {
   private static instance: RoomManager;
@@ -48,7 +49,11 @@ class RoomManager {
   }
 }
 
-export function useChatRoom(roomId: string, roomMembers: ChatUser[], adminUserId: string) {
+export function useChatRoom(
+  roomId: string,
+  roomMembers: ChatUser[],
+  adminUserId: string
+) {
   const { toast } = useToast();
   const roomManager = useRef(RoomManager.getInstance());
   const {
@@ -67,6 +72,7 @@ export function useChatRoom(roomId: string, roomMembers: ChatUser[], adminUserId
     removeRoomMember,
   } = useRoomMembersStore();
   const addMessage = useMessagesStore().addMessage;
+  const removeJoinedRoom = useJoinedRoomsStore().removeJoinedRoom;
   const { data } = useSession();
 
   // Handle room connection
@@ -216,6 +222,7 @@ export function useChatRoom(roomId: string, roomMembers: ChatUser[], adminUserId
         roomId,
       },
     });
+    removeJoinedRoom(roomId);
   }, []);
 
   return {
