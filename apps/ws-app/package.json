@@ -1,5 +1,5 @@
 {
-  "name": "ws",
+  "name": "ws-app",
   "version": "2.0",
   "private": true,
   "scripts": {

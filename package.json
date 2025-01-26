@@ -11,7 +11,7 @@
     "prisma:generate": "cd packages/db && npx prisma generate && cd ../..",
     "prisma:seed": "node packages/db/seed.js",
     "start:web": "pnpm --filter web run start",
-    "start:ws": "pnpm --filter ws run start"
+    "start:ws": "pnpm --filter ws-app run start"
   },
   "devDependencies": {
     "prettier": "^3.2.5",
