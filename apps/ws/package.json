@@ -1,6 +1,6 @@
 {
   "name": "ws",
-  "version": "1.0.0",
+  "version": "2.0",
   "private": true,
   "scripts": {
     "build": "esbuild src/index.ts --bundle --platform=node --target=node20 --outfile=dist/index.js --format=cjs --sourcemap --resolve-extensions=.ts,.js",

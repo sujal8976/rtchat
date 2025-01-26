@@ -1,109 +1,98 @@
-# RtChat v2
+# RtChat v2: Your Flexible Real-Time Chat Platform 💬🌐
 
-RtChat v2 is a purely room-based real-time chat system. It allows users to create and join chat rooms. The system is designed to be fast and performant.
+## Overview
+RtChat v2 is a powerful, room-based real-time chat application. Designed for seamless interaction, it offers both public and private chat rooms, catering to diverse communication needs.
 
-## Features
-- **Room-based real-time communication**: Users can join any room and chat in real time.
-- **Accessible**: Anyone can join.
-- **Fast and performant**: Built with optimized tech stacks for speed and reliability.
+## Live Demo
+🌐 **Access RtChat v2**
+- **Web App**: [https://rtchat.thesujal.buzz](https://rtchat.thesujal.buzz)
+- **Status**: Active and Open for Users 🟢
 
----
+## Key Features
+🌟 **Versatile Room-Based Communication**
+- Create and join multiple chat rooms
+- Choose between **public** and **private** room options
+- Instant, real-time messaging across rooms
+
+🔒 **Flexible Access Controls**
+- Public rooms: Open to all users
+- Private rooms: Need room's private key
+
+⚡ **High-Performance Architecture**
+- Low-latency communication
+- Optimized for smooth user experience
+- Scalable design supporting multiple concurrent users
 
 ## Tech Stack
-- **Monorepo**: Managed with Turborepo for efficient development.
-- **Frontend & HTTP Server**: Built with Next.js.
-- **Styling**: Tailwind CSS for rapid UI development.
-- **WebSocket Server**: Implemented using the `ws` library in Node.js.
-- **Database**: PostgreSQL for robust and reliable data storage.
-- **ORM**: Prisma for database schema management and query building.
-- **State Management**: Zustand for simple and flexible client-side state handling.
-- **zod**: Zod for runtime types safety.
+- **Monorepo**: Turborepo
+- **Frontend**: Next.js
+- **Styling**: Tailwind CSS
+- **WebSocket**: Node.js `ws` library
+- **Database**: PostgreSQL
+- **ORM**: Prisma
+- **State Management**: Zustand
+- **Type Safety**: Zod
 
----
-
-## System Design
-The development of RtChat v2 adheres to several fundamental and efficient system design principles to ensure reliability, performance, and maintainability:
-
-- **Debouncing**: Implemented to prevent redundant API calls during rapid user actions, enhancing responsiveness and reducing server load.
-- **Infinite Scrolling**: Used in chat history views to load data progressively as the user scrolls, ensuring a smooth user experience.
-- **Singleton Pattern**: Applied to manage WebSocket connections both on the frontend and backend, ensuring a single active connection per client and reducing resource usage.
-- **Database Indexing**: Added indexes to frequently queried fields to optimize database performance and reduce query latency.
-- **Separation of Concerns**: Clearly divided responsibilities among different components and services for better maintainability.
-- **Retry and Fallback Mechanisms**: Incorporated retries for transient failures in WebSocket communication, with appropriate fallback strategies.
-- **Efficient State Management**: Utilized lightweight state management library `zustand` to manage application state seamlessly without unnecessary overhead.
-
----
+## System Design Principles
+💡 **Smart Architecture**
+- Debouncing to prevent redundant API calls
+- Infinite scrolling for efficient chat history
+- Singleton WebSocket connection management
+- Optimized database indexing
+- Robust retry and fallback mechanisms
+- Real-time sending/sent status tracking
+- Room members joined/online/offline/left status tracking
 
 ## Installation Guide
+### Prerequisites
+- Node.js v22.12.0 (LTS)
+- PostgreSQL
+- pnpm package manager
 
-### Use node version v22.12.0(lts).
-
-### Step 1: Set up the project directory
+### Quick Setup
+1. Clone the repository
 ```bash
-mkdir rtchat
+git clone https://github.com/sujal8976/rtchat.git
 cd rtchat
-git clone https://github.com/sujal8976/rtchat.git .
 ```
 
-### Step 2: Install dependencies
-Make sure you have `pnpm` installed globally. If not, install it using:
+2. Install dependencies
 ```bash
 npm install -g pnpm
-```
-Then, install project dependencies:
-```bash
 pnpm install
 ```
 
-### Step 3: Configure environment variables
-Add environment variables for each app. Refer to the `.env.example` file in the respective directories for guidance.
+3. Configure environment variables
+- Refer to `.env.example` in each app directory
+- Set up database, authentication, and WebSocket configurations
 
-#### apps/web/.env
-```env
-NEXTAUTH_URL=http://localhost:3000
-NEXTAUTH_SECRET=test
-AUTH_TRUST_HOST=http://localhost:3000
-WS_URL=ws://localhost:5000
-JWT_SECRET=your-256-bit-secret
-NEXT_PUBLIC_WS_URL=ws://localhost:5000
-```
-
-#### apps/ws/.env
-```env
-JWT_SECRET=your-256-bit-secret
-PORT=5000
-```
-
-#### packages/db/.env
-```env
-DATABASE_URL="postgres://postgres:@localhost:5432/rtchat"
-```
-
-### Step 4: Run Prisma migrations
-Apply the database migrations:
+4. Database Setup
 ```bash
 pnpm run prisma:migrate
-```
-
-### Step 5: Generate Prisma client
-Generate the Prisma client for database interactions:
-```bash
 pnpm run prisma:generate
-```
-
-### Step 6: Seed the database
-Populate the database with initial data:
-```bash
 pnpm run prisma:seed
 ```
 
-### Step 7: Start the development server
-Start both the frontend and WebSocket servers:
+5. Start Development Server
 ```bash
 pnpm run dev
 ```
 
----
+## Room Types
+### Public Rooms
+- Open to all registered users
+- Discover and join rooms based on interests
+- No invitation required
 
-Happy chatting! 🚀
+### Private Rooms
+- Invite-only access
+- Required private room key
 
+## Getting Started
+1. Register an account
+2. Explore public rooms
+3. Create your own rooms (public or private)
+4. Invite friends to private rooms
+5. Start chatting!
+
+Happy Chatting! 🚀🌈
