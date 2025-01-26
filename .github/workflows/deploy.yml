@@ -29,20 +29,20 @@ jobs:
         push: true
         tags: sujal8976/rtchat-web:2.0
     
-    # - name: Build and Push WS App Docker image
-    #   uses: docker/build-push-action@v6
-    #   with:
-    #     context: .
-    #     file: ./docker/Dockerfile.ws
-    #     push: true
-    #     tags: sujal8976/rtchat-ws:2.0
+    - name: Build and Push WS App Docker image
+      uses: docker/build-push-action@v6
+      with:
+        context: .
+        file: ./docker/Dockerfile.ws
+        push: true
+        tags: sujal8976/rtchat-ws:2.0
 
     - name: Verify Pushed Images
       run: |
         docker pull sujal8976/rtchat-web:2.0
-#        docker pull sujal8976/rtchat-ws:2.0
+       docker pull sujal8976/rtchat-ws:2.0
 
     - name: Clean Up Local Docker Images
       run: |
         docker images -q sujal8976/rtchat-web:2.0 | xargs -r docker rmi
-#        docker images -q sujal8976/rtchat-ws:2.0 | xargs -r docker rmi
+       docker images -q sujal8976/rtchat-ws:2.0 | xargs -r docker rmi
