@@ -32,7 +32,6 @@ export function ChatRoom(room: ChatRoomProps) {
           <ChatHeader
             name={room.name}
             description={room.description}
-            adminId={room.createdBy}
             exitRoom={exitRoom}
           />
           <ChatMessages roomId={room.id} />

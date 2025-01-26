@@ -20,14 +20,12 @@ import { useMessagesStore } from "../../lib/store/messages";
 interface ChatHeaderProps {
   name: string;
   description: string | null;
-  adminId: string;
   exitRoom: () => void;
 }
 
 export function ChatHeader({
   name,
   description,
-  adminId,
   exitRoom,
 }: ChatHeaderProps) {
   const router = useRouter();
