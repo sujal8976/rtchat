@@ -3,7 +3,8 @@ import { ChatUser } from "../../types/chat";
 
 interface RoomMembersStore {
   roomMembers: ChatUser[];
-  setRoomMembers: (users: ChatUser[]) => void;
+  adminUserId: string | null;
+  setRoomMembers: (users: ChatUser[], adminUserId: string | null) => void;
   addRoomMember: (username: string) => void;
   removeRoomMember: (username: string) => void;
   setOnlineRoomMember: (username: string) => void;
@@ -12,10 +13,12 @@ interface RoomMembersStore {
 
 export const useRoomMembersStore = create<RoomMembersStore>((set, get) => ({
   roomMembers: [],
+  adminUserId: null,
 
-  setRoomMembers: (users) => {
+  setRoomMembers: (users, adminUserId) => {
     set(() => ({
       roomMembers: [...users],
+      adminUserId
     }));
   },
 

@@ -10,7 +10,7 @@ import Loading from "../loading/loading";
 
 export function ChatRoom(room: ChatRoomProps) {
   const { connectionStatus, exitRoom, roomConnectionStatus, sendMessage } =
-    useChatRoom(room.id, room.users);
+    useChatRoom(room.id, room.users, room.createdBy);
 
   if (connectionStatus === "disconnected") {
     return (
@@ -38,7 +38,7 @@ export function ChatRoom(room: ChatRoomProps) {
           <ChatMessages roomId={room.id} />
           <ChatInput sendMessage={sendMessage} />
         </div>
-        <ChatMembers adminId={room.createdBy} />
+        <ChatMembers />
       </div>
     );
   } else {

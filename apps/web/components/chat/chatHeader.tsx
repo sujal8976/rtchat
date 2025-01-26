@@ -1,5 +1,4 @@
 import { Button } from "@repo/ui/components/ui/button";
-import { ChatUser } from "../../types/chat";
 import { LogOut, Settings, Users } from "@repo/ui/icons";
 import {
   Sheet,
@@ -80,7 +79,7 @@ export function ChatHeader({
           </SheetTrigger>
           <SheetContent side={"right"} className="p-4 mb-4">
             <h2 className="font-semibold my-5">Room Members</h2>
-            <ChatMembersContent adminId={adminId} />
+            <ChatMembersContent />
           </SheetContent>
         </Sheet>
       </div>

@@ -48,7 +48,7 @@ class RoomManager {
   }
 }
 
-export function useChatRoom(roomId: string, roomMembers: ChatUser[]) {
+export function useChatRoom(roomId: string, roomMembers: ChatUser[], adminUserId: string) {
   const { toast } = useToast();
   const roomManager = useRef(RoomManager.getInstance());
   const {
@@ -78,7 +78,7 @@ export function useChatRoom(roomId: string, roomMembers: ChatUser[]) {
     try {
       setRoomConnectionStatus("connecting");
       roomManager.current.joinRoom(roomId);
-      setRoomMembers(roomMembers);
+      setRoomMembers(roomMembers, adminUserId);
     } catch (err) {
       toast({
         title: "Connection Error",
@@ -96,7 +96,7 @@ export function useChatRoom(roomId: string, roomMembers: ChatUser[]) {
       roomManager.current.closeRoom(roomId);
       setRoomConnectionStatus("disconnected");
       setCurrentRoom(null);
-      setRoomMembers([]);
+      setRoomMembers([], null);
       toast({
         title: "Disconnected",
         description: `Left room ${roomId}`,
@@ -138,7 +138,6 @@ export function useChatRoom(roomId: string, roomMembers: ChatUser[]) {
     switch (roomUpdates.status) {
       case "rejoined":
         if (roomUpdates.username === data?.user?.username) {
-          setRoomMembers(roomMembers);
           setRoomConnectionStatus("connected");
         }
         setOnlineRoomMember(roomUpdates.username);
