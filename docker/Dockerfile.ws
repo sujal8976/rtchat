@@ -4,7 +4,7 @@ WORKDIR /rtchat-ws
 
 COPY turbo.json pnpm-workspace.yaml package.json .npmrc ./
 
-COPY apps/ws ./apps/ws
+COPY apps/ws-app ./apps/ws-app
 
 COPY packages/db ./packages/db
 COPY packages/common ./packages/common
