@@ -8,7 +8,7 @@ const nextConfig = {
     remotePatterns: [
       {
         protocol: "https",
-        hostname: process.env.AWS_S3_HOSTNAME_NAME,
+        hostname: process.env.AWS_S3_HOSTNAME_NAME || 'rtchat-web-bucket.s3.ap-south-1.amazonaws.com',
         pathname: "/*",
       },
     ],
