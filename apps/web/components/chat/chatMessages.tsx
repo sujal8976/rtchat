@@ -1,145 +1,156 @@
 "use client";
 
 import { useSession } from "next-auth/react";
-import { MessageBubble } from "./messageBubble";
 import { useMessagesStore } from "../../lib/store/messages";
-import { useCallback, useEffect, useRef } from "react";
-import useInfiniteScroll from "../../hooks/useInfiniteScroll";
-import Loading from "../loading/loading";
+import { useEffect, useRef } from "react";
 import { ChevronDown } from "@repo/ui/icons";
+import { MediaBubble } from "./mediaBubble";
+import Loading from "../loading/loading";
+import { useToast } from "@repo/ui/hooks/use-toast";
+
+const MESSAGES_PER_PAGE = 30;
+const SCROLL_THRESHOLD = 200;
 
 interface ChatMessagesProps {
   roomId: string;
 }
 
 export function ChatMessages({ roomId }: ChatMessagesProps) {
-  const { data } = useSession();
-  const pageRef = useRef(1);
-  const messageEndRef = useRef<HTMLDivElement | null>(null);
-  const containerRef = useRef<HTMLDivElement>(null);
-  const scrollHeightRef = useRef(0);
-  const isFirstLoadRef = useRef(true);
-  const initialLoadCompletedRef = useRef(false);
-
+  const { data: session } = useSession();
   const { messages, fetchMessages, resetStore, isLoading, hasMore } =
     useMessagesStore();
 
-  const scrollToBottom = useCallback(() => {
-    if (messageEndRef.current) {
-      messageEndRef.current?.scrollIntoView({
-        behavior: "smooth",
+  const pageRef = useRef(1);
+  const initializedRef = useRef(false);
+  const containerRef = useRef<HTMLDivElement>(null);
+  const prevScrollHeightRef = useRef(0);
+  const { toast } = useToast();
+
+  const handleScroll = () => {
+    const container = containerRef.current;
+    if (!container) return;
+
+    if (container.scrollTop === 0 && hasMore && !isLoading) {
+      handleLoadMore();
+    }
+
+    const isAtBottom =
+      container.scrollHeight - container.scrollTop - container.clientHeight <=
+      SCROLL_THRESHOLD;
+    container.dataset.showScrollButton = (!isAtBottom).toString();
+  };
+
+  const handleLoadMore = async () => {
+    if (!containerRef.current || isLoading) return;
+
+    prevScrollHeightRef.current = containerRef.current.scrollHeight;
+
+    pageRef.current += 1;
+    try {
+      await fetchMessages(roomId, pageRef.current, MESSAGES_PER_PAGE);
+    } catch (error) {
+      toast({
+        title: "Failed to load more messages",
+        variant: "destructive",
       });
     }
-  }, []);
 
-  const isNearBottom = useCallback(() => {
-    const container = containerRef.current;
-    if (!container) return false;
+    if (containerRef.current) {
+      const newScrollHeight = containerRef.current.scrollHeight;
+      const scrollDiff = newScrollHeight - prevScrollHeightRef.current;
+      containerRef.current.scrollTop = scrollDiff;
+    }
+  };
 
-    const distanceFromBottom =
-      container.scrollHeight - (container.scrollTop + container.clientHeight);
+  const scrollToBottom = () => {
+    if (!containerRef.current) return;
+    containerRef.current.scrollTop = containerRef.current.scrollHeight;
+  };
 
-    const threshold = 300;
-    return distanceFromBottom <= threshold;
-  }, []);
-
-  // Initial load effect
   useEffect(() => {
-    const initialLoad = async () => {
-      if (initialLoadCompletedRef.current) return;
+    const initializeChat = async () => {
+      if (initializedRef.current) return;
 
       resetStore();
       pageRef.current = 1;
-      await fetchMessages(roomId, 1, 30);
+      try {
+        await fetchMessages(roomId, 1, MESSAGES_PER_PAGE);
+      } catch (error) {
+        toast({
+          title: "Failed to load more messages",
+          variant: "destructive",
+        });
+      }
       scrollToBottom();
-      initialLoadCompletedRef.current = true;
-      isFirstLoadRef.current = false;
+      initializedRef.current = true;
     };
 
-    initialLoad();
+    initializeChat();
   }, [roomId, resetStore, fetchMessages]);
 
   useEffect(() => {
-    if (messages.length === 0 || !initialLoadCompletedRef.current) return;
+    if (!containerRef.current || messages.length === 0) return;
 
-    if (isNearBottom()) {
+    const container = containerRef.current;
+    const isNearBottom =
+      container.scrollHeight - container.scrollTop - container.clientHeight <=
+      SCROLL_THRESHOLD;
+
+    if (isNearBottom) {
       scrollToBottom();
     }
   }, [messages]);
 
-  const handleInfiniteScroll = useCallback(async () => {
-    if (isLoading || !hasMore || !initialLoadCompletedRef.current) return;
-
-    if (containerRef.current) {
-      scrollHeightRef.current = containerRef.current.scrollHeight;
-    }
-
-    pageRef.current += 1;
-    await fetchMessages(roomId, pageRef.current, 30);
-
-    if (containerRef.current) {
-      const newScrollHeight = containerRef.current.scrollHeight;
-      const scrollDiff = newScrollHeight - scrollHeightRef.current;
-      containerRef.current.scrollTop += scrollDiff;
-    }
-  }, [isLoading, hasMore, fetchMessages, roomId]);
-
-  const firstMessageRef = useInfiniteScroll<HTMLDivElement>(
-    handleInfiniteScroll,
-    [hasMore, !isLoading]
-  );
-
-  if (!data?.user?.id) {
+  if (!session?.user?.id) {
     return (
       <div className="flex flex-col justify-center items-center text-xl font-medium w-full h-[calc(100svh-73px-81px-77px)]">
-        <p className="w-[80%]">User is not Logged In</p>
-        <p className="w-[80%]">
-          Please try to refresh the page and try again to connect to Room...
-        </p>
+        <p>User is not Logged In</p>
+        <p>Please refresh the page and try again to connect to Room...</p>
       </div>
     );
   }
 
-  if (isFirstLoadRef.current && isLoading) {
+  if (!initializedRef.current && isLoading) {
     return <Loading text="Loading Chats..." />;
   }
 
   return (
-    <>
-      <div className="relative">
-        <div
-          ref={containerRef}
-          className="w-full h-[calc(100svh-73px-65px-61px)] lg:h-[calc(100svh-73px-81px-77px)] p-4 overflow-y-scroll"
-        >
-          {isLoading && (
-            <div className="h-4">
-              <Loading text="Loading messages..." />
-            </div>
-          )}
-          <div className="space-y-3">
-            {messages.map((msg, i) => (
-              <MessageBubble
-                key={msg.id}
-                messageId={msg.id}
-                ref={i === 0 ? firstMessageRef : null}
-                content={msg.content}
-                username={msg.user.username}
-                createdAt={msg.createdAt}
-                isCurrentUser={msg.userId === data?.user?.id}
-              />
-            ))}
-          </div>
-          <div ref={messageEndRef} />
+    <div className="relative">
+      <div
+        ref={containerRef}
+        onScroll={handleScroll}
+        className="w-full h-[calc(100svh-73px-65px-61px)] lg:h-[calc(100svh-73px-81px-77px)] p-4 pb-0 overflow-y-scroll"
+      >
+        {isLoading && <Loading text="Loading messages..." />}
+
+        <div className="">
+          {messages.map((msg) => (
+            <MediaBubble
+              key={msg.id}
+              messageId={msg.id}
+              message={msg.message || null}
+              username={msg.user.username}
+              createdAt={msg.createdAt}
+              isCurrentUser={msg.userId === session?.user?.id}
+              mediaUrl={msg.mediaUrl}
+              mediaType={msg.mediaType}
+            />
+          ))}
         </div>
-        {!isNearBottom() && (
-          <div
-            onClick={() => scrollToBottom()}
-            className="absolute bottom-4 right-4 z-20 dark:bg-white bg-slate-500 shadow-lg rounded-full p-2 hover:bg-gray-400 transition-colors cursor-pointer"
-          >
-            <ChevronDown className="dark:text-black" />
-          </div>
-        )}
       </div>
-    </>
+
+      <button
+        onClick={scrollToBottom}
+        className="absolute bottom-4 right-4 z-20 dark:bg-white bg-slate-500 shadow-lg rounded-full p-2 hover:bg-gray-400 transition-colors cursor-pointer"
+        style={{
+          display:
+            containerRef.current?.dataset.showScrollButton === "true"
+              ? "block"
+              : "none",
+        }}
+      >
+        <ChevronDown className="dark:text-black" />
+      </button>
+    </div>
   );
 }

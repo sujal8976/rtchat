@@ -5,6 +5,9 @@ on:
     branches:
       - main
 
+env:
+  AWS_S3_HOSTNAME_NAME: ${{ secrets.AWS_S3_HOSTNAME_NAME }}
+
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -31,4 +34,7 @@ jobs:
       #   run: pnpm run lint
 
       - name: Run Turbo build
-        run: pnpm run build
+        run: |
+          export AWS_S3_HOSTNAME_NAME=${{ secrets.AWS_S3_HOSTNAME_NAME }}
+          pnpm run build
+

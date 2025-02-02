@@ -51,7 +51,9 @@ export const GET = auth(async function GET(req) {
         skip,
         select: {
           id: true,
-          content: true,
+          message: true,
+          mediaType: true,
+          mediaUrl: true,
           roomId: true,
           userId: true,
           createdAt: true,

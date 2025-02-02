@@ -10,6 +10,18 @@ import { useMessagesStore } from "../lib/store/messages";
 import { ChatUser } from "../types/chat";
 import { useRoomMembersStore } from "../lib/store/roomMembers";
 import { useJoinedRoomsStore } from "../lib/store/mobileRoomSidebar";
+import { MediaFile } from "../types/messages";
+import { getSignedURL } from "../lib/s3/getSignedUrl";
+
+const computeSHA256 = async (file: File) => {
+  const buffer = await file.arrayBuffer();
+  const hashBuffer = await crypto.subtle.digest("SHA-256", buffer);
+  const hashArray = Array.from(new Uint8Array(hashBuffer));
+  const hashHex = hashArray
+    .map((b) => b.toString(16).padStart(2, "0"))
+    .join("");
+  return hashHex;
+};
 
 class RoomManager {
   private static instance: RoomManager;
@@ -188,27 +200,73 @@ export function useChatRoom(
     }
   }, [error, toast, roomUpdates]);
 
-  const sendMessage = useCallback(
-    (message: string) => {
-      const tempId = `temp-${Date.now().toString()}`;
+  // type SignedURLResponse = 
+  // | { success: { url: string }; error?: never }
+  // | { success?: never; error: string };
 
-      wsService.send({
-        type: WebSocketMessageType.SEND_MESSAGE,
-        payload: {
-          roomId,
-          content: message,
-          tempId,
-        },
-      });
+  const sendMessage = useCallback(
+    async (message: string, mediaFile: MediaFile | null) => {
+      if (!message && !mediaFile) return;
+
+      const tempId = `temp-${Date.now().toString()}`;
 
       addMessage({
         id: tempId,
-        content: message,
+        message: message || null,
         userId: data?.user?.id as string,
         roomId: roomId,
         createdAt: new Date(),
         user: {
           username: data?.user?.username as string,
+        },
+        mediaUrl: mediaFile?.preview || null,
+        mediaType: mediaFile?.type || null,
+      });
+
+      let mediaUrl: string | undefined;
+
+      if (mediaFile) {
+        try {
+          const signedUrl = await getSignedURL(
+            mediaFile.type,
+            await computeSHA256(mediaFile.file)
+          );
+
+          if (signedUrl.error || !signedUrl.success || !signedUrl.success.url) {
+            return toast({
+              title: `Failed to send ${mediaFile.type}.`,
+              variant: "destructive",
+            });
+          }
+
+          const url = signedUrl.success.url;
+          mediaUrl = url.split("?")[0];
+
+          await fetch(url, {
+            method: "PUT",
+            body: mediaFile.file,
+            headers: {
+              "Content-Type": mediaFile.type,
+            },
+          });
+        } catch (error) {
+          URL.revokeObjectURL(mediaFile.preview);
+          return toast({
+            title: "Failed to upload media.",
+            variant: "destructive",
+          });
+        }
+      }
+      // await new Promise(resolve => setTimeout(resolve, 5000))
+      wsService.send({
+        type: WebSocketMessageType.SEND_MESSAGE,
+        payload: {
+          roomId,
+          message: message ? message : undefined,
+          tempId,
+          mediaType: mediaFile ? mediaFile.type : undefined,
+          mediaUrl: mediaUrl ? mediaUrl : undefined,
+          tempMediaUrl: mediaFile ? mediaFile.preview : undefined
         },
       });
     },
