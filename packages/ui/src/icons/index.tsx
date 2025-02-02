@@ -13,5 +13,6 @@ export {
   LogOut,
   ChevronDown,
   Clock,
-  LockKeyhole
+  LockKeyhole,
+  ImagePlus
 } from "lucide-react";

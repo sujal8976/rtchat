@@ -1,3 +1,64 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+@layer utilities {
+  .image-rendering-high-quality {
+    image-rendering: high-quality;
+  }
+}
+
+@layer components {
+  [data-rmiz] {
+    position: relative;
+    display: block;
+  }
+
+  [data-rmiz-ghost] {
+    pointer-events: none;
+    position: absolute;
+  }
+
+  [data-rmiz-btn-zoom],
+  [data-rmiz-btn-unzoom] {
+    display: none;
+  }
+
+  [data-rmiz-modal][open] {
+    position: fixed;
+    inset: 0;
+    width: 100vw;
+    height: 100vh;
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    max-width: none;
+    max-height: none;
+    background-color: transparent;
+  }
+
+  [data-rmiz-modal-overlay] {
+    position: absolute;
+    inset: 0;
+    transition-property: background-color;
+  }
+
+  [data-rmiz-modal-img] {
+    position: absolute;
+    transform: translate3d(0, 0, 0);
+    transition-property: transform;
+    transition-duration: 300ms;
+    transform-origin: 0 0;
+  }
+
+  [data-rmiz-content="found"] img {
+    cursor: zoom-in;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  [data-rmiz-modal-overlay],
+  [data-rmiz-modal-img] {
+    transition-duration: 0.01ms !important;
+  }
+}
