@@ -5,6 +5,9 @@ on:
     branches:
       - main
 
+env:
+  AWS_S3_HOSTNAME_NAME: ${{ secrets.AWS_S3_HOSTNAME_NAME }}
+
 jobs:
   build:
     runs-on: ubuntu-latest
