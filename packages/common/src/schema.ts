@@ -26,8 +26,11 @@ export const sendMessageSchema = z.object({
   type: z.literal(WebSocketMessageType.SEND_MESSAGE),
   payload: z.object({
     roomId: z.string(),
-    content: z.string().min(1),
-    tempId: z.string().optional()
+    message: z.string().min(1).optional(),
+    tempId: z.string().optional(),
+    mediaType: z.enum(['image', 'video']).optional(),
+    mediaUrl: z.string().optional(),
+    tempMediaUrl: z.string().optional()
   }),
 });
 
@@ -35,7 +38,7 @@ export const privateMessageSchema = z.object({
   type: z.literal(WebSocketMessageType.PRIVATE_MESSAGE),
   payload: z.object({
     recipientId: z.string(),
-    content: z.string().min(1),
+    message: z.string().min(1),
   }),
 });
 
