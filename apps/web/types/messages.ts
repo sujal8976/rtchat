@@ -1,13 +1,15 @@
 export interface ChatMessage {
   id: string;
-  content: string;
+  message: string | null;
   userId: string;
   roomId: string;
   createdAt: Date;
   user: {
     username: string;
   };
-  tempId?: string
+  tempId?: string;
+  mediaType: "image" | "video" | null;
+  mediaUrl: string | null;
 }
 
 export interface MessageResponse {
@@ -16,5 +18,11 @@ export interface MessageResponse {
   currentPage: number;
   totalPage: number;
   hasMore: boolean;
-  error? : string;
+  error?: string;
+}
+
+export interface MediaFile {
+  file: File;
+  type: "image" | "video";
+  preview: string;
 }

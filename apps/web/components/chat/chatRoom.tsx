@@ -12,20 +12,11 @@ export function ChatRoom(room: ChatRoomProps) {
   const { connectionStatus, exitRoom, roomConnectionStatus, sendMessage } =
     useChatRoom(room.id, room.users, room.createdBy);
 
-  if (connectionStatus === "disconnected") {
-    return (
-      <Loading text="Try to refresh the page OR Check your network connection..." />
-    );
-  }
-
   if (roomConnectionStatus === "connecting") {
     return <Loading text={`Connecting to ${room.name} room...`} />;
   }
 
-  if (
-    connectionStatus === "connected" &&
-    roomConnectionStatus === "connected"
-  ) {
+  if (roomConnectionStatus === "connected") {
     return (
       <div className="flex-1 flex">
         <div className="flex-1 flex flex-col">

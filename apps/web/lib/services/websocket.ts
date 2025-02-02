@@ -110,6 +110,7 @@ class WebSocketService {
     switch (message.type) {
       case WebSocketMessageType.SEND_MESSAGE:
         if (message.payload.userId === this.currentUserId) {
+          if(message.payload.tempMediaUrl) URL.revokeObjectURL(message.payload.tempMediaUrl);
           messageStore.replaceMessage(message.payload.tempId, message.payload);
         } else {
           messageStore.addMessage(message.payload);

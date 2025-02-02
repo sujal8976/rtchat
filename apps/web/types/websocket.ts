@@ -1,6 +1,8 @@
 export interface ChatMessage {
   id: string;
-  content: string;
+  message?: string;
+  mediaUrl?: string;
+  mediaType?: "image" | "video";
   roomId: string;
   userId: string;
   createdAt: Date;

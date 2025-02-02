@@ -137,9 +137,9 @@ export class WebSocketService {
         type: WebSocketMessageType.JOIN_ROOM,
         payload,
       }).payload;
-  
+
       const result = await RoomService.addUserToRoom(ws.userId, roomId);
-  
+
       switch (result) {
         case "joined":
         case "alreadyJoined":
@@ -193,7 +193,14 @@ export class WebSocketService {
 
   private async handleSendMessage(ws: AuthenticatedWebSocket, payload: any) {
     try {
-      const { roomId, content, tempId } = schemas.sendMessageSchema.parse({
+      const {
+        roomId,
+        message: text,
+        mediaType,
+        mediaUrl,
+        tempId,
+        tempMediaUrl,
+      } = schemas.sendMessageSchema.parse({
         type: WebSocketMessageType.SEND_MESSAGE,
         payload,
       }).payload;
@@ -217,13 +224,17 @@ export class WebSocketService {
       const message = await MessageService.createMessage(
         ws.userId,
         roomId,
-        content
+        text || null,
+        mediaType || null,
+        mediaUrl || null
       );
       this.broadcastToRoom(roomId, {
         type: WebSocketMessageType.SEND_MESSAGE,
         payload: {
           id: message.id,
-          content: message.content,
+          message: message.message || null,
+          mediaType: message.mediaType || null,
+          mediaUrl: message.mediaUrl || null,
           userId: message.userId,
           roomId: message.roomId,
           createdAt: message.createdAt,
@@ -231,6 +242,7 @@ export class WebSocketService {
             username: message.user.username,
           },
           tempId: tempId || undefined,
+          tempMediaUrl: tempMediaUrl || undefined,
         },
       });
     } catch (error) {
@@ -261,10 +273,12 @@ export class WebSocketService {
 
   private async handlePrivateMessage(ws: AuthenticatedWebSocket, payload: any) {
     try {
-      const { recipientId, content } = schemas.privateMessageSchema.parse({
-        type: WebSocketMessageType.PRIVATE_MESSAGE,
-        payload,
-      }).payload;
+      const { recipientId, message: text } = schemas.privateMessageSchema.parse(
+        {
+          type: WebSocketMessageType.PRIVATE_MESSAGE,
+          payload,
+        }
+      ).payload;
 
       const recipient = this.clients.get(recipientId);
       if (!recipient) {
@@ -278,7 +292,7 @@ export class WebSocketService {
       const message = {
         type: WebSocketMessageType.PRIVATE_MESSAGE,
         payload: {
-          content,
+          message: text,
           senderId: ws.userId,
           timestamp: new Date(),
         },

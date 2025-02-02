@@ -1,13 +1,21 @@
 import prisma from "@repo/db/client";
 
 export class MessageService {
-  static async createMessage(userId: string, roomId: string, content: string) {
+  static async createMessage(
+    userId: string,
+    roomId: string,
+    message: string | null,
+    mediaType: "image" | "video" | null,
+    mediaUrl: string | null
+  ) {
     try {
       return await prisma.message.create({
         data: {
-          content,
+          message,
           userId,
           roomId,
+          mediaType,
+          mediaUrl,
         },
         include: {
           user: {
