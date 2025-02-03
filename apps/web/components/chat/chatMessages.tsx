@@ -124,18 +124,25 @@ export function ChatMessages({ roomId }: ChatMessagesProps) {
         {isLoading && <Loading text="Loading messages..." />}
 
         <div className="">
-          {messages.map((msg) => (
-            <MediaBubble
-              key={msg.id}
-              messageId={msg.id}
-              message={msg.message || null}
-              username={msg.user.username}
-              createdAt={msg.createdAt}
-              isCurrentUser={msg.userId === session?.user?.id}
-              mediaUrl={msg.mediaUrl}
-              mediaType={msg.mediaType}
-            />
-          ))}
+          {messages.map((msg, index) => {
+            const previousMessage = index > 0 ? messages[index - 1] : null;
+            const isConsecutive = previousMessage
+              ? previousMessage.userId === msg.userId
+              : false;
+            return (
+              <MediaBubble
+                key={msg.id}
+                messageId={msg.id}
+                message={msg.message || null}
+                username={msg.user.username}
+                createdAt={msg.createdAt}
+                isCurrentUser={msg.userId === session?.user?.id}
+                mediaUrl={msg.mediaUrl}
+                mediaType={msg.mediaType}
+                isConsecutive={isConsecutive}
+              />
+            );
+          })}
         </div>
       </div>
 

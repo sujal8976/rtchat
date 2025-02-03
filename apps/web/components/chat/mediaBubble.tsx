@@ -13,6 +13,7 @@ interface MediaBubbleProps {
   username: string;
   isCurrentUser: boolean;
   messageId: string;
+  isConsecutive?: boolean;
 }
 
 export const MediaBubble = forwardRef<HTMLDivElement, MediaBubbleProps>(
@@ -25,6 +26,7 @@ export const MediaBubble = forwardRef<HTMLDivElement, MediaBubbleProps>(
       createdAt,
       isCurrentUser,
       messageId,
+      isConsecutive,
     },
     ref
   ) => {
@@ -43,14 +45,14 @@ export const MediaBubble = forwardRef<HTMLDivElement, MediaBubbleProps>(
           isCurrentUser ? " flex-row-reverse" : ""
         )}
       >
-        {!isCurrentUser && (
+        {!isCurrentUser && !isConsecutive && (
           <div className="flex items-center gap-2">
             <Avatar className="h-8 w-8">
               <AvatarFallback>
                 <UserCircle className="h-5 w-5" />
               </AvatarFallback>
             </Avatar>
-            <span className="text-sm font-medium">{username}</span>
+            <span className="text-sm font-semibold">{username}</span>
           </div>
         )}
         <div

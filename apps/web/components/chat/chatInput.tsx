@@ -22,9 +22,9 @@ export function ChatInput({
     const file = e.target.files?.[0];
     if (!file) return;
 
-    if (file.size > 5 * 1024 * 1024) { // (5MB = 5 * 1024 * 1024 bytes)
+    if (file.size > 10 * 1024 * 1024) { // (10MB = 10 * 1024 * 1024 bytes)
       toast({
-        title: "File size must be less than 5MB",
+        title: "File size must be less than 10MB",
         variant: "destructive",
       });
       e.target.value = "";
