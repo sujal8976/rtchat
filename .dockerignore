@@ -1,5 +1,6 @@
 node_modules
 .next
+.turbo
 .env
 *.log
 *.cache
@@ -15,4 +16,5 @@ coverage
 **/dist
 **/build
 **/.next
+**/.turbo
 **/.git
