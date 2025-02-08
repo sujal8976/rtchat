@@ -9,19 +9,10 @@ import { useSession } from "next-auth/react";
 import { useMessagesStore } from "../lib/store/messages";
 import { ChatUser } from "../types/chat";
 import { useRoomMembersStore } from "../lib/store/roomMembers";
-import { useJoinedRoomsStore } from "../lib/store/mobileRoomSidebar";
+import { useJoinedRoomsStore } from "../lib/store/joinedRooms";
 import { MediaFile } from "../types/messages";
 import { getSignedURL } from "../lib/s3/getSignedUrl";
-
-const computeSHA256 = async (file: File) => {
-  const buffer = await file.arrayBuffer();
-  const hashBuffer = await crypto.subtle.digest("SHA-256", buffer);
-  const hashArray = Array.from(new Uint8Array(hashBuffer));
-  const hashHex = hashArray
-    .map((b) => b.toString(16).padStart(2, "0"))
-    .join("");
-  return hashHex;
-};
+import { computeSHA256 } from "../lib/utils/sha";
 
 class RoomManager {
   private static instance: RoomManager;
@@ -200,10 +191,6 @@ export function useChatRoom(
     }
   }, [error, toast, roomUpdates]);
 
-  // type SignedURLResponse = 
-  // | { success: { url: string }; error?: never }
-  // | { success?: never; error: string };
-
   const sendMessage = useCallback(
     async (message: string, mediaFile: MediaFile | null) => {
       if (!message && !mediaFile) return;
@@ -232,13 +219,6 @@ export function useChatRoom(
             await computeSHA256(mediaFile.file)
           );
 
-          if (signedUrl.error || !signedUrl.success || !signedUrl.success.url) {
-            return toast({
-              title: `Failed to send ${mediaFile.type}.`,
-              variant: "destructive",
-            });
-          }
-
           const url = signedUrl.success.url;
           mediaUrl = url.split("?")[0];
 
@@ -266,7 +246,7 @@ export function useChatRoom(
           tempId,
           mediaType: mediaFile ? mediaFile.type : undefined,
           mediaUrl: mediaUrl ? mediaUrl : undefined,
-          tempMediaUrl: mediaFile ? mediaFile.preview : undefined
+          tempMediaUrl: mediaFile ? mediaFile.preview : undefined,
         },
       });
     },

@@ -16,6 +16,7 @@ export const GET = auth(async function GET(req) {
             id: true,
             name: true,
             description: true,
+            roomImage: true
           },
         },
       },

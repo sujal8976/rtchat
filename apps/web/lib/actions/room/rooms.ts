@@ -18,7 +18,8 @@ export async function createRoom(
   name: string,
   description: string,
   isPrivate: boolean,
-  code: string | null
+  code: string | null,
+  image: string | null
 ): Promise<CreateRoomResponse> {
   const session = await auth();
 
@@ -56,6 +57,7 @@ export async function createRoom(
         createdBy: session.user.id,
         isPrivate,
         privateCode: hashedCode,
+        roomImage: image,
         users: {
           create: {
             userId: session.user.id,
@@ -100,6 +102,7 @@ export async function getRoom(roomId: string): Promise<ChatRoom | undefined> {
         description: true,
         createdBy: true,
         isPrivate: true,
+        roomImage: true,
         users: {
           select: {
             user: {
@@ -107,6 +110,7 @@ export async function getRoom(roomId: string): Promise<ChatRoom | undefined> {
                 id: true,
                 username: true,
                 isOnline: true,
+                image: true,
               },
             },
           },
@@ -133,6 +137,7 @@ export async function getRoom(roomId: string): Promise<ChatRoom | undefined> {
       createdBy: room.createdBy,
       users: room.users.map((u) => u.user),
       isPrivate: room.isPrivate,
+      roomImage: room.roomImage,
     };
 
     return transformedRoom;

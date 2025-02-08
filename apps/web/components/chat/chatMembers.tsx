@@ -1,8 +1,8 @@
 import { cn } from "@repo/ui/lib/utils";
-import { ChatUser } from "../../types/chat";
 import { Avatar, AvatarFallback } from "@repo/ui/components/ui/avatar";
 import { UserCircle } from "@repo/ui/icons";
 import { useRoomMembersStore } from "../../lib/store/roomMembers";
+import Image from "next/image";
 
 export function ChatMembers() {
   return (
@@ -23,9 +23,19 @@ export function ChatMembersContent() {
         <div key={user.id} className="flex items-center gap-3">
           <div className="relative">
             <Avatar>
-              <AvatarFallback>
-                <UserCircle className="h-5 w-5" />
-              </AvatarFallback>
+              {user.image ? (
+                <Image
+                  className="h-12 w-12 rounded-full"
+                  src={user.image}
+                  alt=""
+                  height={48}
+                  width={48}
+                />
+              ) : (
+                <AvatarFallback className="bg-gray-200">
+                  <UserCircle className="text-gray-500 size-7" />
+                </AvatarFallback>
+              )}
             </Avatar>
             <span
               className={cn(

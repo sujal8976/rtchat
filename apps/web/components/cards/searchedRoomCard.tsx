@@ -20,13 +20,14 @@ import {
   validatePrivateRoomCode,
 } from "../../lib/actions/room/rooms";
 import { Room } from "../../types/room";
-import { useJoinedRoomsStore } from "../../lib/store/mobileRoomSidebar";
+import { useJoinedRoomsStore } from "../../lib/store/joinedRooms";
 
 interface SearchedRoomCardProps {
   name: string;
   id: string;
   description: string;
   isPrivate: boolean;
+  roomImage: string | null;
   isJoinedRoom: boolean;
   onUpdate?: (value: boolean) => void;
 }
@@ -37,6 +38,7 @@ export function SearchedRoomCard({
   description,
   isPrivate,
   isJoinedRoom,
+  roomImage,
   onUpdate,
 }: SearchedRoomCardProps) {
   const [isOpen, setIsOpen] = useState(false);
@@ -46,7 +48,7 @@ export function SearchedRoomCard({
   const { toast } = useToast();
   const addJoinedRoom = useJoinedRoomsStore().addJoinedRoom;
 
-  const newRoom: Room = { name, id, description, isPrivate };
+  const newRoom: Room = { name, id, description, isPrivate, roomImage };
 
   const privateJoinRoomHandler = async () => {
     setLoading(true);
@@ -69,7 +71,7 @@ export function SearchedRoomCard({
       const isUserAdded = await addUserToRoom(id);
       if (isUserAdded === "added") {
         setIsOpen(false);
-        addJoinedRoom({room: newRoom});
+        addJoinedRoom({ room: newRoom });
         if (onUpdate) onUpdate(false);
         router.push(`/chat/${id}`);
       } else {
@@ -91,7 +93,7 @@ export function SearchedRoomCard({
 
   const publicJoinRoomHandler = () => {
     setIsOpen(false);
-    addJoinedRoom({room: newRoom});
+    addJoinedRoom({ room: newRoom });
     if (onUpdate) onUpdate(false);
     router.push(`/chat/${id}`);
   };
@@ -100,10 +102,10 @@ export function SearchedRoomCard({
     return (
       <Link prefetch={false} href={`/chat/${id}`} className="w-full">
         <RoomCard
+          roomImage={roomImage}
           onClickSidebarClose={onUpdate}
           name={name}
           description={description}
-          id={id}
         />
       </Link>
     );
@@ -113,7 +115,7 @@ export function SearchedRoomCard({
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
       <DialogTrigger asChild>
         <div>
-          <RoomCard name={name} id={id} description={description} />
+          <RoomCard roomImage={roomImage} name={name} description={description} />
         </div>
       </DialogTrigger>
       <DialogContent className="max-w-[90%] sm:max-w-[500px]">

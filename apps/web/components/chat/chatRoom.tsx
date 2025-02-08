@@ -9,8 +9,11 @@ import { useChatRoom } from "../../hooks/use-chat-room";
 import Loading from "../loading/loading";
 
 export function ChatRoom(room: ChatRoomProps) {
-  const { connectionStatus, exitRoom, roomConnectionStatus, sendMessage } =
-    useChatRoom(room.id, room.users, room.createdBy);
+  const { exitRoom, roomConnectionStatus, sendMessage } = useChatRoom(
+    room.id,
+    room.users,
+    room.createdBy
+  );
 
   if (roomConnectionStatus === "connecting") {
     return <Loading text={`Connecting to ${room.name} room...`} />;
@@ -21,6 +24,7 @@ export function ChatRoom(room: ChatRoomProps) {
       <div className="flex-1 flex">
         <div className="flex-1 flex flex-col">
           <ChatHeader
+            roomImage={room.roomImage}
             name={room.name}
             description={room.description}
             exitRoom={exitRoom}

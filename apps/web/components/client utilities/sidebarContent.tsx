@@ -11,7 +11,7 @@ import Loading from "../loading/loading";
 import { BASE_URL } from "../../lib/config/websocket";
 import Link from "next/link";
 import { SearchedRoomCard } from "../cards/searchedRoomCard";
-import { useJoinedRoomsStore } from "../../lib/store/mobileRoomSidebar";
+import { useJoinedRoomsStore } from "../../lib/store/joinedRooms";
 
 interface SidebarContentProps {
   onUpdate?: (value: boolean) => void;
@@ -76,7 +76,7 @@ export function SidebarContent({ onUpdate }: SidebarContentProps) {
         });
       }
     };
-    
+
     getJoinedRooms();
   }, []);
 
@@ -109,6 +109,7 @@ export function SidebarContent({ onUpdate }: SidebarContentProps) {
               {roomSearch ? (
                 rooms.map((room) => (
                   <SearchedRoomCard
+                    roomImage={room.roomImage}
                     name={room.name}
                     description={room.description}
                     id={room.id}
@@ -134,10 +135,10 @@ export function SidebarContent({ onUpdate }: SidebarContentProps) {
                         key={room.room.id}
                       >
                         <RoomCard
+                          roomImage={room.room.roomImage}
                           onClickSidebarClose={onUpdate}
                           name={room.room.name}
                           description={room.room.description}
-                          id={room.room.id}
                         />
                       </Link>
                     ))

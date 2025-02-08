@@ -2,6 +2,7 @@ export interface ChatUser {
   id: string;
   username: string;
   isOnline: boolean;
+  image: string | null;
 }
 
 export interface ChatRoom {
@@ -10,5 +11,6 @@ export interface ChatRoom {
   description: string | null;
   createdBy: string;
   users: ChatUser[];
-  isPrivate: boolean
+  isPrivate: boolean;
+  roomImage: string | null;
 }

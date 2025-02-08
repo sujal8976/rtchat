@@ -16,9 +16,11 @@ import { useRouter } from "next/navigation";
 import { useChatStore } from "../../lib/store/chat";
 import { Avatar, AvatarFallback } from "@repo/ui/components/ui/avatar";
 import { useMessagesStore } from "../../lib/store/messages";
+import Image from "next/image";
 
 interface ChatHeaderProps {
   name: string;
+  roomImage: string | null;
   description: string | null;
   exitRoom: () => void;
 }
@@ -26,19 +28,30 @@ interface ChatHeaderProps {
 export function ChatHeader({
   name,
   description,
+  roomImage,
   exitRoom,
 }: ChatHeaderProps) {
   const router = useRouter();
   const setCurrentRoom = useChatStore().setCurrentRoom;
-  const resetStore = useMessagesStore().resetStore
+  const resetStore = useMessagesStore().resetStore;
 
   return (
     <div className="border-b dark:border-amber-50 lg:border-b-2 lg:dark:border-b lg:h-[81px] px-6 py-2 lg:py-4 flex items-center justify-between backdrop-blur">
       <div className="flex items-center gap-4">
         <Avatar className="size-12 flex-shrink-0">
-          <AvatarFallback className="bg-gray-200">
-            <Users className="text-gray-500" size={28}/>
-          </AvatarFallback>
+          {roomImage ? (
+            <Image
+              className="h-12 w-12 rounded-full"
+              src={roomImage}
+              alt=""
+              height={48}
+              width={48}
+            />
+          ) : (
+            <AvatarFallback className="bg-gray-200">
+              <Users className="text-gray-500" size={28} />
+            </AvatarFallback>
+          )}
         </Avatar>
         <div>
           <h2 className="text-xl font-semibold">{name}</h2>

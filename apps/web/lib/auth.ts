@@ -18,7 +18,7 @@ const getSecretKey = async () => {
   if (!secret || typeof secret !== "string") {
     throw new Error("JWT_SECRET is not configured");
   }
-  
+
   return secret;
 };
 
@@ -62,7 +62,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         const password = credentials.password as string | undefined;
 
         if (!email || !password) {
-          return null
+          return null;
         }
 
         try {
@@ -70,22 +70,30 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
             where: {
               email,
             },
+            select: {
+              id: true,
+              username: true,
+              email: true,
+              image: true,
+              password: true,
+            },
           });
 
           if (!user) {
-            throw new CredentialsSignin("Password or Email is wrong.")
+            throw new CredentialsSignin("Password or Email is wrong.");
           }
 
           const isPasswordValid = await compare(password, user.password);
 
           if (!isPasswordValid) {
-            throw new CredentialsSignin("Password or Email is wrong.")
+            throw new CredentialsSignin("Password or Email is wrong.");
           }
 
           return {
             id: user.id,
             username: user.username,
             email: user.email,
+            image: user.image,
           };
         } catch (error) {
           return null;
@@ -103,6 +111,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
 
         token.accessToken = customToken;
         token.username = user.username;
+        token.image = user.image;
       }
 
       return token;
@@ -112,6 +121,7 @@ export const { handlers, signIn, signOut, auth } = NextAuth({
         session.user.id = token.sub;
         session.user.username = token.username as string;
         session.user.accessToken = token.accessToken as string;
+        session.user.image = token.image as string;
       }
       return session;
     },

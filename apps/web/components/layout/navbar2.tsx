@@ -12,7 +12,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@repo/ui/components/ui/dropdown-menu";
-import { Avatar, AvatarFallback } from "@repo/ui/components/ui/avatar";
+import { Avatar, AvatarFallback, AvatarImage } from "@repo/ui/components/ui/avatar";
 import { UserCircle } from "@repo/ui/icons";
 import { signOut, useSession } from "next-auth/react";
 
@@ -31,6 +31,7 @@ export function Navbar() {
           <DropdownMenu>
             <DropdownMenuTrigger asChild>
               <Avatar className="size-10 flex-shrink-0 cursor-pointer">
+                <AvatarImage src={data?.user && data.user?.image as string}/>
                 <AvatarFallback className="bg-gray-200">
                   <UserCircle className="text-gray-500" size={24} />
                 </AvatarFallback>

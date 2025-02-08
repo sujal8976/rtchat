@@ -32,6 +32,7 @@ export const useRoomMembersStore = create<RoomMembersStore>((set, get) => ({
               username,
               id: `temp-${username}`,
               isOnline: true,
+              image: null,
             },
           ],
         };

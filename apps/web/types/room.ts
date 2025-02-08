@@ -3,6 +3,7 @@ export interface Room {
   name: string;
   description: string;
   isPrivate: boolean;
+  roomImage: string | null;
 }
 
 export interface UserJoinedRoom {

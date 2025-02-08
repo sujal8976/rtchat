@@ -14,5 +14,6 @@ export {
   ChevronDown,
   Clock,
   LockKeyhole,
-  ImagePlus
+  ImagePlus,
+  Camera
 } from "lucide-react";
