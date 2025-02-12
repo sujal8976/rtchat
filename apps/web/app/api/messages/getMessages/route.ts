@@ -60,6 +60,7 @@ export const GET = auth(async function GET(req) {
           user: {
             select: {
               username: true,
+              image: true
             },
           },
         },

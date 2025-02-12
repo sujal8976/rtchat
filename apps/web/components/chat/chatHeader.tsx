@@ -16,7 +16,7 @@ import { useRouter } from "next/navigation";
 import { useChatStore } from "../../lib/store/chat";
 import { Avatar, AvatarFallback } from "@repo/ui/components/ui/avatar";
 import { useMessagesStore } from "../../lib/store/messages";
-import Image from "next/image";
+import { ImageZoom } from "../client utilities/zoomableImage";
 
 interface ChatHeaderProps {
   name: string;
@@ -40,12 +40,12 @@ export function ChatHeader({
       <div className="flex items-center gap-4">
         <Avatar className="size-12 flex-shrink-0">
           {roomImage ? (
-            <Image
-              className="h-12 w-12 rounded-full"
+            <ImageZoom
               src={roomImage}
-              alt=""
+              alt="room Image"
               height={48}
               width={48}
+              className="h-12 w-12 rounded-full object-cover"
             />
           ) : (
             <AvatarFallback className="bg-gray-200">

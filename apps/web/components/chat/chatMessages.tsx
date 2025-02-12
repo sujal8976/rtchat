@@ -135,6 +135,7 @@ export function ChatMessages({ roomId }: ChatMessagesProps) {
                 messageId={msg.id}
                 message={msg.message || null}
                 username={msg.user.username}
+                userImage={msg.user.image || null}
                 createdAt={msg.createdAt}
                 isCurrentUser={msg.userId === session?.user?.id}
                 mediaUrl={msg.mediaUrl}

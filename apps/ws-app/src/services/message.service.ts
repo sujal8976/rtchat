@@ -21,6 +21,7 @@ export class MessageService {
           user: {
             select: {
               username: true,
+              image: true
             },
           },
         },

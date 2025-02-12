@@ -240,6 +240,7 @@ export class WebSocketService {
           createdAt: message.createdAt,
           user: {
             username: message.user.username,
+            image: message.user.image,
           },
           tempId: tempId || undefined,
           tempMediaUrl: tempMediaUrl || undefined,

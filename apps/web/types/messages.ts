@@ -6,6 +6,7 @@ export interface ChatMessage {
   createdAt: Date;
   user: {
     username: string;
+    image: string | null;
   };
   tempId?: string;
   mediaType: "image" | "video" | null;

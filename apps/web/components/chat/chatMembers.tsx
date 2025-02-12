@@ -2,7 +2,7 @@ import { cn } from "@repo/ui/lib/utils";
 import { Avatar, AvatarFallback } from "@repo/ui/components/ui/avatar";
 import { UserCircle } from "@repo/ui/icons";
 import { useRoomMembersStore } from "../../lib/store/roomMembers";
-import Image from "next/image";
+import { ImageZoom } from "../client utilities/zoomableImage";
 
 export function ChatMembers() {
   return (
@@ -24,12 +24,12 @@ export function ChatMembersContent() {
           <div className="relative">
             <Avatar>
               {user.image ? (
-                <Image
-                  className="h-12 w-12 rounded-full"
+                <ImageZoom
                   src={user.image}
-                  alt=""
+                  alt="user Image"
                   height={48}
                   width={48}
+                  className="h-12 w-12 rounded-full object-cover"
                 />
               ) : (
                 <AvatarFallback className="bg-gray-200">

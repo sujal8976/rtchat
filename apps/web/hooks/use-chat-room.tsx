@@ -205,6 +205,7 @@ export function useChatRoom(
         createdAt: new Date(),
         user: {
           username: data?.user?.username as string,
+          image: data?.user?.image || null,
         },
         mediaUrl: mediaFile?.preview || null,
         mediaType: mediaFile?.type || null,

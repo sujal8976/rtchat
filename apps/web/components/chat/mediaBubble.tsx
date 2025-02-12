@@ -11,6 +11,7 @@ interface MediaBubbleProps {
   message: string | null;
   createdAt: Date;
   username: string;
+  userImage: string | null;
   isCurrentUser: boolean;
   messageId: string;
   isConsecutive?: boolean;
@@ -23,6 +24,7 @@ export const MediaBubble = forwardRef<HTMLDivElement, MediaBubbleProps>(
       mediaUrl,
       message,
       username,
+      userImage,
       createdAt,
       isCurrentUser,
       messageId,
@@ -47,11 +49,21 @@ export const MediaBubble = forwardRef<HTMLDivElement, MediaBubbleProps>(
       >
         {!isCurrentUser && !isConsecutive && (
           <div className="flex items-center gap-2">
-            <Avatar className="h-8 w-8">
-              <AvatarFallback>
-                <UserCircle className="h-5 w-5" />
-              </AvatarFallback>
-            </Avatar>
+            {userImage ? (
+              <ImageZoom
+                src={userImage}
+                alt="user Image"
+                height={32}
+                width={32}
+                className="h-8 w-8 rounded-full object-cover"
+              />
+            ) : (
+              <Avatar className="h-8 w-8">
+                <AvatarFallback>
+                  <UserCircle className="h-5 w-5" />
+                </AvatarFallback>
+              </Avatar>
+            )}
             <span className="text-sm font-semibold">{username}</span>
           </div>
         )}
